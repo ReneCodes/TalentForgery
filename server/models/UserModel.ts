@@ -1,5 +1,7 @@
-const { DataTypes } = require('sequelize');
-const sequelize = require('./connection');
+const { DataTypes } = require("sequelize");
+const sequelize = require("./connection");
+const crypto = require("crypto");
+export {};
 
 const User = sequelize.define("user", {
   role: DataTypes.TEXT,
@@ -18,17 +20,16 @@ const User = sequelize.define("user", {
 })();
 
 const registerNewUser = async () => {
-
   const userInformation = {
-    role: 'admin',
-    first_name: 'Bob',
-    last_name: 'Alfred',
-    email: 'admin@admin.com',
-    personal_email: '123@123.com',
-    password: 'admin',
-    phone: '123456789',
-    department: '567-UFG',
-    user_id: crypto.randomUUID()
+    role: "admin",
+    first_name: "Bob",
+    last_name: "Alfred",
+    email: "admin@admin.com",
+    personal_email: "123@123.com",
+    password: "admin",
+    phone: "123456789",
+    department: "567-UFG",
+    user_id: crypto.randomUUID(),
   };
 
   const newUSer = await User.create(userInformation);
@@ -38,7 +39,7 @@ const registerNewUser = async () => {
 const getInfo = async () => {
   const allUsers = await User.findAll();
   return allUsers;
-}
+};
 
 module.exports = {
   registerNewUser,
