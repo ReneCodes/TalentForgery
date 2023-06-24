@@ -1,11 +1,10 @@
-import {FC} from 'react';
-import {Navbar} from '../../Components/Navbar/Navbar';
+// @ts-ignore
+import React, {FC} from 'react';
 
-export const Home: FC = () => {
+export const Home = () => {
 	return (
 		<div>
 			<h1>Home</h1>
-			<Navbar></Navbar>
 		</div>
 	);
 };

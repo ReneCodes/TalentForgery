@@ -1,19 +1,17 @@
 // @ts-ignore
 import React from 'react';
 import './App.css';
-import {Login} from './Pages/Login';
-import {Register} from './Pages/Register';
-import {Home} from './Pages/Home/Home';
+import {Navbar} from './Components/Navbar/Navbar';
+import {Outlet} from 'react-router-dom';
 
-function App() {
+const App: React.FC = () => {
 	return (
-		<>
-			<h1>This is Minon Mentor</h1>
-			<Login></Login>
-			<Register></Register>
-			<Home></Home>
-		</>
+		<div className="app">
+			<h1 className="header">This is Minon Mentor</h1>
+			<Navbar></Navbar>
+			<Outlet />
+		</div>
 	);
-}
+};
 
 export default App;
