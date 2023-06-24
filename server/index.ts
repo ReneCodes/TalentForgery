@@ -9,7 +9,12 @@ const router = require('./router');
 const app = express();
 const PORT = process.env.PORT || 8080;
 
-app.use(cors());
+const corsConfig = {
+  origin: `http://localhost:${process.env.FRONT_END_PORT}`, // put in .env
+  credentials: true,
+};
+
+app.use(cors(corsConfig));
 app.use(bodyParser());
 app.use(cookieParser());
 app.use(router);
