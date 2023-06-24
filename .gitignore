@@ -1,0 +1,25 @@
+
+# Logs
+logs
+*.log
+npm-debug.log*
+
+# Runtime data
+pids
+*.pid
+*.seed
+
+# testing
+coverage
+
+# Dependency directories
+node_modules
+
+# Custom
+.DS_Store
+dist
+
+# Private or Temp Stuff
+.env*
+private
+Temp*
