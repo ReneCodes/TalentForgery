@@ -40,7 +40,7 @@ const loginUser = async (req: Request, res: Response) => {
 // GETS ALL THE INFORMATION FROM A CERTAIN USER
 const getUserInformation = async (req: Request, res: Response) => {
   const session_token = req.cookies.session_token;
-  if (!session_token) res.status(422).json('Session token not passed');
+  if (!session_token) return res.status(422).json('Session token not passed');
 
   try {
     const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
@@ -52,7 +52,7 @@ const getUserInformation = async (req: Request, res: Response) => {
   } catch (error) {
     if ((error as Error).message === 'jwt expired') res.status(422).json((error as Error).message);
     else if((error as Error).message === 'user_id is invalid') res.status(422).json((error as Error).message);
-    else res.status(422).json('Server failed');
+    else res.status(500).json('Server failed');
   }
 };
 

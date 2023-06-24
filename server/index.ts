@@ -19,5 +19,5 @@ app.use(bodyParser());
 app.use(cookieParser());
 app.use(router);
 
-
-app.listen(PORT, ()=> console.log(`Running at http://localhost:${PORT}/`));
+const server = app.listen(PORT, () => console.log(`Running at http://localhost:${PORT}/`));
+module.exports = server;

@@ -94,4 +94,5 @@ module.exports = {
   registerNewUser,
   getUserInfo,
   loginTheUser,
+  User
 };
