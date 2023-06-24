@@ -1,16 +1,49 @@
+export {};
+const crypto = require('crypto');
 const { DataTypes } = require('sequelize');
 const sequelize = require('./connection');
 
 const User = sequelize.define("user", {
-  role: DataTypes.TEXT,
-  first_name: DataTypes.TEXT,
-  last_name: DataTypes.TEXT,
-  email: DataTypes.TEXT,
-  personal_email: DataTypes.TEXT,
-  password: DataTypes.TEXT,
-  phone: DataTypes.TEXT,
-  department: DataTypes.TEXT,
-  user_id: DataTypes.TEXT,
+  role: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  first_name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  last_name: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  email: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    isEmail: true,
+  },
+  personal_email: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+    isEmail: true,
+  },
+  password: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  phone: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  department: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  user_id: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    unique: true,
+    isUUID: true,
+  },
 });
 
 (async () => {
@@ -28,7 +61,7 @@ const registerNewUser = async () => {
     password: 'admin',
     phone: '123456789',
     department: '567-UFG',
-    user_id: crypto.randomUUID()
+    user_id: crypto.randomUUID(),
   };
 
   const newUSer = await User.create(userInformation);
