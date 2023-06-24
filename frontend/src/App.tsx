@@ -1,4 +1,5 @@
-// import {useState} from 'react';
+// @ts-ignore
+import React from 'react';
 import './App.css';
 import {Login} from './Pages/Login';
 import {Register} from './Pages/Register';
