@@ -1,18 +1,16 @@
 // import {useState} from 'react';
 import './App.css';
-import {MinonStore} from './utils/zustand.store';
+import {Login} from './Pages/Login';
+import {Register} from './Pages/Register';
+import {Home} from './Pages/Home/Home';
 
 function App() {
-	const {minon, increase, decrease} = MinonStore();
-
 	return (
 		<>
 			<h1>This is Minon Mentor</h1>
-			<div>
-				<button onClick={() => increase(1)}>+ minons</button>
-				<span>{minon}</span>
-				<button onClick={() => decrease(1)}>- minons</button>
-			</div>
+			<Login></Login>
+			<Register></Register>
+			<Home></Home>
 		</>
 	);
 }

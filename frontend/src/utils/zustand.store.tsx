@@ -9,5 +9,5 @@ interface MinonState {
 export const MinonStore = create<MinonState>()((set) => ({
 	minon: 0,
 	increase: (by) => set((state) => ({minon: state.minon + by})),
-	decrease: (by) => set((state) => ({minon: state.minon - by})),
+	decrease: (by) => set((state) => ({minon: state.minon === 0 ? (state.minon = 0) : state.minon - by})),
 }));
