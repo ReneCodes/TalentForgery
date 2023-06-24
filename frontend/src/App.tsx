@@ -1,4 +1,5 @@
-// import {useState} from 'react';
+// @ts-ignore
+import React from 'react';
 import './App.css';
 
 function App() {
