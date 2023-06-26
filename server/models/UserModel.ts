@@ -1,4 +1,3 @@
-export {};
 
 import { UUID } from "crypto";
 import { registeredUser, loginUser } from "../types/user";
@@ -8,9 +7,9 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("./connection");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
-const {checkInvite} = require('./InviteModel');
+const { checkInvite } = require('./InviteModel');
 
-const User = sequelize.define("user", {
+export const User = sequelize.define("user", {
   role: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -61,7 +60,7 @@ const registerNewUser = async (providedInformaion: registeredUser) => {
   const findUser = await User.findOne({ where: { email: providedInformaion.email } });
   const inviteID = await checkInvite(providedInformaion.inviteID);
   if (findUser) throw new Error('User already exists');
-  else if(!inviteID) throw new Error('Invalid invite');
+  else if (!inviteID) throw new Error('Invalid invite');
   else {
     const hash = await hashAsync(providedInformaion.password, 10);
     providedInformaion.password = hash;
@@ -81,16 +80,7 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   const samePassword = await bcrypt.compare(password, findUser.password);
   if (!samePassword) throw new Error("Wrong credentials");
   else {
-    const {
-      role,
-      first_name,
-      last_name,
-      email,
-      personal_email,
-      phone,
-      department,
-      user_id,
-    } = findUser;
+    const { role, first_name, last_name, email, personal_email, phone, department, user_id, } = findUser;
     return [
       { role, first_name, last_name, email, personal_email, phone, department },
       user_id,
@@ -102,30 +92,14 @@ const getUserInfo = async (user_id: UUID) => {
   const userInfo = await User.findOne({ where: { user_id } });
   if (!userInfo) throw new Error("user_id is invalid");
   else {
-    const {
-      role,
-      first_name,
-      last_name,
-      email,
-      personal_email,
-      phone,
-      department,
-    } = userInfo;
-    return {
-      role,
-      first_name,
-      last_name,
-      email,
-      personal_email,
-      phone,
-      department,
-    };
+    const { role, first_name, last_name, email, personal_email, phone, department, } = userInfo;
+    return { role, first_name, last_name, email, personal_email, phone, department };
   }
 };
 
 module.exports = {
-  User,
   registerNewUser,
   getUserInfo,
   loginTheUser,
+  User,
 };

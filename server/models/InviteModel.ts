@@ -1,7 +1,7 @@
 const sequelize = require('./connection');
 const { DataTypes } = require('sequelize');
-const { User } = require('./UserModel');
 import { UUID } from "crypto";
+import { User } from "./UserModel";
 const crypto = require('crypto');
 
 const Invites = sequelize.define("invite", {
@@ -16,9 +16,11 @@ const Invites = sequelize.define("invite", {
 });
 
 const getUserInvite = async (user_id: UUID) => {
+
   const userInfo = await User.findOne({ where: { user_id } });
+
   if (!userInfo) throw new Error('user_id is invalid');
-  if (userInfo.role !== 'Admin') throw new Error('unauthorized');
+  if (userInfo.role !== 'admin') throw new Error('unauthorized');
   else {
     const invite = await Invites.findOne({ where: { user_created: user_id } });
     if (invite) return invite.inviteID;

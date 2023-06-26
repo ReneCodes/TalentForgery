@@ -74,12 +74,9 @@ const upload = multer({ storage });
 
 const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
   try {
-    console.log(req.body);
-
     await upload.single('profile_picture')(req, res, next);
     res.send('Done');
   } catch (error) {
-    console.log(error);
     res.send('Failed')
   }
 
