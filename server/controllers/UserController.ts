@@ -5,7 +5,7 @@ const {
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // REGISTERS THE USER
 const registerUser = async (req: Request, res: Response) => {
@@ -47,24 +47,46 @@ const loginUser = async (req: Request, res: Response) => {
 // GETS ALL THE INFORMATION FROM A CERTAIN USER
 const getUserInformation = async (req: Request, res: Response) => {
   const session_token = req.cookies.session_token;
-  if (!session_token) return res.status(422).json('Session token not passed');
-
   try {
     const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
-    if (!user_id) res.status(422).json('user_id not in the token');
-    else {
-      const data = await getUserInfo(user_id);
-      res.status(200).json(data);
-    }
+    const data = await getUserInfo(user_id);
+    res.status(200).json(data);
   } catch (error) {
-    const errorMessage = (error as Error).message;
-    if (errorMessage === 'jwt expired' || errorMessage === 'user_id is invalid') res.status(422).json(errorMessage);
-    else res.status(500).json('Server failed');
+    res.status(500).json('Server failed');
   }
+};
+
+const multer = require('multer');
+import { fileInput } from '../types/user';
+
+const storage = multer.diskStorage({
+  destination: (req: Request, file: File, cb: Function) => {
+    cb(null, '../images/profile_pictures');
+  },
+  filename: (req: Request, file: fileInput, cb: Function) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+
+const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    console.log(req.body);
+
+    await upload.single('profile_picture')(req, res, next);
+    res.send('Done');
+  } catch (error) {
+    console.log(error);
+    res.send('Failed')
+  }
+
 };
 
 module.exports = {
   registerUser,
   getUserInformation,
   loginUser,
+  uploadImage
 };
