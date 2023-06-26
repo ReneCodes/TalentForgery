@@ -1,8 +1,9 @@
 const request = require('supertest');
 const expect = require('chai').expect;
 const server = require('../dist/index');
-const sequelize = require('../dist/models/connection');
+const crypto = require('crypto');
 const { User } = require('../dist/models/UserModel');
+const { Invites } = require('../dist/models/InviteModel');
 
 
 afterAll((done) => {
@@ -17,6 +18,7 @@ afterAll((done) => {
 });
 
 const user_info = {
+  inviteID: 'invalidID',
   first_name: "Bob",
   last_name: "Alfred",
   email: "admin@admin.com",
@@ -58,7 +60,24 @@ describe('Register Tests', () => {
     expect(res.text).to.equal('"Not enough information provided"');
   });
 
+  it('Should not register with an invalid inviteID', async () => {
+
+    const res = await request(`http://localhost:${process.env.PORT}`)
+      .post('/register')
+      .send(JSON.stringify(user_info))
+      .set('Content-Type', 'application/json')
+      .expect('Content-Type', 'application/json; charset=utf-8')
+
+    expect(res.statusCode).equal(409);
+    expect(res.text).to.equal('"Invalid invite"');
+  });
+
   it('should register a new user', async () => {
+
+    const randomBytes = crypto.randomBytes(16);
+    const inviteID = randomBytes.toString('hex');
+    await Invites.create({ inviteID, user_created: 'testsUser' })
+    user_info.inviteID = inviteID;
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/register')

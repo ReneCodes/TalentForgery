@@ -1,18 +1,24 @@
-const { registerNewUser, getUserInfo, loginTheUser } = require('../models/UserModel');
+const {
+  registerNewUser,
+  loginTheUser,
+  getUserInfo,
+} = require('../models/UserModel');
+
 const jwt = require('jsonwebtoken');
 import { Request, Response } from 'express';
 
 // REGISTERS THE USER
 const registerUser = async (req: Request, res: Response) => {
-  const { first_name, last_name, email, personal_email, password, phone, department } = req.body;
-  if (!first_name || !last_name || !email || !password || !phone || !department) {
+  const { first_name, last_name, email, personal_email, password, phone, department, inviteID } = req.body;
+  if (!first_name || !last_name || !email || !password || !phone || !department || !inviteID) {
     res.status(400).json('Not enough information provided');
   } else {
     try {
-      const data = await registerNewUser({ first_name, last_name, email, personal_email, password, phone, department });
+      const data = await registerNewUser({ first_name, last_name, email, personal_email, password, phone, department, inviteID });
       res.status(201).json(data);
     } catch (error) {
-      if ((error as Error).message === 'User already exists') res.status(409).json('User already exists');
+      const errorMessage = (error as Error).message;
+      if (errorMessage === 'User already exists' || errorMessage === 'Invalid invite') res.status(409).json(errorMessage);
       else res.status(500).json('Server Failed');
     }
   }
@@ -29,8 +35,9 @@ const loginUser = async (req: Request, res: Response) => {
       res.setHeader('Set-Cookie', `session_token=${token}; path=/`);
       res.status(200).json(user_info);
     } catch (error) {
-      if ((error as Error).message === 'User dosent exist') res.status(404).json((error as Error).message);
-      else if ((error as Error).message === 'Wrong credentials') res.status(422).json((error as Error).message);
+      const errorMessage = (error as Error).message;
+      if (errorMessage === 'User dosent exist') res.status(404).json(errorMessage);
+      else if (errorMessage === 'Wrong credentials') res.status(422).json(errorMessage);
       else res.status(500).json('Server Failed');
     }
   }
@@ -45,15 +52,19 @@ const getUserInformation = async (req: Request, res: Response) => {
   try {
     const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
     if (!user_id) res.status(422).json('user_id not in the token');
-    else{
+    else {
       const data = await getUserInfo(user_id);
       res.status(200).json(data);
     }
   } catch (error) {
-    if ((error as Error).message === 'jwt expired') res.status(422).json((error as Error).message);
-    else if((error as Error).message === 'user_id is invalid') res.status(422).json((error as Error).message);
+    const errorMessage = (error as Error).message;
+    if (errorMessage === 'jwt expired' || errorMessage === 'user_id is invalid') res.status(422).json(errorMessage);
     else res.status(500).json('Server failed');
   }
 };
 
-module.exports = { registerUser, getUserInformation, loginUser };
+module.exports = {
+  registerUser,
+  getUserInformation,
+  loginUser,
+};
