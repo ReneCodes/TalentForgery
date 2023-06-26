@@ -5,7 +5,7 @@ const dotenv = require('dotenv');
 const user = process.env.POSTGRES_USER;
 const password = process.env.POSTGRES_PASSWORD;
 const port = process.env.POSTGRES_PORT;
-const dbname = process.env.DB_Name;
+const dbname = process.env.DB_NAME;
 
 const sequelize = new Sequelize(dbname, user, password, {
   host: 'localhost',
