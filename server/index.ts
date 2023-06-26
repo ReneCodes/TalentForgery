@@ -5,6 +5,8 @@ const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 
+const retire = require('./retire');
+
 const router = require('./router');
 const app = express();
 const PORT = process.env.PORT || 8080;
