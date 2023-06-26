@@ -7,7 +7,7 @@ router.get("/user", UserController.getUserInformation);
 router.post("/register", UserController.registerUser);
 router.post("/login", UserController.loginUser);
 
-router.post("/create-tutorial", TutorialController.createTutorial);
-router.get("/all-tutorials", TutorialController.getAllTutorials);
+router.post("/create_tutorial", TutorialController.createTutorial);
+router.get("/get_all_tutorials", TutorialController.getAllTutorials);
 
 module.exports = router;

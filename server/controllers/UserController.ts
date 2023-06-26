@@ -1,13 +1,11 @@
-export {};
 const {
   registerNewUser,
-  getUserInfo,
   loginTheUser,
+  getUserInfo,
 } = require("../models/UserModel");
+
 const jwt = require("jsonwebtoken");
-// @ts-ignore
 import { Request, Response } from "express";
-;
 
 // REGISTERS THE USER
 const registerUser = async (req: Request, res: Response) => {

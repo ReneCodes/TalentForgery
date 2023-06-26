@@ -2,20 +2,13 @@ export {};
 const { Sequelize } = require("sequelize");
 const dotenv = require("dotenv");
 
-// import dotenv from "dotenv";
-dotenv.config();
-
-const user = process.env.POSTGRES_USER || "defaultUser";
+const user = process.env.POSTGRES_USER;
 const password = process.env.POSTGRES_PASSWORD;
 const port = process.env.POSTGRES_PORT;
-const dbName = process.env.POSTGRES_DB;
-const portNumber = port ? parseInt(port, 10) : undefined;
+const dbname = process.env.DB_Name;
 
-console.log(user, password, port, dbName);
-
-const sequelize = new Sequelize(dbName, user, password, {
+const sequelize = new Sequelize(dbname, user, password, {
   host: "localhost",
-  port: portNumber,
   dialect: "postgres",
   logging: false,
 });

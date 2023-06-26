@@ -1,12 +1,10 @@
-// const { Request, Response } = require("express");
-// @ts-ignore
-import { Request, Response } from "express";
 import { createdTutorial } from "../types/tutorial";
 const jwt = require("jsonwebtoken");
 const {
   createTheTutorial,
   getAllTheTutorials,
 } = require("../models/TutorialModel");
+import { Request, Response } from "express";
 
 export async function createTutorial(req: Request, res: Response) {
   const sessionToken = req.cookies.session_token;
@@ -43,7 +41,7 @@ export async function createTutorial(req: Request, res: Response) {
       access_date,
       due_date,
     };
-    const result = await createTheTutorial(tutorialData, user_id);
+    await createTheTutorial(tutorialData, user_id);
     res.status(201).json("Tutorial created.");
   } catch (error) {
     if ((error as Error).message === "Unauthorized") {
