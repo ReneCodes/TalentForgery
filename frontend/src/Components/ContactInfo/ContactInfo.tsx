@@ -1,17 +1,6 @@
 import {FC} from "react";
 import './ContactInfo.css';
-
-interface ContactInfoComp {
-  info: {
-    firstName: string,
-    lastName: string,
-    id: number,
-    department: string,
-    email: string,
-    secondEmail: string,
-    phoneNumber: string
-  }
-}
+import { ContactInfoComp } from "../../utils/types";
 
 const ContactInfo: FC<ContactInfoComp> = ({info}) => {
   return <div className='contact'>

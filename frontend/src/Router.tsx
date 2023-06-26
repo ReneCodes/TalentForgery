@@ -6,6 +6,7 @@ import Register from './Pages/Register';
 import {Home} from './Pages/Home/Home';
 import ContactInfo from './Components/ContactInfo/ContactInfo';
 import Stats from './Components/Stats/Stats';
+import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
 
 const info = {
 	firstName: 'jon',
@@ -38,11 +39,15 @@ export const Router = createBrowserRouter([
 		element: <Register />,
 	},
 	{
-		path: 'profile',
+		path: '/profile',
 		element: <ContactInfo info={info} />
 	},
 	{
-		path: 'stats',
+		path: '/stats',
 		element: <Stats />
+	},
+	{
+		path: '/staff',
+		element: <EmployeeInfo contactInfo={info} taskArr={['fire', 'water', 'earth', 'air']} />
 	}
 ]);
