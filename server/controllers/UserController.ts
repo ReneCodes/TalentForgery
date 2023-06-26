@@ -72,36 +72,6 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-
-const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    console.log(req.body);
-
-    await upload.single('profile_picture')(req, res, next);
-    res.send('Done');
-  } catch (error) {
-    console.log(error);
-    res.send('Failed')
-  }
-
-};
-
-// UPLOADS A TEST IMAGE
-const multer = require('multer');
-import { fileInput } from '../types/user';
-
-const storage = multer.diskStorage({
-  destination: (req: Request, file: File, cb: Function) => {
-    cb(null, '../images/profile_pictures');
-  },
-  filename: (req: Request, file: fileInput, cb: Function) => {
-    cb(null, Date.now() + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-
 const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
   try {
     console.log(req.body);
