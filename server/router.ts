@@ -6,5 +6,8 @@ router.get('/user', UserController.getUserInformation);
 router.post('/register', UserController.registerUser);
 router.post('/login', UserController.loginUser);
 
+router.post("/create-tutorial")
+router.get("/all-tutorials")
+
 module.exports = router;
 
