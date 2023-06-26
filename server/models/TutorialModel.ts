@@ -1,7 +1,7 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("./connection");
-const crypto = require("crypto");
 const { User } = require("./UserModel");
+import { UUID } from "crypto";
 import { createdTutorial } from "../types/tutorial";
 export {};
 
@@ -9,6 +9,10 @@ const Tutorial = sequelize.define("tutorial", {
   creator_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
+    // references: {
+    //   model: User,
+    //   key: "id",
+    // },
   },
   title: {
     type: DataTypes.TEXT,
@@ -44,27 +48,38 @@ const Tutorial = sequelize.define("tutorial", {
   },
 });
 
-// Tutorial.belongsTo(User, { foreignKey: "creator_id" })
 (async () => {
   await sequelize.sync({ alter: true });
 })();
 
 // Methods for tutorials: Create Tutorial, get all tutorials
 
-const createTheTutorial = async (providedInformaion: createdTutorial) => {
-  try {
-    // Create tutorial in db
-    const tutorial = await Tutorial.create(providedInformaion);
+// Tutorial.belongsTo(User, { foreignKey: "creator_id" });
+
+const createTheTutorial = async (
+  providedInformaion: createdTutorial,
+  user_id: UUID
+) => {
+  // Create tutorial in db
+  const creator = await User.findOne({ where: { user_id } });
+  // const creator = await User.findByPk(creator_id);
+
+  console.log(creator);
+
+  if (creator.role !== "admin") {
+    throw new Error("Unauthorized");
+  } else {
+    const tutorial = await Tutorial.create({
+      ...providedInformaion,
+      creator_id: user_id,
+    });
     return "Tutorial created!";
-  } catch (error) {
-    throw new Error("Failed to create tutorial");
   }
 };
 
 const getAllTheTutorials = async () => {
   try {
     const tutorials = await Tutorial.findAll();
-    console.log("Tutorials are looking good ");
     return tutorials;
   } catch (error) {
     throw new Error("Failed to retreive tutorials");

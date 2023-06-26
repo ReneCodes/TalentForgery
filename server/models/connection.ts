@@ -1,9 +1,11 @@
 export {};
 const { Sequelize } = require("sequelize");
-// const dotenv1 = require('dotenv');
+const dotenv = require("dotenv");
 
-import dotenv from "dotenv";
+// import dotenv from "dotenv";
 dotenv.config();
+
+const str = "Some string";
 
 const user = process.env.POSTGRES_USER || "defaultUser";
 const password = process.env.POSTGRES_PASSWORD;

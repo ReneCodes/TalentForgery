@@ -1,16 +1,54 @@
-import { Request, Response } from "express";
+const { Request, Response } = require("express");
+import { createdTutorial } from "../types/tutorial";
+const jwt = require("jsonwebtoken");
 const {
   createTheTutorial,
   getAllTheTutorials,
 } = require("../models/TutorialModel");
 
 export async function createTutorial(req: Request, res: Response) {
+  const sessionToken = req.cookies.session_token;
+  const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
+  const {
+    title,
+    video_url,
+    description,
+    question_ids,
+    questions_shown,
+    access_date,
+    due_date,
+  }: createdTutorial = req.body;
+
+  if (
+    !title ||
+    !video_url ||
+    !description ||
+    !question_ids ||
+    !questions_shown ||
+    !access_date ||
+    !due_date
+  ) {
+    return res.status(400).json("All fields are required");
+  }
+
   try {
-    const tutorialData = req.body;
-    const result = await createTheTutorial(tutorialData);
-    res.status(201).json({ message: result });
+    const tutorialData = {
+      title,
+      video_url,
+      description,
+      question_ids,
+      questions_shown,
+      access_date,
+      due_date,
+    };
+    const result = await createTheTutorial(tutorialData, user_id);
+    res.status(201).json("Tutorial created.");
   } catch (error) {
-    res.status(500).json({ error: "Failed to create tutorial" });
+    if ((error as Error).message === "Unauthorized") {
+      res.status(403).json("Unauthorized");
+    } else {
+      res.status(500).json("Failed to create tutorial.");
+    }
   }
 }
 
@@ -19,8 +57,7 @@ export async function getAllTutorials(req: Request, res: Response) {
     const tutorials = await getAllTheTutorials();
     res.status(200).json(tutorials);
   } catch (error) {
-    console.log(error);
-    res.status(500).json({ error: "Failed to retrieve tutorial" });
+    res.status(500).json("Failed to retrieve tutorial");
   }
 }
 
