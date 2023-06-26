@@ -44,7 +44,8 @@ const Tutorial = sequelize.define("tutorial", {
   },
 });
 
-Tutorial.belongsTo(User, { foreignKey: "creator_id" })(async () => {
+// Tutorial.belongsTo(User, { foreignKey: "creator_id" })
+(async () => {
   await sequelize.sync({ alter: true });
 })();
 
@@ -62,7 +63,8 @@ const createTheTutorial = async (providedInformaion: createdTutorial) => {
 
 const getAllTheTutorials = async () => {
   try {
-    const tutorials = await Tutorial.model.findAll();
+    const tutorials = await Tutorial.findAll();
+    console.log("Tutorials are looking good ");
     return tutorials;
   } catch (error) {
     throw new Error("Failed to retreive tutorials");
