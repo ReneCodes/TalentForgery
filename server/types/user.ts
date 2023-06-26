@@ -13,3 +13,10 @@ export type loginUser = {
   email: String,
   password: String
 }
+
+export type fileInput = {
+  fieldname: string,
+  originalname: string,
+  encoding: string,
+  mimetype: string
+}

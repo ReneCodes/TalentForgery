@@ -1,6 +1,6 @@
 const { registerNewUser, getUserInfo, loginTheUser } = require('../models/UserModel');
 const jwt = require('jsonwebtoken');
-import { Request, Response } from 'express';
+import { NextFunction, Request, Response } from 'express';
 
 // REGISTERS THE USER
 const registerUser = async (req: Request, res: Response) => {
@@ -56,4 +56,42 @@ const getUserInformation = async (req: Request, res: Response) => {
   }
 };
 
+<<<<<<< main
 module.exports = { registerUser, getUserInformation, loginUser };
+=======
+// UPLOADS A TEST IMAGE
+const multer = require('multer');
+import { fileInput } from '../types/user';
+
+const storage = multer.diskStorage({
+  destination: (req: Request, file: File, cb: Function) => {
+    cb(null, '../images/profile_pictures');
+  },
+  filename: (req: Request, file: fileInput, cb: Function) => {
+    cb(null, Date.now() + file.originalname);
+  },
+});
+
+const upload = multer({ storage });
+
+
+const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
+  try {
+    console.log(req.body);
+
+    await upload.single('profile_picture')(req, res, next);
+    res.send('Done');
+  } catch (error) {
+    console.log(error);
+    res.send('Failed')
+  }
+
+};
+
+module.exports = {
+  registerUser,
+  getUserInformation,
+  loginUser,
+  uploadImage
+};
+>>>>>>> local
