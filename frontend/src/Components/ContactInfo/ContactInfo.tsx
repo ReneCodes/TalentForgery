@@ -1,4 +1,5 @@
 import {FC} from "react";
+import './ContactInfo.css';
 
 interface ContactInfoComp {
   info: {
@@ -15,40 +16,40 @@ interface ContactInfoComp {
 const ContactInfo: FC<ContactInfoComp> = ({info}) => {
   return <div className='contact'>
     <div>
-      <h1 className='title'>Personal Information</h1>
+      <h1 className='contact_title'>Personal Information</h1>
       <div className='row'>
-        <div className="box">
+        <div className="contact_box ">
           <h2 className="info">{info.firstName}</h2>
           <div className="line"></div>
           <p className="label">First Name</p>
         </div>
-        <div className="box">
+        <div className="contact_box">
           <h2 className="info">{info.lastName}</h2>
           <div className="line"></div>
           <p className="label">Last Name</p>
         </div>
       </div>
       <div className='row'>
-        <div className="box">
+        <div className="contact_box">
           <h2 className="info">{info.id}</h2>
           <div className="line"></div>
           <p className="label">ID</p>
         </div>
-        <div className="box">
+        <div className="contact_box">
           <h2 className="info">{info.department}</h2>
           <div className="line"></div>
           <p className="label">Department</p>
         </div>
       </div>
     </div>
-      <h1 className='title'>Contact Details</h1>
+      <h1 className='contact_title'>Contact Details</h1>
     <div className='contact_info'>
-      <div className="box">
+      <div className="contact_box">
           <h2 className="info">{info.email}</h2>
           <div className="line"></div>
           <p className="label">Email</p>
         </div>
-        <div className="box">
+        <div className="contact_box">
           <h2 className="info">{info.secondEmail}</h2>
           <div className="line"></div>
           <p className="label">Secondary Email</p>
