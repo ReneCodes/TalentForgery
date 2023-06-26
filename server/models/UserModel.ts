@@ -8,6 +8,7 @@ const { DataTypes } = require("sequelize");
 const sequelize = require("./connection");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
+const {checkInvite} = require('./InviteModel');
 
 const User = sequelize.define("user", {
   role: {
@@ -57,10 +58,10 @@ const User = sequelize.define("user", {
 })();
 
 const registerNewUser = async (providedInformaion: registeredUser) => {
-  const findUser = await User.findOne({
-    where: { email: providedInformaion.email },
-  });
-  if (findUser) throw new Error("User already exists");
+  const findUser = await User.findOne({ where: { email: providedInformaion.email } });
+  const inviteID = await checkInvite(providedInformaion.inviteID);
+  if (findUser) throw new Error('User already exists');
+  else if(!inviteID) throw new Error('Invalid invite');
   else {
     const hash = await hashAsync(providedInformaion.password, 10);
     providedInformaion.password = hash;
@@ -123,8 +124,8 @@ const getUserInfo = async (user_id: UUID) => {
 };
 
 module.exports = {
+  User,
   registerNewUser,
   getUserInfo,
   loginTheUser,
-  User,
 };
