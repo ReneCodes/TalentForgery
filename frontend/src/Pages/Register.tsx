@@ -71,7 +71,7 @@ const Register = () => {
 	return (
 		<Container
 			maxWidth="xs"
-			sx={{height: '100vh', overflow: 'hidden'}}>
+			sx={{height: '100%', mb: 8}}>
 			<Container
 				maxWidth="xs"
 				sx={{backgroundColor: 'inherit'}}>
@@ -95,6 +95,7 @@ const Register = () => {
 							label="First Name"
 							variant="outlined"
 							aria-label="name input-field"
+							aria-invalid={errors.firstName ? 'true' : 'false'}
 							{...register('firstName', {
 								required: 'Your Firstname is required',
 							})}
@@ -106,6 +107,7 @@ const Register = () => {
 							label="Last Name"
 							variant="outlined"
 							aria-label="name input-field"
+							aria-invalid={errors.lastname ? 'true' : 'false'}
 							{...register('lastname', {
 								required: 'Your Lastname is required',
 							})}
@@ -118,11 +120,11 @@ const Register = () => {
 							type="email"
 							variant="outlined"
 							aria-label="name input-field"
+							aria-invalid={errors.email ? 'true' : 'false'}
 							{...register('email', {
 								required: 'Your Email is required',
 							})}
 						/>
-						{/*  */}
 						<FormControl
 							error={!!errors.password}
 							fullWidth
@@ -133,6 +135,12 @@ const Register = () => {
 								id="password-field"
 								type={showPassword ? 'text' : 'password'}
 								minLength={8}
+								label="Password"
+								aria-label="password input-field"
+								aria-invalid={errors.password ? 'true' : 'false'}
+								{...register('password', {
+									required: 'Password is required',
+								})}
 								endAdornment={
 									<InputAdornment position="end">
 										<IconButton
@@ -143,15 +151,14 @@ const Register = () => {
 										</IconButton>
 									</InputAdornment>
 								}
-								label="Password"
-								{...register('password', {
-									required: 'Password is required',
-								})}
 							/>
-							<FormHelperText>{errors.password ? errors.password?.message : 'Minimun 8 Characters.\nMust contain lower and uppercase letters'}</FormHelperText>
+							<Stack>
+								<FormHelperText>{errors.password ? errors.password?.message : 'Minimun 8 Characters.'}</FormHelperText>
+
+								<FormHelperText>{errors.password ? '' : 'Must contain lower and uppercase letters'}</FormHelperText>
+							</Stack>
 						</FormControl>
 
-						{/*  */}
 						<TextField
 							error={!!errors.confirmPassword}
 							helperText={errors.confirmPassword?.message}
@@ -160,7 +167,8 @@ const Register = () => {
 							variant="outlined"
 							type={showPassword ? 'text' : 'password'}
 							minLength={8}
-							aria-label="name input-field"
+							aria-label="confirmPassword input-field"
+							aria-invalid={errors.confirmPassword ? 'true' : 'false'}
 							{...register('confirmPassword', {
 								required: 'Matching Password is required',
 							})}
@@ -170,7 +178,8 @@ const Register = () => {
 							label="Secondary Email - Optional"
 							type="email"
 							variant="outlined"
-							aria-label="name input-field"
+							aria-label="second email optional"
+							aria-invalid={errors.secondEmail ? 'true' : 'false'}
 							{...register('secondEmail')}
 						/>
 						<TextField
@@ -178,13 +187,15 @@ const Register = () => {
 							label="Phone Number - Optional"
 							variant="outlined"
 							inputProps={{inputMode: 'numeric', pattern: '[+0-9]*'}}
+							aria-label="phone number optional"
+							aria-invalid={errors.phoneNumber ? 'true' : 'false'}
 							{...register('phoneNumber')}
 						/>
 						<Button
 							type="submit"
 							variant="contained"
-							aria-label="register">
-							Register
+							aria-label="register now">
+							Register Now
 						</Button>
 					</Stack>
 				</form>

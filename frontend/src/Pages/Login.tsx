@@ -4,7 +4,7 @@ import {Container, TextField, FormControl, InputLabel, OutlinedInput, InputAdorn
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 
 type LoginFormValues = {
-	id: string;
+	userId: string;
 	password: string;
 };
 
@@ -12,7 +12,7 @@ export const Login: FC = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const loginForm = useForm<LoginFormValues>({
 		defaultValues: {
-			id: '',
+			userId: '',
 			password: '',
 		},
 	});
@@ -30,7 +30,7 @@ export const Login: FC = () => {
 		// on mismatch => incorrect id or password
 		// then => reset
 		reset({
-			id: '',
+			userId: '',
 			password: '',
 		});
 	}
@@ -38,7 +38,7 @@ export const Login: FC = () => {
 	return (
 		<Container
 			maxWidth="xs"
-			sx={{height: '100vh', overflow: 'hidden'}}>
+			sx={{height: '100vh', overflow: 'hidden', mb: 8}}>
 			<Container
 				maxWidth="xs"
 				sx={{backgroundColor: 'inherit'}}>
@@ -56,15 +56,16 @@ export const Login: FC = () => {
 						width={'90%'}
 						margin={'auto'}>
 						<TextField
-							error={!!errors.id}
-							helperText={errors.id ? errors.id?.message : 'numbers only'}
+							error={!!errors.userId}
+							helperText={errors.userId ? errors.userId?.message : 'numbers only'}
 							inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
 							id="id-field"
 							label="ID"
 							variant="outlined"
 							fullWidth
 							aria-label="id input-field"
-							{...register('id', {
+							aria-invalid={errors.userId ? 'true' : 'false'}
+							{...register('userId', {
 								required: 'Your ID is required',
 							})}
 						/>
@@ -77,6 +78,12 @@ export const Login: FC = () => {
 							<OutlinedInput
 								id="password-field"
 								type={showPassword ? 'text' : 'password'}
+								aria-label="password input-field"
+								aria-invalid={errors.password ? 'true' : 'false'}
+								label="Password"
+								{...register('password', {
+									required: 'Password is required',
+								})}
 								endAdornment={
 									<InputAdornment position="end">
 										<IconButton
@@ -87,10 +94,6 @@ export const Login: FC = () => {
 										</IconButton>
 									</InputAdornment>
 								}
-								label="Password"
-								{...register('password', {
-									required: 'Password is required',
-								})}
 							/>
 							<FormHelperText>{errors.password ? errors.password?.message : ' '}</FormHelperText>
 						</FormControl>
