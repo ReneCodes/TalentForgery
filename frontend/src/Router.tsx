@@ -5,6 +5,7 @@ import {Login} from './Pages/Login';
 import Register from './Pages/Register';
 import {Home} from './Pages/Home/Home';
 import ContactInfo from './Components/ContactInfo/ContactInfo';
+import Stats from './Components/Stats/Stats';
 
 const info = {
 	firstName: 'jon',
@@ -39,5 +40,9 @@ export const Router = createBrowserRouter([
 	{
 		path: 'profile',
 		element: <ContactInfo info={info} />
+	},
+	{
+		path: 'stats',
+		element: <Stats />
 	}
 ]);
