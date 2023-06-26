@@ -7,6 +7,7 @@ import {Home} from './Pages/Home/Home';
 import ContactInfo from './Components/ContactInfo/ContactInfo';
 import Stats from './Components/Stats/Stats';
 import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
+import PieChartComp from './Components/PieChart/PieChart';
 
 const info = {
 	firstName: 'jon',
@@ -49,5 +50,9 @@ export const Router = createBrowserRouter([
 	{
 		path: '/staff',
 		element: <EmployeeInfo contactInfo={info} taskArr={['fire', 'water', 'earth', 'air']} />
+	}, 
+	{
+		path: '/piechart',
+		element: <PieChartComp width={120} passed={63} todo={17} failed={13} />
 	}
 ]);
