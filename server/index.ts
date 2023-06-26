@@ -7,6 +7,7 @@ const cookieParser = require('cookie-parser');
 const router = require('./router');
 const app = express();
 const PORT = process.env.PORT || 8080;
+console.log(process.env.PORT);
 
 const corsConfig = {
   origin: `http://localhost:${process.env.FRONT_END_PORT}`, // put in .env

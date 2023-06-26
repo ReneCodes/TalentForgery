@@ -27,12 +27,15 @@ const registerUser = async (req: Request, res: Response) => {
 // LOGINS THE USER AND SETS A TOKEN WITH THE USER ID AND THE EXPIRITY OF 1 MONTH IN THE COOKIES
 const loginUser = async (req: Request, res: Response) => {
   const { email, password } = req.body;
-  if (!email || !password) res.status(400).json('Not enough information provided');
+  if (!email || !password)
+    res.status(400).json("Not enough information provided");
   else {
     try {
       const [user_info, user_id] = await loginTheUser({ email, password });
-      const token = jwt.sign({ user_id }, process.env.SECRET, { expiresIn: process.env.EXPIRITY_IN_HOURS });
-      res.setHeader('Set-Cookie', `session_token=${token}; path=/`);
+      const token = jwt.sign({ user_id }, process.env.SECRET, {
+        expiresIn: process.env.EXPIRITY_IN_HOURS,
+      });
+      res.setHeader("Set-Cookie", `session_token=${token}; path=/`);
       res.status(200).json(user_info);
     } catch (error) {
       const errorMessage = (error as Error).message;
@@ -41,7 +44,6 @@ const loginUser = async (req: Request, res: Response) => {
       else res.status(500).json('Server Failed');
     }
   }
-
 };
 
 // GETS ALL THE INFORMATION FROM A CERTAIN USER
