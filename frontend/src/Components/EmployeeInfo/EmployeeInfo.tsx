@@ -15,10 +15,10 @@ const EmployeeInfo: FC<EmployeeInfoComp> = ({contactInfo, taskArr}) => {
     <div className="employee_info">
     <ContactInfo info={contactInfo}/>
 
-    <h1 className='title'>Stats</h1>
+    <h1 className='contact_title'>Stats</h1>
     <Stats />
 
-    <h1 className='title task_title'>Outstanding Tasks</h1>
+    <h1 className='task_title'>Outstanding Tasks</h1>
     <OutstandingTasks taskArr={taskArr} />
     </div>
   </div>
