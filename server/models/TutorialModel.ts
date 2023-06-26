@@ -9,10 +9,6 @@ const Tutorial = sequelize.define("tutorial", {
   creator_id: {
     type: DataTypes.INTEGER,
     allowNull: false,
-    // references: {
-    //   model: User,
-    //   key: "id",
-    // },
   },
   title: {
     type: DataTypes.TEXT,
@@ -66,7 +62,7 @@ const createTheTutorial = async (
 
   console.log(creator);
 
-  if (creator.role !== "admin") {
+  if (creator.role !== "pending") {
     throw new Error("Unauthorized");
   } else {
     const tutorial = await Tutorial.create({

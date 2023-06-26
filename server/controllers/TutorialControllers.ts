@@ -1,4 +1,6 @@
-const { Request, Response } = require("express");
+// const { Request, Response } = require("express");
+// @ts-ignore
+import { Request, Response } from "express";
 import { createdTutorial } from "../types/tutorial";
 const jwt = require("jsonwebtoken");
 const {

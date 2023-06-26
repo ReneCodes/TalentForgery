@@ -5,7 +5,9 @@ const {
   loginTheUser,
 } = require("../models/UserModel");
 const jwt = require("jsonwebtoken");
-const { Request, Response } = require("express");
+// @ts-ignore
+import { Request, Response } from "express";
+;
 
 // REGISTERS THE USER
 const registerUser = async (req: Request, res: Response) => {

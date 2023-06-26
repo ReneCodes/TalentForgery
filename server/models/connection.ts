@@ -5,8 +5,6 @@ const dotenv = require("dotenv");
 // import dotenv from "dotenv";
 dotenv.config();
 
-const str = "Some string";
-
 const user = process.env.POSTGRES_USER || "defaultUser";
 const password = process.env.POSTGRES_PASSWORD;
 const port = process.env.POSTGRES_PORT;
