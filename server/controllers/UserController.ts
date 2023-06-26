@@ -1,31 +1,16 @@
-export {};
 const {
   registerNewUser,
-  getUserInfo,
   loginTheUser,
-} = require("../models/UserModel");
-const jwt = require("jsonwebtoken");
-const { Request, Response } = require("express");
+  getUserInfo,
+} = require('../models/UserModel');
+
+const jwt = require('jsonwebtoken');
+import { Request, Response } from 'express';
 
 // REGISTERS THE USER
 const registerUser = async (req: Request, res: Response) => {
-  const {
-    first_name,
-    last_name,
-    email,
-    personal_email,
-    password,
-    phone,
-    department,
-  } = req.body;
-  if (
-    !first_name ||
-    !last_name ||
-    !email ||
-    !password ||
-    !phone ||
-    !department
-  ) {
+  const { first_name, last_name, email, personal_email, password, phone, department } = req.body;
+  if (!first_name || !last_name || !email || !password || !phone || !department) {
     res.status(400).json("Not enough information provided");
   } else {
     try {

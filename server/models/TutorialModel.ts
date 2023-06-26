@@ -1,18 +1,14 @@
-const { DataTypes } = require("sequelize");
+export { };
 const sequelize = require("./connection");
+const { DataTypes } = require("sequelize");
 const { User } = require("./UserModel");
 import { UUID } from "crypto";
 import { createdTutorial } from "../types/tutorial";
-export {};
 
 const Tutorial = sequelize.define("tutorial", {
   creator_id: {
-    type: DataTypes.INTEGER,
+    type: DataTypes.TEXT,
     allowNull: false,
-    // references: {
-    //   model: User,
-    //   key: "id",
-    // },
   },
   title: {
     type: DataTypes.TEXT,
@@ -39,37 +35,23 @@ const Tutorial = sequelize.define("tutorial", {
     allowNull: true,
   },
   access_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
   due_date: {
-    type: DataTypes.DATE,
+    type: DataTypes.TEXT,
     allowNull: false,
   },
 });
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
+const createTheTutorial = async (providedInformaion: createdTutorial, user_id: UUID) => {
 
-// Methods for tutorials: Create Tutorial, get all tutorials
-
-// Tutorial.belongsTo(User, { foreignKey: "creator_id" });
-
-const createTheTutorial = async (
-  providedInformaion: createdTutorial,
-  user_id: UUID
-) => {
-  // Create tutorial in db
   const creator = await User.findOne({ where: { user_id } });
-  // const creator = await User.findByPk(creator_id);
-
-  console.log(creator);
 
   if (creator.role !== "admin") {
     throw new Error("Unauthorized");
   } else {
-    const tutorial = await Tutorial.create({
+    await Tutorial.create({
       ...providedInformaion,
       creator_id: user_id,
     });
