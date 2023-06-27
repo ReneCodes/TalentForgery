@@ -57,7 +57,7 @@ const AddQuestion:FC<{onData: any}> = ({onData}) => {
         </li>
       ))}
     </ul>
-    <Button type='submit' variant="contained">Contained</Button>
+    <Button type='submit' variant="contained">Create</Button>
   </form>
 }
 

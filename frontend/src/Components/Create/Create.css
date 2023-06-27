@@ -107,3 +107,10 @@ ul {
   border-radius: 5px;
   cursor: pointer;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  width: 60%;
+}
