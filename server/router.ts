@@ -23,7 +23,4 @@ router.delete('/user', authUser, UserController.deleteMyAccount);
 router.delete('/an_user', authAdminUser, UserController.deleteUserAccount);
 
 
-// EXTRA ROUTE
-router.post('/upload', UserController.uploadImage);
-
 module.exports = router;

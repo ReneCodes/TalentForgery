@@ -142,7 +142,7 @@ describe('Register Tests', () => {
 
 });
 
-describe.only('Login Tests', () => {
+describe('Login Tests', () => {
   const profileInformation = { email: "admin@admin.com", password: "123" };
 
   beforeAll(() => {
@@ -195,7 +195,7 @@ describe.only('Login Tests', () => {
     expect(res.text).to.equal('"Wrong credentials"');
   });
 
-  it.only('Should be able to login', async () => {
+  it('Should be able to login', async () => {
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/login')
