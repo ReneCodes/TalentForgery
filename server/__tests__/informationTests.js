@@ -2,7 +2,7 @@ const request = require('supertest');
 const expect = require('chai').expect;
 const server = require('../dist/index');
 const crypto = require('crypto');
-const { User } = require('../dist/models/UserModel');
+const { User } = require('../dist/models/Schemas');
 
 
 afterAll((done) => {

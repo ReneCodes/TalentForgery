@@ -2,8 +2,7 @@ const request = require('supertest');
 const expect = require('chai').expect;
 const server = require('../dist/index');
 const crypto = require('crypto');
-const { User } = require('../dist/models/UserModel');
-const { Invites } = require('../dist/models/InviteModel');
+const { User, Invites } = require('../dist/models/Schemas');
 
 
 afterAll((done) => {
@@ -76,6 +75,10 @@ describe('Register Tests', () => {
   });
 
   it('Should not register with an invalid inviteID', async () => {
+    await User.create({
+      role: 'pending', ...second_user,
+      password: "$2b$10$2D3duqAFVODAacQmGgjMtuQxzefQ48ovZmnZzMycCIo4OE5l.G/Xm", user_id: crypto.randomUUID()
+    });
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/register')
@@ -89,10 +92,8 @@ describe('Register Tests', () => {
 
   it('The first user registered becomes an admin', async () => {
 
-    const randomBytes = crypto.randomBytes(16);
-    const inviteID = randomBytes.toString('hex');
-    await Invites.create({ inviteID, user_created: 'testsUser' })
-    user_info.inviteID = inviteID;
+    await User.destroy({ where: {} });
+    user_info.inviteID = 'firstPerson';
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/register')
@@ -106,17 +107,16 @@ describe('Register Tests', () => {
 
   it('should register a new user', async () => {
 
+    const user_id = crypto.randomUUID();
+    User.create({
+      role: 'admin', ...user_info, password: "$2b$10$2D3duqAFVODAacQmGgjMtuQxzefQ48ovZmnZzMycCIo4OE5l.G/Xm",
+      user_id
+    });
+
     const randomBytes = crypto.randomBytes(16);
     const inviteID = randomBytes.toString('hex');
-    await Invites.create({ inviteID, user_created: 'testsUser' })
-    user_info.inviteID = inviteID;
+    await Invites.create({ inviteID, user_created: user_id })
     second_user.inviteID = inviteID;
-
-    await request(`http://localhost:${process.env.PORT}`)
-      .post('/register')
-      .send(JSON.stringify(user_info))
-      .set('Content-Type', 'application/json')
-      .expect('Content-Type', 'application/json; charset=utf-8')
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/register')

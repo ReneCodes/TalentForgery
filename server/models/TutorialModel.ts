@@ -1,7 +1,7 @@
 export { };
 const sequelize = require("./connection");
 const { DataTypes } = require("sequelize");
-const { User } = require("./UserModel");
+const { User } =  require('./Schemas');
 import { UUID } from "crypto";
 import { createdTutorial } from "../types/tutorial";
 

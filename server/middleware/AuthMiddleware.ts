@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 const jwt = require('jsonwebtoken');
-const { User } = require('../models/UserModel');
+const { User } = require('../models/Schemas');
 
 const authUser = async (req: Request, res: Response, next: NextFunction) => {
   const session_token = req.cookies.session_token;

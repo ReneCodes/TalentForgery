@@ -1,18 +1,6 @@
-const sequelize = require('./connection');
-const { DataTypes } = require('sequelize');
 import { UUID } from "crypto";
 const crypto = require('crypto');
-
-const Invites = sequelize.define("invite", {
-  inviteID: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  user_created: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-});
+const { Invites } = require('./Schemas');
 
 const getUserInvite = async (user_id: UUID) => {
   const invite = await Invites.findOne({ where: { user_created: user_id } });
@@ -31,7 +19,6 @@ const checkInvite = async (inviteID: string) => {
 };
 
 module.exports = {
-  Invites,
   getUserInvite,
   checkInvite
 }

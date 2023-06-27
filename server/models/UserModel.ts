@@ -3,62 +3,11 @@ import { UUID } from "crypto";
 import { registeredUser, loginUser } from "../types/user";
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const { DataTypes } = require("sequelize");
-const sequelize = require("./connection");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
 const { checkInvite } = require('./InviteModel');
+const { User } =  require('./Schemas');
 
-const User = sequelize.define("user", {
-  role: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  first_name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  last_name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    isEmail: true,
-  },
-  personal_email: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-    isEmail: true,
-  },
-  password: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  phone: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  department: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  profile_picture: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  user_id: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    unique: true,
-    isUUID: true,
-  },
-});
-
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
 
 const registerNewUser = async (providedInformaion: registeredUser) => {
   const userList = await User.findOne({ where: {} });
