@@ -5,7 +5,7 @@ ul {
 
 .question_list {
   width: 90%;
-  height: 240px;
+  height: 280px;
   margin-left: 5%;
   background-color: rgb(232, 232, 232);
   border-radius: 15px;
@@ -46,6 +46,12 @@ ul {
 
 .delete {
   cursor: pointer;
+  border: none;
+  background-color: rgb(86, 86, 255);
+  color: white;
+  height: 35px;
+  width: 120px;
+  border-radius: 5px;
 }
 
 .question_title {
@@ -86,4 +92,18 @@ ul {
 
 .selected {
   color: rgb(2, 203, 2);
+}
+
+.option_input {
+  width: 100%;
+}
+
+.add_button {
+  border: none;
+  background-color: rgb(86, 86, 255);
+  color: white;
+  height: 25px;
+  width: 50px;
+  border-radius: 5px;
+  cursor: pointer;
 }
