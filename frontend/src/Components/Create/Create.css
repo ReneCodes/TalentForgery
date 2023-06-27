@@ -1,0 +1,32 @@
+.question {
+  width: 50%;
+  background-color: rgb(232, 232, 232);
+}
+
+.question_title {
+  text-align: left;
+  font-size: 18px;
+}
+
+.question_line {
+  height: 1px;
+  background-color: black;
+}
+
+.options_list {
+  display: flex;
+  justify-content: space-around;
+  padding: 0px;
+  flex-wrap: wrap;
+}
+
+.correct {
+  color: rgb(2, 203, 2);
+}
+
+.incorrect,
+.correct {
+  text-align: left;
+  list-style: none;
+}
+

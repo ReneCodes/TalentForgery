@@ -11,3 +11,9 @@ export interface contactInfo {
   secondEmail?: string,
   phoneNumber?: string
 }
+
+export interface QuestionType {
+  question: string,
+  options: string[],
+  answer: string,
+}
