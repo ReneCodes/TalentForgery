@@ -38,16 +38,20 @@ const ContactInfo: FC<ContactInfoComp> = ({info}) => {
           <div className="line"></div>
           <p className="label">Email</p>
         </div>
+        {info.secondEmail && (
         <div className="contact_box">
           <h2 className="info">{info.secondEmail}</h2>
           <div className="line"></div>
           <p className="label">Secondary Email</p>
         </div>
+        )}
+        {info.phoneNumber && (
         <div className="phone">
-          <h2 className="info">+{info.phoneNumber}</h2>
+          <h2 className="info">{info.phoneNumber}</h2>
           <div className="line"></div>
           <p className="label">Phone Number</p>
         </div>
+        )}
     </div>
   </div>
 }

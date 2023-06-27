@@ -8,6 +8,6 @@ export interface contactInfo {
   id: number,
   department: string,
   email: string,
-  secondEmail: string,
-  phoneNumber: string
+  secondEmail?: string,
+  phoneNumber?: string
 }
