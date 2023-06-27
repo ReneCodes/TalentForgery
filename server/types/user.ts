@@ -7,9 +7,17 @@ export type registeredUser = {
   password: String,
   phone: String,
   departement: String,
+  inviteID: String,
 };
 
 export type loginUser = {
   email: String,
   password: String
+}
+
+export type fileInput = {
+  fieldname: string,
+  originalname: string,
+  encoding: string,
+  mimetype: string,
 }
