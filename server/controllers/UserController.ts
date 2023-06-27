@@ -7,23 +7,45 @@ const {
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
+const multer = require('multer');
 import { NextFunction, Request, Response } from 'express';
+import { fileInput } from '../types/user';
+
+const storage = multer.diskStorage({
+  destination: (req: Request, file: File, cb: Function) => {
+    cb(null, '../server/images/profile_pictures');
+  },
+  filename: (req: Request, file: fileInput, cb: Function) => {
+    const customFileName = Date.now() + file.originalname;
+    cb(null, Date.now() + customFileName);
+  },
+});
+
+const upload = multer({ storage });
 
 // REGISTERS THE USER
-const registerUser = async (req: Request, res: Response) => {
-  const { first_name, last_name, email, personal_email, password, phone, department, inviteID } = req.body;
-  if (!first_name || !last_name || !email || !password || !phone || !department || !inviteID) {
-    res.status(400).json('Not enough information provided');
-  } else {
-    try {
-      const data = await registerNewUser({ first_name, last_name, email, personal_email, password, phone, department, inviteID });
-      res.status(201).json(data);
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      if (errorMessage === 'User already exists' || errorMessage === 'Invalid invite') res.status(409).json(errorMessage);
-      else res.status(500).json('Server Failed');
+// req: Request -> req.file will complain if you leave with type
+const registerUser = async (req: any, res: Response, next: NextFunction) => {
+
+  await upload.single('profile_image')(req, res, async (err: Error) => {
+
+    if (err) return res.status(500).json('Server failed uploading profile picture');
+    const { first_name, last_name, email, personal_email, password, phone, department, inviteID } = req.body;
+    if (!first_name || !last_name || !email || !password || !department || !inviteID) {
+      return res.status(400).json('Not enough information provided');
+    } else {
+      try {
+        const profile_picture = req.file ? req.file.filename : null;
+        const data = await registerNewUser({ first_name, last_name, email, personal_email, password, phone, department, inviteID, profile_picture });
+        res.status(201).json(data);
+      } catch (error) {
+        const errorMessage = (error as Error).message;
+        if (errorMessage === 'User already exists' || errorMessage === 'Invalid invite') res.status(409).json(errorMessage);
+        else res.status(500).json('Server Failed');
+      }
     }
-  }
+  });
+
 };
 
 // LOGINS THE USER AND SETS A TOKEN WITH THE USER ID AND THE EXPIRITY OF 1 MONTH IN THE COOKIES
@@ -84,35 +106,10 @@ const deleteUserAccount = async (req: Request, res: Response) => {
   }
 };
 
-const multer = require('multer');
-import { fileInput } from '../types/user';
-
-const storage = multer.diskStorage({
-  destination: (req: Request, file: File, cb: Function) => {
-    cb(null, '../server/images/profile_pictures');
-  },
-  filename: (req: Request, file: fileInput, cb: Function) => {
-    cb(null, Date.now() + file.originalname);
-  },
-});
-
-const upload = multer({ storage });
-
-const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
-  try {
-    await upload.single('profile_picture')(req, res, next);
-    res.send('Done');
-  } catch (error) {
-    res.send('Failed')
-  }
-
-};
-
 module.exports = {
   deleteMyAccount,
   registerUser,
   getUserInformation,
   loginUser,
-  uploadImage,
   deleteUserAccount
 };

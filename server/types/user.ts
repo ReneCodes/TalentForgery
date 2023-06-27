@@ -8,6 +8,7 @@ export type registeredUser = {
   phone: String,
   departement: String,
   inviteID: String,
+  customFileName: String,
 };
 
 export type loginUser = {

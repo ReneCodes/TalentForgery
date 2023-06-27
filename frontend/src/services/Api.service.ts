@@ -19,19 +19,30 @@ export async function loginUser(formData: LoginFormValues) {
 
 	return errorMessage;
 }
-export async function registerUser(formData: LoginFormValues) {
+export async function registerUser(userData: LoginFormValues) {
 	let errorMessage: string = '';
-	console.log('formData', formData);
 
-	await axios
-		.post(baseURL + 'register', formData)
-		.then((response) => {
-			console.log('REGISTER RES: ', JSON.stringify(response.data));
-		})
-		.catch((error) => {
-			console.log('Error register', error.response.data);
-			errorMessage = error.response.data;
-		});
+	const formData = new FormData();
+
+	Object.entries(userData).forEach(([key, value]) => {
+    formData.append(key, value);
+  });
+  formData.append('inviteID', 'stillNeedToChange');
+
+	const image = userData.profile_image['0'];
+  formData.append('profile_image', image);
+
+  try {
+    const response = await axios.post(baseURL + 'register', formData, {
+      headers: {
+        'Content-Type': 'multipart/form-data',
+      },
+    });
+    console.log('REGISTER RES:', JSON.stringify(response.data));
+  } catch (error: any) {
+    console.log('Error register', error.response.data);
+    errorMessage = error.response.data;
+  }
 
 	return errorMessage;
 }

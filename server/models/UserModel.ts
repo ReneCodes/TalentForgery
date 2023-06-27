@@ -44,6 +44,10 @@ const User = sequelize.define("user", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  profile_picture: {
+    type: DataTypes.TEXT,
+    allowNull: true,
+  },
   user_id: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -61,13 +65,13 @@ const registerNewUser = async (providedInformaion: registeredUser) => {
   const findUser = await User.findOne({ where: { email: providedInformaion.email } });
   const inviteID = await checkInvite(providedInformaion.inviteID);
   if (findUser) throw new Error('User already exists');
-  else if (!inviteID) throw new Error('Invalid invite');
+  else if (!inviteID && userList !== null) throw new Error('Invalid invite');
   else {
     const hash = await hashAsync(providedInformaion.password, 10);
     providedInformaion.password = hash;
 
     const role = userList == null ? 'admin' : 'pending';
-    await User.create({ role, ...providedInformaion, user_id: crypto.randomUUID() });
+    const userCreated = await User.create({ role, ...providedInformaion, user_id: crypto.randomUUID() });
     return role === 'admin' ? "Admin User created" : "User created";
   }
 };
