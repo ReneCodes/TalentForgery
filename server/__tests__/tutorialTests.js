@@ -51,10 +51,6 @@ const tutorialInfo = {
 };
 
 describe("Create Tutorial Tests when user is loged out", () => {
-  it("Should return 4", async () => {
-    expect(2 + 2).toBe(4);
-  });
-
   it("Shouldn't be able to create a tutorial if it is not logged in", async () => {
     const res = await request(server)
       .post("/create_tutorial")
@@ -64,11 +60,10 @@ describe("Create Tutorial Tests when user is loged out", () => {
     expect(res.statusCode).toBe(422);
     expect(res.body).toEqual("Session token not passed");
   });
-
-  it("Should login already existing user", async () => {});
+  // it("Shoudn't be able to see tutorials if it's not logged in");
 });
 
-describe("Tutorial Tests", () => {
+describe("Admin tutorial Tests", () => {
   let sessionToken;
 
   beforeAll(async () => {
@@ -93,7 +88,6 @@ describe("Tutorial Tests", () => {
       .set("Content-Type", "application/json");
 
     const userId = loginResponse.body.user_id;
-    // sessionToken = jwt.sign({ user_id: userId }, "SECRET");
     sessionToken = loginResponse.headers["set-cookie"][0];
 
     expect(loginResponse.statusCode).toBe(200);
@@ -108,6 +102,22 @@ describe("Tutorial Tests", () => {
 
     expect(res.statusCode).toBe(201);
     expect(res.body).toEqual("Tutorial created.");
+  });
+
+  it("Should not be able to create incomplete tutorial", async () => {
+    const res = await request(server)
+      .post("/create_tutorial")
+      .send({
+        video_url: "https://example.com/onboarding",
+        description: "Short video about onboarding",
+        question_ids: ["51", "17", "21"],
+        questions_shown: ["question03", "question07", "question55"],
+      })
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken]);
+
+    expect(res.statusCode).toBe(400);
+    expect(res.body).toEqual("All fields are required");
   });
 
   afterAll(async () => {
