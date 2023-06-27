@@ -141,3 +141,54 @@ describe("Admin create/see tutorials", () => {
     await User.destroy({ where: {} });
   });
 });
+describe("User create/see tutorials", () => {
+  let sessionToken;
+
+  beforeAll(async () => {
+    // Create a new user
+    await User.create({
+      role: "pending",
+      ...user1_info,
+      user_id: crypto.randomUUID(),
+    });
+
+    const loginResponse = await request(`http://localhost:${process.env.PORT}`)
+      .post("/login")
+      .send({
+        email: user1_info.email,
+        password: "123",
+      })
+      .set("Content-Type", "application/json");
+
+    const userId = loginResponse.body.user_id;
+    sessionToken = loginResponse.headers["set-cookie"][0];
+
+    expect(loginResponse.statusCode).toBe(200);
+  });
+
+  it("Shouldn't be able to create a tutorial if user is logged in", async () => {
+    const res = await request(server)
+      .post("/create_tutorial")
+      .send(tutorialInfo)
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken]);
+
+    expect(res.statusCode).toBe(403);
+    expect(res.body).toEqual("Unauthorized");
+  });
+
+  it("Should retrieve all tutorials", async () => {
+    const res = await request(server)
+      .get("/get_all_tutorials")
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken]);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
+  });
+
+  afterAll(async () => {
+    // Clean up the user records
+    await User.destroy({ where: {} });
+  });
+});
