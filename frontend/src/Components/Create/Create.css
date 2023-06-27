@@ -1,6 +1,11 @@
+ul {
+  padding: 0px;
+}
+
+
 .question_list {
   width: 90%;
-  height: 180px;
+  height: 240px;
   margin-left: 5%;
   background-color: rgb(232, 232, 232);
   border-radius: 15px;
@@ -17,6 +22,13 @@
 
 .question_bar {
   margin-bottom: 15px;
+}
+
+.add_question {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-left: 10px;
 }
 
 .question {
@@ -64,3 +76,14 @@
   list-style: none;
 }
 
+.option,
+.selected {
+  margin: 0px;
+  list-style: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.selected {
+  color: rgb(2, 203, 2);
+}

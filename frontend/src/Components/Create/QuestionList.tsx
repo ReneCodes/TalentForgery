@@ -19,6 +19,8 @@ const QuestionList = () => {
     setQuestions([obj])
   }, [])
 
+  useEffect(() => console.log(questions), [questions])
+
   const handleLeft = () => {
     if (counter === 1) {
       setCounter(questions.length + 1)
@@ -35,14 +37,25 @@ const QuestionList = () => {
     }
   }
 
+  const handleDataFromChildren = (childData: QuestionType) => {
+    console.log(childData);
+    setQuestions((res) => [...res, childData])
+  }
+
+  const handleDelete = () => {
+    setQuestions((res) => {
+      return res.filter((_, index) => index !== counter-1);
+    })
+  }
+
   return <div className="question_list">
     <div className="question_top">
-      {counter === questions.length + 1 ? <AddQuestion /> : <Question question={questions[0]} />}
+      {counter === questions.length + 1 ? <AddQuestion onData={handleDataFromChildren} /> : <Question question={questions[counter - 1]} />}
       <h1 className="index">{counter}/{questions.length + 1}</h1>
     </div>
     <div className="question_bar">
       <ArrowBackIosNewTwoToneIcon onClick={handleLeft} className="arrow" />
-      <button className="delete">Delete</button>
+      <button onClick={handleDelete} className="delete">Delete</button>
       <ArrowForwardIosTwoToneIcon onClick={handleRight}  className="arrow" />
     </div>
   </div>
