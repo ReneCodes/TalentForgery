@@ -6,6 +6,9 @@ import {expect, test, describe} from '@jest/globals';
 import { jest } from '@jest/globals';
 
 
+// TODO: Create fake axios or it will work on real DB
+// FIXME: Create fake axios or it will work on real DB
+
 describe('Register', () => {
 	test('renders the content', async () => {
 		await act(async () => render(<Register />));
@@ -17,7 +20,7 @@ describe('Register', () => {
 		});
 
 		const inputs = screen.queryAllByRole('textbox');
-		expect(inputs.length).toBe(7);
+		expect(inputs.length).toBe(8);
 	});
 
 	test('the form works', async () => {
@@ -33,22 +36,24 @@ describe('Register', () => {
 			fireEvent.change(inputs[0], {target: {value: 'James'}});
 			fireEvent.change(inputs[1], {target: {value: 'Vowles'}});
 			fireEvent.change(inputs[2], {target: {value: 'jamesvowles@gofast.com'}});
-			fireEvent.change(inputs[3], {target: {value: 'Albon_1234'}});
+			fireEvent.change(inputs[3], {target: {value: 'Finance'}});
 			fireEvent.change(inputs[4], {target: {value: 'Albon_1234'}});
-			fireEvent.change(inputs[5], {target: {value: 'albonfan123@hotmail.com'}});
-			fireEvent.change(inputs[6], {target: {value: '07399583230'}});
+			fireEvent.change(inputs[5], {target: {value: 'Albon_1234'}});
+			fireEvent.change(inputs[6], {target: {value: 'albonfan123@hotmail.com'}});
+			fireEvent.change(inputs[7], {target: {value: '07399583230'}});
 		});
 
 		expect(inputs[0].value).toBe('James');
 		expect(inputs[1].value).toBe('Vowles');
 		expect(inputs[2].value).toBe('jamesvowles@gofast.com');
-		expect(inputs[3].value).toBe('Albon_1234');
+		expect(inputs[3].value).toBe('Finance');
 		expect(inputs[4].value).toBe('Albon_1234');
-		expect(inputs[3].value).toBe(inputs[4].value);
-		expect(inputs[5].value).toBe('albonfan123@hotmail.com');
-		expect(inputs[6].value).toBe('07399583230');
+		expect(inputs[5].value).toBe('Albon_1234');
+		expect(inputs[4].value).toBe(inputs[5].value);
+		expect(inputs[6].value).toBe('albonfan123@hotmail.com');
+		expect(inputs[7].value).toBe('07399583230');
 
-		console.log = jest.fn();
+		// @ts-ignore
 		window.alert = jest.fn();
 
 		const buttons = screen.queryAllByRole('button') as HTMLButtonElement[];
@@ -59,16 +64,6 @@ describe('Register', () => {
 			fireEvent.click(buttons[1]);
 		});
 		expect(inputs[0].value).toBe('');
-
-		expect(console.log).toHaveBeenCalledWith({
-			confirmPassword: 'Albon_1234',
-			email: 'jamesvowles@gofast.com',
-			firstName: 'James',
-			lastname: 'Vowles',
-			password: 'Albon_1234',
-			phoneNumber: '07399583230',
-			secondEmail: 'albonfan123@hotmail.com',
-		});
 	});
 
 	test('second email and phone number should be optional', async () => {
@@ -86,18 +81,22 @@ describe('Register', () => {
 			fireEvent.change(inputs[0], {target: {value: 'James'}});
 			fireEvent.change(inputs[1], {target: {value: 'Vowles'}});
 			fireEvent.change(inputs[2], {target: {value: 'jamesvowles@gofast.com'}});
-			fireEvent.change(inputs[3], {target: {value: 'Albon_1234'}});
+			fireEvent.change(inputs[3], {target: {value: 'Finance'}});
 			fireEvent.change(inputs[4], {target: {value: 'Albon_1234'}});
+			fireEvent.change(inputs[5], {target: {value: 'Albon_1234'}});
 		});
 
 		expect(inputs[0].value).toBe('James');
 		expect(inputs[1].value).toBe('Vowles');
 		expect(inputs[2].value).toBe('jamesvowles@gofast.com');
-		expect(inputs[3].value).toBe('Albon_1234');
+		expect(inputs[3].value).toBe('Finance');
 		expect(inputs[4].value).toBe('Albon_1234');
-		expect(inputs[3].value).toBe(inputs[4].value);
+		expect(inputs[5].value).toBe('Albon_1234');
+		expect(inputs[4].value).toBe(inputs[5].value);
 
+		// @ts-ignore
 		console.log = jest.fn();
+		// @ts-ignore
 		window.alert = jest.fn();
 
 		const buttons = screen.queryAllByRole('button') as HTMLButtonElement[];
@@ -106,14 +105,16 @@ describe('Register', () => {
 			fireEvent.click(buttons[1]);
 		});
 
-		expect(console.log).toHaveBeenCalledWith({
+		expect(console.log).toHaveBeenCalledWith('formData', {
 			confirmPassword: 'Albon_1234',
 			email: 'jamesvowles@gofast.com',
-			firstName: 'James',
-			lastname: 'Vowles',
+			first_name: 'James',
+			last_name: 'Vowles',
+			department: 'Finance',
 			password: 'Albon_1234',
-			phoneNumber: '',
-			secondEmail: '',
+			phone: '',
+			personal_email: '',
+			profile_image: {},
 		});
 	});
 });
@@ -133,18 +134,22 @@ describe('edge Cases', () => {
 			fireEvent.change(inputs[0], {target: {value: 'James'}});
 			fireEvent.change(inputs[1], {target: {value: 'Vowles'}});
 			fireEvent.change(inputs[2], {target: {value: 'jamesvowles@gofast.com'}});
-			fireEvent.change(inputs[3], {target: {value: 'Al_12'}});
+			fireEvent.change(inputs[3], {target: {value: 'Finance'}});
 			fireEvent.change(inputs[4], {target: {value: 'Al_12'}});
+			fireEvent.change(inputs[5], {target: {value: 'Al_12'}});
 		});
 
 		expect(inputs[0].value).toBe('James');
 		expect(inputs[1].value).toBe('Vowles');
 		expect(inputs[2].value).toBe('jamesvowles@gofast.com');
-		expect(inputs[3].value).toBe('Al_12');
+		expect(inputs[3].value).toBe('Finance');
 		expect(inputs[4].value).toBe('Al_12');
-		expect(inputs[3].value).toBe(inputs[4].value);
+		expect(inputs[5].value).toBe('Al_12');
+		expect(inputs[4].value).toBe(inputs[5].value);
 
+		// @ts-ignore
 		console.log = jest.fn();
+		// @ts-ignore
 		window.alert = jest.fn();
 
 		const buttons = screen.queryAllByRole('button') as HTMLButtonElement[];
@@ -172,17 +177,21 @@ describe('edge Cases', () => {
 			fireEvent.change(inputs[0], {target: {value: 'James'}});
 			fireEvent.change(inputs[1], {target: {value: 'Vowles'}});
 			fireEvent.change(inputs[2], {target: {value: 'jamesvowles@gofast.com'}});
-			fireEvent.change(inputs[3], {target: {value: '12345678'}});
+			fireEvent.change(inputs[3], {target: {value: 'Finance'}});
 			fireEvent.change(inputs[4], {target: {value: '12345678'}});
+			fireEvent.change(inputs[5], {target: {value: '12345678'}});
 		});
 		expect(inputs[0].value).toBe('James');
 		expect(inputs[1].value).toBe('Vowles');
 		expect(inputs[2].value).toBe('jamesvowles@gofast.com');
-		expect(inputs[3].value).toBe('12345678');
+		expect(inputs[3].value).toBe('Finance');
 		expect(inputs[4].value).toBe('12345678');
-		expect(inputs[3].value).toBe(inputs[4].value);
+		expect(inputs[5].value).toBe('12345678');
+		expect(inputs[4].value).toBe(inputs[5].value);
 
+		// @ts-ignore
 		console.log = jest.fn();
+		// @ts-ignore
 		window.alert = jest.fn();
 
 		const buttons = screen.queryAllByRole('button') as HTMLButtonElement[];
@@ -210,17 +219,21 @@ describe('edge Cases', () => {
 			fireEvent.change(inputs[0], {target: {value: 'James'}});
 			fireEvent.change(inputs[1], {target: {value: 'Vowles'}});
 			fireEvent.change(inputs[2], {target: {value: 'jamesvowles@gofast.com'}});
-			fireEvent.change(inputs[3], {target: {value: 'Albon_123'}});
-			fireEvent.change(inputs[4], {target: {value: 'Albon_234'}});
+			fireEvent.change(inputs[3], {target: {value: 'Finance'}});
+			fireEvent.change(inputs[4], {target: {value: 'Albon_123'}});
+			fireEvent.change(inputs[5], {target: {value: 'Albon_234'}});
 		});
 
 		expect(inputs[0].value).toBe('James');
 		expect(inputs[1].value).toBe('Vowles');
 		expect(inputs[2].value).toBe('jamesvowles@gofast.com');
-		expect(inputs[3].value).toBe('Albon_123');
-		expect(inputs[4].value).toBe('Albon_234');
+		expect(inputs[3].value).toBe('Finance');
+		expect(inputs[4].value).toBe('Albon_123');
+		expect(inputs[5].value).toBe('Albon_234');
 
+		// @ts-ignore
 		console.log = jest.fn();
+		// @ts-ignore
 		window.alert = jest.fn();
 
 		const buttons = screen.queryAllByRole('button') as HTMLButtonElement[];
