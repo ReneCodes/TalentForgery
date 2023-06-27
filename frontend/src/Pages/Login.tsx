@@ -1,18 +1,19 @@
 import {FC, useState} from 'react';
 import {useForm} from 'react-hook-form';
-import {Container, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button, Stack, FormHelperText} from '@mui/material';
+import {Container, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button, Stack, FormHelperText, Box} from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 
-type LoginFormValues = {
-	userId: string;
-	password: string;
-};
+import {loginUser} from '../services/Api.service';
+import {LoginFormValues} from '../@types/Types';
+import {Navigate} from 'react-router';
 
 export const Login: FC = () => {
 	const [showPassword, setShowPassword] = useState(false);
+	const [loginError, setLoginError] = useState('');
+
 	const loginForm = useForm<LoginFormValues>({
 		defaultValues: {
-			userId: '',
+			email: '',
 			password: '',
 		},
 	});
@@ -22,17 +23,17 @@ export const Login: FC = () => {
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
-	function handleLogin(data: LoginFormValues) {
-		console.log(data);
+	async function handleLogin(formData: LoginFormValues) {
+		const requestAnswer = await loginUser(formData);
 
-		// Login User function
-		// on success => navigate to Home
-		// on mismatch => incorrect id or password
-		// then => reset
-		reset({
-			userId: '',
-			password: '',
-		});
+		if (requestAnswer) setLoginError(requestAnswer);
+		else {
+			reset({
+				email: '',
+				password: '',
+			});
+			<Navigate to={'/home'} />;
+		}
 	}
 
 	return (
@@ -48,6 +49,13 @@ export const Login: FC = () => {
 				maxWidth="xs"
 				sx={{pb: 8, pt: 3, boxShadow: 3, borderRadius: 2}}>
 				<h2>Login</h2>
+				{loginError && (
+					<Box
+						color="red"
+						my={1}>
+						{loginError}
+					</Box>
+				)}
 				<form
 					onSubmit={handleSubmit(handleLogin)}
 					autoCapitalize="off">
@@ -56,17 +64,23 @@ export const Login: FC = () => {
 						width={'90%'}
 						margin={'auto'}>
 						<TextField
-							error={!!errors.userId}
-							helperText={errors.userId ? errors.userId?.message : 'numbers only'}
-							inputProps={{inputMode: 'numeric', pattern: '[0-9]*'}}
-							id="id-field"
-							label="ID"
+							error={!!errors.email}
+							helperText={errors.email ? errors.email?.message : ' '}
+							id="email-field"
+							label="email"
 							variant="outlined"
 							fullWidth
-							aria-label="id input-field"
-							aria-invalid={errors.userId ? 'true' : 'false'}
-							{...register('userId', {
-								required: 'Your ID is required',
+							aria-label="email input-field"
+							aria-invalid={errors.email ? 'true' : 'false'}
+							{...register('email', {
+								pattern: {
+									value: /^[a-zA-Z0-9._%+-]+@+[a-zA-Z0-9]+\.+([a-z.]+){2,}$/,
+									message: 'Not a valid email',
+								},
+								required: {
+									value: true,
+									message: 'Your email is required',
+								},
 							})}
 						/>
 						<FormControl
@@ -83,6 +97,10 @@ export const Login: FC = () => {
 								label="Password"
 								{...register('password', {
 									required: 'Password is required',
+									minLength: {
+										value: 8,
+										message: 'Must be 8 character or more',
+									},
 								})}
 								endAdornment={
 									<InputAdornment position="end">

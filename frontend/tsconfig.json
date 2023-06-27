@@ -8,7 +8,7 @@
 		"useUnknownInCatchVariables": true,
 
 		/* Bundler mode */
-		"moduleResolution": "bundler",
+		"moduleResolution": "Node",
 		"allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
@@ -26,8 +26,10 @@
 		/* MUI */
 		"paths": {
 			"@mui/styled-engine": ["./node_modules/@mui/styled-engine-sc"]
-		}
+		},
+		"typeRoots": ["./src/@types", "./node_modules/@types"]
 	},
-	"include": ["src"],
+	// "include": ["src"],
+	"include": ["./src/**/*", "src/@types/assets/index.d.ts", "./test-utils/**/*", "*/__mocks__/**/*", "__tests__"],
 	"references": [{"path": "./tsconfig.node.json"}]
 }
