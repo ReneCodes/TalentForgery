@@ -7,6 +7,8 @@ const password = process.env.POSTGRES_PASSWORD;
 const port = process.env.POSTGRES_PORT;
 const dbname = process.env.DB_NAME;
 
+console.log(user, password, dbname, port);
+
 const sequelize = new Sequelize(dbname, user, password, {
   host: "localhost",
   dialect: "postgres",
@@ -16,7 +18,7 @@ const sequelize = new Sequelize(dbname, user, password, {
 (async () => {
   try {
     await sequelize.authenticate();
-    // console.log("Connection has been established successfully.");
+    console.log("Connection has been established successfully.");
   } catch (error) {
     console.error("Unable to connect to the database:", error);
   }
