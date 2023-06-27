@@ -51,7 +51,7 @@ describe.only('Create a invite for new users', () => {
   afterEach(async () => {
     await User.destroy({ where: {} });
     await Invites.destroy({ where: {} });
-    role = role === 'admin' ? 'user' : 'admin';
+    role = 'admin';
   });
 
   it('Should not allow none admin users to get invites ', async () => {

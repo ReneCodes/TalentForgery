@@ -22,3 +22,16 @@ export type fileInput = {
   encoding: string,
   mimetype: string,
 }
+
+export type UserType = {
+  role: String,
+  first_name: String,
+  last_name: String,
+  email: String,
+  personal_email: String,
+  password: String,
+  phone: String,
+  department: String,
+  profile_picture: String,
+  user_id: String,
+};

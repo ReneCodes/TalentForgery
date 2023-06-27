@@ -12,6 +12,7 @@ router.post("/login", UserController.loginUser);
 // INFORMATION ROUTES
 router.get('/invite', authAdminUser, InviteController.getInvite);
 router.get('/user', authUser, UserController.getUserInformation);
+router.get('/pending_users', authAdminUser, UserController.getPendingUsers);
 
 // TUTORIAL ROUTES
 router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
