@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {LoginFormValues} from '../@types/Types';
+import {LoginFormValues, RegisterFormValues} from '../@types/Types';
 
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -19,7 +19,7 @@ export async function loginUser(formData: LoginFormValues) {
 
 	return errorMessage;
 }
-export async function registerUser(userData: LoginFormValues) {
+export async function registerUser(userData: RegisterFormValues) {
 	let errorMessage: string = '';
 
 	const formData = new FormData();
