@@ -3,6 +3,8 @@ import React from 'react';
 import {render, screen, fireEvent, act} from '@testing-library/react';
 import {Login} from '../src/Pages/Login';
 import {expect, test, describe} from '@jest/globals';
+import { jest } from '@jest/globals';
+
 
 describe('Register', () => {
 	test('login renders the content', async () => {

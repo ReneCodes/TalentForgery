@@ -1,0 +1,53 @@
+.contact {
+  max-width: 900px;
+}
+
+.contact_title {
+  margin-left: 10px;
+  text-align: left;
+}
+
+.row {
+  display: flex;
+  justify-content: space-between;
+  margin-left: 15%;
+  margin-right: 8%;
+}
+
+.contact_box {
+  width: 40%;
+  max-width: 350px;
+  margin-bottom: 40px;
+  text-align: left;
+}
+
+.info {
+  margin: 0px;
+  margin-left: 10px;
+}
+
+.line {
+  height: 1px;
+  background-color: black;
+}
+
+.label {
+  margin: 0px;
+}
+
+.contact_info {
+  margin-left: 15%;
+  margin-right: 8%;
+}
+
+.contact_info .box {
+  width: 100%;
+  max-width: 700px;
+}
+
+.phone {
+  width: 52%;
+  max-width: 350px;
+  margin-bottom: 40px;
+  text-align: left;
+}

@@ -1,0 +1,32 @@
+.page_center {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.employee_info {
+  background-color: rgb(239, 239, 239);
+  border-radius: 40px;
+  box-sizing: border-box;
+  display: flex;
+  flex-direction: column;
+  max-height: 600px;
+  max-width: 700px;
+  width: 80%;
+  padding: 10px 30px;
+  overflow: scroll;
+}
+
+.task_title {
+  margin-bottom: 0px;
+}
+
+.task_list {
+  margin: 0px;
+  margin-bottom: 20px;
+  text-align: left;
+}
+
+.task {
+  font-size: 20px;
+}

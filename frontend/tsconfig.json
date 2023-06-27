@@ -8,8 +8,8 @@
 		"useUnknownInCatchVariables": true,
 
 		/* Bundler mode */
-		"moduleResolution": "bundler",
-		"allowImportingTsExtensions": true,
+		"moduleResolution": "node",
+		// "allowImportingTsExtensions": true,
 		"resolveJsonModule": true,
 		"isolatedModules": true,
 		"noEmit": true,
