@@ -114,3 +114,7 @@ ul {
   margin: 20px;
   width: 60%;
 }
+
+.dropdown {
+  width: 200px;
+}
