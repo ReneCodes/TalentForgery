@@ -63,7 +63,7 @@ import { fileInput } from '../types/user';
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: File, cb: Function) => {
-    cb(null, '../images/profile_pictures');
+    cb(null, '../server/images/profile_pictures');
   },
   filename: (req: Request, file: fileInput, cb: Function) => {
     cb(null, Date.now() + file.originalname);
