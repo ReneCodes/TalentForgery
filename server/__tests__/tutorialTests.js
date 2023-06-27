@@ -50,7 +50,7 @@ const tutorialInfo = {
   due_date: "2023-07-25T23:59:59Z",
 };
 
-describe("Create Tutorial Tests when user is loged out", () => {
+describe("Tutorials shouldn't be seen or created if the user is logged out", () => {
   it("Shouldn't be able to create a tutorial if it is not logged in", async () => {
     const res = await request(server)
       .post("/create_tutorial")
@@ -60,10 +60,17 @@ describe("Create Tutorial Tests when user is loged out", () => {
     expect(res.statusCode).toBe(422);
     expect(res.body).toEqual("Session token not passed");
   });
-  // it("Shoudn't be able to see tutorials if it's not logged in");
+  it("Shoudn't be able to see tutorials if it's not logged in", async () => {
+    const res = await request(server)
+      .get("/get_all_tutorials")
+      .set("Content-Type", "application/json");
+
+    expect(res.statusCode).toBe(422);
+    expect(res.body).toEqual("Session token not passed");
+  });
 });
 
-describe("Admin tutorial Tests", () => {
+describe("Admin create/see tutorials", () => {
   let sessionToken;
 
   beforeAll(async () => {
@@ -118,6 +125,15 @@ describe("Admin tutorial Tests", () => {
 
     expect(res.statusCode).toBe(400);
     expect(res.body).toEqual("All fields are required");
+  });
+  it("Should retrieve all tutorials", async () => {
+    const res = await request(server)
+      .get("/get_all_tutorials")
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken]);
+
+    expect(res.statusCode).toBe(200);
+    expect(Array.isArray(res.body)).toBe(true);
   });
 
   afterAll(async () => {
