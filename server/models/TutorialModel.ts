@@ -48,7 +48,7 @@ const createTheTutorial = async (providedInformaion: createdTutorial, user_id: U
 
   const creator = await User.findOne({ where: { user_id } });
 
-  if (creator.role !== "pending") {
+  if (creator.role !== "admin") {
     throw new Error("Unauthorized");
   } else {
     await Tutorial.create({
