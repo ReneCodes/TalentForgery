@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import { useEffect, useState, FC } from "react";
 import Question from "./Question";
 import { QuestionType } from '../../utils/types';
 import './Create.css';
@@ -6,7 +6,7 @@ import ArrowForwardIosTwoToneIcon from '@mui/icons-material/ArrowForwardIosTwoTo
 import ArrowBackIosNewTwoToneIcon from '@mui/icons-material/ArrowBackIosNewTwoTone';
 import AddQuestion from "./AddQuestion";
 
-const QuestionList = () => {
+const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [counter, setCounter] = useState(1);
 
@@ -18,6 +18,17 @@ const QuestionList = () => {
     }
     setQuestions([obj])
   }, [])
+
+  useEffect(() => {
+    let boo = true;
+    if(questions.length >= 1 && imported) {
+      console.log(imported)
+      for(const obj of questions) {
+        if(obj.question === imported.question) boo = false;
+      }
+      if(boo) setQuestions((res) => [...res, imported]);
+    }
+  }, [imported])
 
   useEffect(() => console.log(questions), [questions])
 

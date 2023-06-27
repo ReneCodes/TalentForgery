@@ -35,21 +35,17 @@ const Create = () => {
       <TutorialForm />
       <InputLabel id="label">Import Questions</InputLabel>
       <Select
-        value={selected}
-        onChange={(e) => setSelected(e.target.value)}
+        onChange={(e) => setSelected(e.target.value as string)}
         labelId="label"
         className="dropdown"
       >
-        <MenuItem value="">
-        <InputLabel id="dropdown-label">Import Questions</InputLabel>
-        </MenuItem>
         {questions.map((question, index) => (
           <MenuItem key={index} value={index}>
             {question.question}
           </MenuItem>
         ))}
       </Select>
-      <QuestionList />
+      <QuestionList imported={questions[parseInt(selected)]} />
     </div>
   );
 }
