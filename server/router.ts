@@ -3,16 +3,27 @@ const UserController = require('./controllers/UserController');
 const InviteController = require('./controllers/InviteController');
 const TutorialController = require("./controllers/TutorialControllers");
 
-const authUser = require('./middleware/AuthMiddleware');
+const { authUser, authAdminUser } = require('./middleware/AuthMiddleware');
 
-router.get('/user', authUser, UserController.getUserInformation);
-router.get('/invite', authUser, InviteController.getInvite);
-router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
-
+// AUTHENTICATION ROUTES
 router.post("/register", UserController.registerUser);
 router.post("/login", UserController.loginUser);
-router.post('/create_tutorial', authUser, TutorialController.createTutorial);
 
+// INFORMATION ROUTES
+router.get('/invite', authAdminUser, InviteController.getInvite);
+router.get('/user', authUser, UserController.getUserInformation);
+
+// TUTORIAL ROUTES
+router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
+router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial);
+
+
+// DELETE USER
+router.delete('/user', authUser, UserController.deleteMyAccount);
+router.delete('/an_user', authAdminUser, UserController.deleteUserAccount);
+
+
+// EXTRA ROUTE
 router.post('/upload', UserController.uploadImage);
 
 module.exports = router;

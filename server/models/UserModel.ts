@@ -9,7 +9,7 @@ const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
 const { checkInvite } = require('./InviteModel');
 
-export const User = sequelize.define("user", {
+const User = sequelize.define("user", {
   role: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -57,6 +57,7 @@ export const User = sequelize.define("user", {
 })();
 
 const registerNewUser = async (providedInformaion: registeredUser) => {
+  const userList = await User.findOne({ where: {} });
   const findUser = await User.findOne({ where: { email: providedInformaion.email } });
   const inviteID = await checkInvite(providedInformaion.inviteID);
   if (findUser) throw new Error('User already exists');
@@ -64,19 +65,16 @@ const registerNewUser = async (providedInformaion: registeredUser) => {
   else {
     const hash = await hashAsync(providedInformaion.password, 10);
     providedInformaion.password = hash;
-    await User.create({
-      role: "pending",
-      ...providedInformaion,
-      user_id: crypto.randomUUID(),
-    });
-    return "User created";
+
+    const role = userList == null ? 'admin' : 'pending';
+    await User.create({ role, ...providedInformaion, user_id: crypto.randomUUID() });
+    return role === 'admin' ? "Admin User created" : "User created";
   }
 };
 
 const loginTheUser = async ({ email, password }: loginUser) => {
   const findUser = await User.findOne({ where: { email } });
   if (!findUser) throw new Error("User dosent exist");
-
   const samePassword = await bcrypt.compare(password, findUser.password);
   if (!samePassword) throw new Error("Wrong credentials");
   else {
@@ -97,9 +95,20 @@ const getUserInfo = async (user_id: UUID) => {
   }
 };
 
+const deleteUser = async (user_id: UUID) => {
+  return await User.destroy({ where: { user_id } });
+};
+
+const deleteAnUser = async (userDeleteEmail: string) => {
+  User.destroy({ where: { email: userDeleteEmail } });
+  return;
+};
+
 module.exports = {
+  User,
+  deleteAnUser,
   registerNewUser,
   getUserInfo,
   loginTheUser,
-  User,
+  deleteUser
 };

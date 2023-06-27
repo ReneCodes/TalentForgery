@@ -2,6 +2,8 @@ const {
   registerNewUser,
   loginTheUser,
   getUserInfo,
+  deleteUser,
+  deleteAnUser
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -58,6 +60,30 @@ const getUserInformation = async (req: Request, res: Response) => {
   }
 };
 
+// DELETES AN ACCOUNT
+const deleteMyAccount = async (req: Request, res: Response) => {
+  const session_token = req.cookies.session_token;
+  try {
+    const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
+    const data = await deleteUser(user_id);
+    res.status(200).json('Account Deleted');
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
+};
+
+//  DELETES A USER -> ONLY ADMIM
+const deleteUserAccount = async (req: Request, res: Response) => {
+  const { user_delete } = req.body;
+  if (!user_delete) return res.status(400).json('Not enough information provided');
+  try {
+    await deleteAnUser(user_delete);
+    res.status(200).json('User deleted');
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
+};
+
 const multer = require('multer');
 import { fileInput } from '../types/user';
 
@@ -83,8 +109,10 @@ const uploadImage = async (req: Request, res: Response, next: NextFunction) => {
 };
 
 module.exports = {
+  deleteMyAccount,
   registerUser,
   getUserInformation,
   loginUser,
-  uploadImage
+  uploadImage,
+  deleteUserAccount
 };

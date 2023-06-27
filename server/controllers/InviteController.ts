@@ -13,9 +13,7 @@ const getInvite = async (req: Request, res: Response) => {
     const data = await getUserInvite(user_id);
     res.status(200).json(data);
   } catch (error) {
-    const errorMessage = (error as Error).message;
-    if (errorMessage === 'unauthorized') res.status(403).json(errorMessage);
-    else res.status(500).json('Server failed');
+    res.status(500).json('Server failed');
   }
 };
 
