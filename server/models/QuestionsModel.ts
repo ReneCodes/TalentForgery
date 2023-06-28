@@ -1,7 +1,8 @@
 const { DataTypes } = require("sequelize");
 const sequelize = require("../database/connection");
+import { Question } from "../types/questions";
 
-const Question = sequelize.define("Question", {
+const QuestionModel = sequelize.define("Question", {
   question: {
     type: DataTypes.STRING,
     allowNull: false,
@@ -20,4 +21,13 @@ const Question = sequelize.define("Question", {
   },
 });
 
-module.exports = Question;
+async function createQuestion(questionData: Question) {
+  try {
+    const newQuestion = await QuestionModel.create(questionData);
+    return newQuestion;
+  } catch (error) {
+    throw new Error("Failed to create question");
+  }
+}
+
+module.exports = { createQuestion };

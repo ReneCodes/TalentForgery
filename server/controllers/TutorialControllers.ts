@@ -5,6 +5,7 @@ const {
   getAllTheTutorials,
 } = require("../models/TutorialModel");
 import { Request, Response } from "express";
+const { createQuestion } = require("../models/QuestionsModel");
 
 export async function createTutorial(req: Request, res: Response) {
   const sessionToken = req.cookies.session_token;
