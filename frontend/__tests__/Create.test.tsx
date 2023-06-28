@@ -281,47 +281,47 @@ describe('tutorial form', () => {
   })
 })
 
-// describe('import', () => {
-//   beforeEach(() => {
-//     render(<Create />)
-//   })
+describe('import', () => {
+  beforeEach(() => {
+    render(<Create />)
+  })
 
-//   test('renders a dropdown', () => {
-//     const arrowIcon = screen.getByTestId('ArrowDropDownIcon');
-//     expect(arrowIcon).toBeDefined();
+  test('renders a dropdown', () => {
+    const arrowIcon = screen.getByTestId('ArrowDropDownIcon');
+    expect(arrowIcon).toBeDefined();
     
-//     const dropdown = screen.getByLabelText('Import Questions');
-//     expect(dropdown).toBeDefined();
-//   })
+    const dropdown = screen.getByLabelText('Import Questions');
+    expect(dropdown).toBeDefined();
+  })
 
-//   test('can import questions', () => {
-//     const dropdown = screen.getByLabelText('Import Questions');
+  test('can import questions', () => {
+    const dropdown = screen.getByLabelText('Import Questions');
 
-//     fireEvent.mouseDown(dropdown);
-//     expect(screen.getByText('Where is steve?')).toBeDefined();
-//     const firstOption = screen.getByRole('option', { name:  'Where is steve?'});
-//     fireEvent.click(firstOption);
+    fireEvent.mouseDown(dropdown);
+    expect(screen.getByText('Where is steve?')).toBeDefined();
+    const firstOption = screen.getByRole('option', { name:  'Where is steve?'});
+    fireEvent.click(firstOption);
 
-//     const counter = screen.getByText('1/3');
-//     expect(counter).toBeDefined();
+    const counter = screen.getByText('1/3');
+    expect(counter).toBeDefined();
 
-//     const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
-//     fireEvent.click(arrowIcon);
+    const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
+    fireEvent.click(arrowIcon);
 
-//     const counter2 = screen.getByText('2/3');
-//     expect(counter2).toBeDefined();
+    const counter2 = screen.getByText('2/3');
+    expect(counter2).toBeDefined();
 
-//     const question = screen.getAllByText('Where is steve?');
-//     const option1 = screen.getByText('Detroit');
-//     const option2 = screen.getByText('Michigan');
-//     const option3 = screen.getByText('Orlando');
+    const question = screen.getAllByText('Where is steve?');
+    const option1 = screen.getByText('Detroit');
+    const option2 = screen.getByText('Michigan');
+    const option3 = screen.getByText('Orlando');
     
-//     expect(question.length).toBe(3);
-//     expect(option1).toBeDefined();
-//     expect(option2).toBeDefined();
-//     expect(option3).toBeDefined();
-//   })
-// })
+    expect(question.length).toBe(3);
+    expect(option1).toBeDefined();
+    expect(option2).toBeDefined();
+    expect(option3).toBeDefined();
+  })
+})
 
 describe('submit', () => {
   beforeEach(() => {
@@ -411,14 +411,58 @@ describe('submit', () => {
   })
 
   test('does not submit if any information is missing', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
+    console.log = jest.fn();
+    const mockAlert = jest.spyOn(window, 'alert');
+    mockAlert.mockReset();
+    fireEvent.click(buttons[3]);
+    expect(mockAlert).toHaveBeenCalled();
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+
+    mockAlert.mockReset();
+    fireEvent.click(buttons[3]);
+    expect(mockAlert).toHaveBeenCalled();
+    fireEvent.change(inputs[1], {target: {value: 'test2'}});
+
+    mockAlert.mockReset();
+    fireEvent.click(buttons[3]);
+    expect(mockAlert).toHaveBeenCalled();
+    fireEvent.change(inputs[3], {target: {value: 1}});
+
+    expect(console.log).not.toHaveBeenCalled();
   })
 
   test('length must be a number', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
+    console.log = jest.fn();
+    const mockAlert = jest.spyOn(window, 'alert');
+
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+    fireEvent.change(inputs[1], {target: {value: 'test2'}});
+    fireEvent.change(inputs[3], {target: {value: 'wrong'}});
+
+    fireEvent.click(buttons[3]);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(mockAlert).toHaveBeenCalled();
   })
 
   test('questions.length >= test length', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
+    console.log = jest.fn();
+    const mockAlert = jest.spyOn(window, 'alert');
+
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+    fireEvent.change(inputs[1], {target: {value: 'test2'}});
+    fireEvent.change(inputs[3], {target: {value: 7}});
+
+    fireEvent.click(buttons[3]);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(mockAlert).toHaveBeenCalled();
   })
 })

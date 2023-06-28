@@ -55,10 +55,13 @@ const Create = () => {
       const questionsShown = parseInt(formInfo.length);
       if (!formInfo.title || !formInfo.description || !formInfo.length) {
         alert('form information missing');
-      } else if (typeof questionsShown !== 'number' && !isNaN(questionsShown)) {
+        setGetData(false);
+      } else if (/[a-zA-Z]/.test(formInfo.length)) {
         alert('length must be a number');
+        setGetData(false);
       } else if (questionsShown > questionsForm.length) {
         alert('must have more or equal questions to the length');
+        setGetData(false);
       } else {
         const tutorialData = {
           title: formInfo.title,
