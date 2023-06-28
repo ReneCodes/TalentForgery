@@ -1,9 +1,10 @@
-export { };
+export {};
 const sequelize = require("./connection");
 const { DataTypes } = require("sequelize");
 const { User } = require("./UserModel");
 import { UUID } from "crypto";
 import { createdTutorial } from "../types/tutorial";
+const Question = require("./QuestionModel");
 
 const Tutorial = sequelize.define("tutorial", {
   creator_id: {
@@ -23,7 +24,7 @@ const Tutorial = sequelize.define("tutorial", {
     allowNull: false,
   },
   question_ids: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
+    type: DataTypes.ARRAY(DataTypes.INTEGER),
     allowNull: false,
   },
   questions_shown: {
@@ -44,8 +45,20 @@ const Tutorial = sequelize.define("tutorial", {
   },
 });
 
-const createTheTutorial = async (providedInformaion: createdTutorial, user_id: UUID) => {
+// Relations with Question Model
+Tutorial.hasMany(Question, {
+  foreignKey: "tutorialId",
+  sourceKey: "question_ids",
+});
+Question.belongsTo(Tutorial, {
+  foreignKey: "tutorialId",
+  targetKey: "question_ids",
+});
 
+const createTheTutorial = async (
+  providedInformaion: createdTutorial,
+  user_id: UUID
+) => {
   const creator = await User.findOne({ where: { user_id } });
 
   if (creator.role !== "admin") {
