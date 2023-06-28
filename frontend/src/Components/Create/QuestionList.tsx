@@ -22,7 +22,6 @@ const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
   useEffect(() => {
     let boo = true;
     if(questions.length >= 1 && imported) {
-      console.log(imported)
       for(const obj of questions) {
         if(obj.question === imported.question) boo = false;
       }

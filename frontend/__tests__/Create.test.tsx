@@ -5,6 +5,7 @@ import Question from '../src/Components/Create/Question';
 import AddQuestion from '../src/Components/Create/AddQuestion';
 import QuestionList from '../src/Components/Create/QuestionList';
 import TutorialForm from '../src/Components/Create/TutorialForm';
+import Create from '../src/Pages/Create'
 import {expect, test, describe, beforeEach} from '@jest/globals';
 import { jest } from '@jest/globals';
 
@@ -276,12 +277,44 @@ describe('tutorial form', () => {
 })
 
 describe('import', () => {
-  test('renders a dropdown', () => {
+  beforeEach(() => {
+    render(<Create />)
+  })
 
+  test('renders a dropdown', () => {
+    const arrowIcon = screen.getByTestId('ArrowDropDownIcon');
+    expect(arrowIcon).toBeDefined();
+    
+    const dropdown = screen.getByLabelText('Import Questions');
+    expect(dropdown).toBeDefined();
   })
 
   test('can import questions', () => {
+    const dropdown = screen.getByLabelText('Import Questions');
 
+    fireEvent.mouseDown(dropdown);
+    expect(screen.getByText('Where is steve?')).toBeDefined();
+    const firstOption = screen.getByRole('option', { name:  'Where is steve?'});
+    fireEvent.click(firstOption);
+
+    const counter = screen.getByText('1/3');
+    expect(counter).toBeDefined();
+
+    const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
+    fireEvent.click(arrowIcon);
+
+    const counter2 = screen.getByText('2/3');
+    expect(counter2).toBeDefined();
+
+    const question = screen.getAllByText('Where is steve?');
+    const option1 = screen.getByText('Detroit');
+    const option2 = screen.getByText('Michigan');
+    const option3 = screen.getByText('Orlando');
+    
+    expect(question.length).toBe(3);
+    expect(option1).toBeDefined();
+    expect(option2).toBeDefined();
+    expect(option3).toBeDefined();
   })
 })
 
