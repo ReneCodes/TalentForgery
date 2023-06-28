@@ -1,6 +1,6 @@
 // @ts-ignore
 import React from 'react';
-import {Avatar, Box, Typography, useTheme} from '@mui/material';
+import {Avatar, Box, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {CSSObject, Menu, MenuItem, MenuItemStylesParams, Sidebar, menuClasses} from 'react-pro-sidebar';
 // Icons
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -28,6 +28,9 @@ export const SideNav = () => {
 
 	const theme = useTheme();
 	const location = useLocation();
+	// check screen width to allow nav toggle
+	// when opened on small devices
+	const matches = useMediaQuery('(max-width:767px)');
 
 	return (
 		<>
@@ -37,12 +40,13 @@ export const SideNav = () => {
 					top: 'auto',
 				}}
 				breakPoint="md"
-				onBreakPoint={() => reachedBreakpoint(!breakpoint)}
+				onBreakPoint={() => reachedBreakpoint(matches ? false : !breakpoint)}
 				collapsed={collapsed}
 				toggled={toggled}
 				onBackdropClick={() => isToggled(false)}
 				backgroundColor={theme.palette.white.main}>
 				<Box sx={styles.avatarContainer}>
+					<p>{`${matches}`}</p>
 					<Avatar
 						sx={styles.avatar}
 						alt="profile image"
@@ -139,6 +143,12 @@ export const SideNav = () => {
 						component={<Link to="/piechart" />}
 						icon={<StyleOutlinedIcon name="piechart" />}>
 						<Typography variant="body2">piechart</Typography>
+					</MenuItem>
+					<MenuItem
+						active={location.pathname === '/create-tutorial'}
+						component={<Link to="/create-tutorial" />}
+						icon={<StyleOutlinedIcon name="create-tutorial" />}>
+						<Typography variant="body2">Create Tutorial</Typography>
 					</MenuItem>
 				</Menu>
 			</Sidebar>
