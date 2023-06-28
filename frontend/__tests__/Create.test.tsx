@@ -337,6 +337,14 @@ describe('submit', () => {
 
     const buttons = screen.queryAllByRole('button');
     expect(buttons.length).toBe(6);
+  })
+
+  test('can export all the information in the form', () => {
+    const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
+    fireEvent.click(arrowIcon);
+
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
     fireEvent.change(inputs[0], {target: {value: 'test'}});
     fireEvent.change(inputs[1], {target: {value: 'test'}});
@@ -351,6 +359,7 @@ describe('submit', () => {
     fireEvent.change(inputs[4], {target: {value: 'question'}});
     fireEvent.change(inputs[5], {target: {value: 'option'}});
     fireEvent.click(buttons[2]);
+
     expect(screen.getByText('option')).toBeDefined();
 
     const text = screen.getByText('option');
@@ -372,6 +381,7 @@ describe('submit', () => {
 
     console.log = jest.fn();
     fireEvent.click(buttons[5]);
+    expect(window.alert).not.toHaveBeenCalled();
     expect(console.log).toHaveBeenCalledWith({
       "access_date": "",
       "description": "test",
@@ -394,14 +404,10 @@ describe('submit', () => {
           "question": "question",
         },
       ],
-      "questions_shown": "1",
+      "questions_shown": 1,
       "title": "test",
       "video_url": "",
     });
-  })
-
-  test('can export all the information in the form', () => {
-
   })
 
   test('does not submit if any information is missing', () => {

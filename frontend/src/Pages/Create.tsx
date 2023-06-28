@@ -52,16 +52,25 @@ const Create = () => {
 
   useEffect(() => {
     if(getData) {
-      const tutorialData = {
-        title: formInfo.title,
-        video_url: '',
-        description: formInfo.description,
-        question_ids: questionsForm,
-        questions_shown: formInfo.length,
-        access_date: '',
-        due_date: '',
+      const questionsShown = parseInt(formInfo.length);
+      if (!formInfo.title || !formInfo.description || !formInfo.length) {
+        alert('form information missing');
+      } else if (typeof questionsShown !== 'number' && !isNaN(questionsShown)) {
+        alert('length must be a number');
+      } else if (questionsShown > questionsForm.length) {
+        alert('must have more or equal questions to the length');
+      } else {
+        const tutorialData = {
+          title: formInfo.title,
+          video_url: '',
+          description: formInfo.description,
+          question_ids: questionsForm,
+          questions_shown: questionsShown,
+          access_date: '',
+          due_date: '',
+        }
+        console.log(tutorialData);
       }
-      console.log(tutorialData);
     }
   }, [questionsForm, formInfo])
 
