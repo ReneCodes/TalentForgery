@@ -118,3 +118,25 @@ ul {
 .dropdown {
   width: 200px;
 }
+
+.calendars {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.calendar {
+  width: 250px;
+  height: 40px;
+  margin-bottom: 15px;
+  font-size: 18px;
+}
+
+.timePicker {
+  margin-left: 10px;
+  margin-bottom: 40px;
+}
+
+.popup {
+  position: fixed;
+}
