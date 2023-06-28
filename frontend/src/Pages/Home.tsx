@@ -1,12 +1,14 @@
 import Button from '@mui/material/Button';
-import Box from '@mui/material/Box';
+import {Container, Box} from '@mui/material';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 export const Home = () => {
   const navigate: NavigateFunction = useNavigate();
 
   return (
-    <Box id='home' position='relative' display='flex' flexDirection='column' width='100%' height='max-content' padding='40px' >
+    <Container sx={{
+      position:'relative', display:'flex', flexDirection:'column', width:'100%', height:'max-content', padding:'40px',
+    }}>
 
       <Button variant="contained"
         onClick={() => navigate('/login')}
@@ -35,7 +37,7 @@ export const Home = () => {
         </Box>
       </Box>
 
-    </Box >
+    </Container >
   )
 
 }

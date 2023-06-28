@@ -65,9 +65,9 @@ const loginUser = async (req: Request, res: Response) => {
       res.status(200).json(user_info);
     } catch (error) {
       const errorMessage = (error as Error).message;
-      if (errorMessage === 'User dosent exist') res.status(404).json(errorMessage);
-      else if (errorMessage === 'Wrong credentials') res.status(422).json(errorMessage);
-      else res.status(500).json('Server Failed');
+      if (errorMessage === "User doesn't exist") {res.status(404).json(errorMessage);}
+      else if (errorMessage === 'Wrong credentials') {res.status(422).json(errorMessage);}
+      else {res.status(500).json('Server Failed');}
     }
   }
 };

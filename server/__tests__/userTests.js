@@ -179,7 +179,7 @@ describe('Login Tests', () => {
       .expect('Content-Type', 'application/json; charset=utf-8')
 
     expect(res.statusCode).equal(404);
-    expect(res.text).to.equal('"User dosent exist"');
+    expect(res.text).to.eql("\"User doesn't exist\"");
   });
 
   it('Should not allow to login with wrong password', async () => {
@@ -196,7 +196,6 @@ describe('Login Tests', () => {
   });
 
   it('Should be able to login', async () => {
-
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/login')
       .send(JSON.stringify(profileInformation))
@@ -261,7 +260,6 @@ describe('User deletes his account', () => {
   });
 
   it('Should allow a user to delete his account', async () => {
-    expect(true).to.eql(true)
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post('/login')
       .send(JSON.stringify({ email: second_user.email, password: '123' }))
