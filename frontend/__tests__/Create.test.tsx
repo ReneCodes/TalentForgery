@@ -4,6 +4,7 @@ import {render, screen, fireEvent} from '@testing-library/react';
 import Question from '../src/Components/Create/Question';
 import AddQuestion from '../src/Components/Create/AddQuestion';
 import QuestionList from '../src/Components/Create/QuestionList';
+import TutorialForm from '../src/Components/Create/TutorialForm';
 import {expect, test, describe, beforeEach} from '@jest/globals';
 import { jest } from '@jest/globals';
 
@@ -238,3 +239,70 @@ describe('Question List', () => {
   })
 })
 
+describe('tutorial form', () => {
+  beforeEach(() => {
+    render(<TutorialForm />)
+  })
+  test('renders the content', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    expect(inputs.length).toBe(4);
+
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons.length).toBe(1);
+  })
+
+  test('can input information', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
+
+    fireEvent.change(inputs[0], {target: {value: 'How to eat'}});
+    fireEvent.change(inputs[1], {target: {value: 'Learn how to eat Fruit, Veg and meat with this short but in-depth tutorial on a basic life skill you should have learned already'}});
+    fireEvent.change(inputs[2], {target: {value: 'Nessasary'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[2], {target: {value: 'Culinary'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[2], {target: {value: 'Basic'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[3], {target: {value: 7}});
+
+    expect(inputs[0].value).toBe('How to eat');
+    expect(inputs[1].value).toBe('Learn how to eat Fruit, Veg and meat with this short but in-depth tutorial on a basic life skill you should have learned already');
+    expect(inputs[3].value).toBe('7');
+
+    expect(screen.getByText('Nessasary')).toBeDefined();
+    expect(screen.getByText('Culinary')).toBeDefined();
+    expect(screen.getByText('Basic')).toBeDefined();
+  })
+})
+
+describe('import', () => {
+  test('renders a dropdown', () => {
+
+  })
+
+  test('can import questions', () => {
+
+  })
+})
+
+describe('submit', () => {
+  test('renders the button', () => {
+
+  })
+
+  test('can export all the information in the form', () => {
+
+  })
+
+  test('does not submit if any information is missing', () => {
+
+  })
+
+  test('length must be a number', () => {
+
+  })
+
+  test('questions.length >= test length', () => {
+
+  })
+})

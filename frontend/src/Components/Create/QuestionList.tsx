@@ -30,8 +30,6 @@ const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
     }
   }, [imported])
 
-  useEffect(() => console.log(questions), [questions])
-
   const handleLeft = () => {
     if (counter === 1) {
       setCounter(questions.length + 1)
@@ -49,7 +47,6 @@ const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
   }
 
   const handleDataFromChildren = (childData: QuestionType) => {
-    console.log(childData);
     setQuestions((res) => [...res, childData])
   }
 
