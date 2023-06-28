@@ -1,8 +1,13 @@
 import TextField from '@mui/material/TextField';
 import Button from '@mui/material/Button';
-import { useState } from 'react';
+import { useState, FC, useEffect } from 'react';
 
-const TutorialForm = () => {
+interface TutorialFormComp {
+  getData: boolean,
+  onData: any
+}
+
+const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
   const [title, setTitle] = useState('');
   const [description, setDesciption] = useState('');
   const [tag, setTag] = useState('');
@@ -12,8 +17,11 @@ const TutorialForm = () => {
   const handleAdd = () => {
     setTags((res) => [...res, tag]);
     setTag('');
-    console.log(tags);
   }
+
+  useEffect(() => {
+    if(getData) onData({title, description, tags, length})
+  }, [getData])
 
   return <div className='form'>
     <TextField 

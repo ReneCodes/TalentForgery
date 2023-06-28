@@ -6,7 +6,13 @@ import ArrowForwardIosTwoToneIcon from '@mui/icons-material/ArrowForwardIosTwoTo
 import ArrowBackIosNewTwoToneIcon from '@mui/icons-material/ArrowBackIosNewTwoTone';
 import AddQuestion from "./AddQuestion";
 
-const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
+interface QuestionListComp {
+  imported: QuestionType,
+  getData: boolean,
+  onData: any
+}
+
+const QuestionList: FC<QuestionListComp> = ({imported, getData, onData}) => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [counter, setCounter] = useState(1);
 
@@ -28,6 +34,10 @@ const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
       if(boo) setQuestions((res) => [...res, imported]);
     }
   }, [imported])
+
+  useEffect(() => {
+    if(getData) onData(questions)
+  }, [getData])
 
   const handleLeft = () => {
     if (counter === 1) {

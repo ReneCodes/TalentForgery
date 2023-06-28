@@ -5,6 +5,7 @@ import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
 import { useEffect, useState } from "react";
 import { QuestionType } from '../utils/types';
+import Button from '@mui/material/Button';
 
 const mockQuestions = [{
   question: 'Where is steve?',
@@ -22,17 +23,59 @@ const mockQuestions = [{
   answer: 'Cider'
 }]
 
+interface FormInfo {
+  title: string, 
+  description: string, 
+  tags: string[], 
+  length: string
+}
+
 const Create = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [selected, setSelected] = useState('');
-
+  const [getData, setGetData] = useState(false);
+  const [formInfo, setFormInfo] = useState<FormInfo>({
+    title: '',
+    description: '',
+    tags: [],
+    length: '',
+  });
+  const [questionsForm, setQuestionsForm] = useState<QuestionType[]>([]);
+  
   useEffect(() => {
     setQuestions(mockQuestions)
   }, [])
 
+  const handleSubmit = () => {
+    setGetData(true);
+  }
+
+  useEffect(() => {
+    if(getData) {
+      const tutorialData = {
+        title: formInfo.title,
+        video_url: '',
+        description: formInfo.description,
+        question_ids: questionsForm,
+        questions_shown: formInfo.length,
+        access_date: '',
+        due_date: '',
+      }
+      console.log(tutorialData);
+    }
+  }, [questionsForm, formInfo])
+
+  const handleDataFromForm = (childData: FormInfo) => {
+    setFormInfo(childData);
+  }
+
+  const handleDataFromQuestions = (childData: QuestionType[]) => {
+    setQuestionsForm(childData);
+  }
+
   return (
     <div>
-      <TutorialForm />
+      <TutorialForm getData={getData} onData={handleDataFromForm}/>
       <InputLabel id="label">Import Questions</InputLabel>
       <Select
         onChange={(e) => setSelected(e.target.value as string)}
@@ -45,7 +88,8 @@ const Create = () => {
           </MenuItem>
         ))}
       </Select>
-      <QuestionList imported={questions[parseInt(selected)]} />
+      <QuestionList imported={questions[parseInt(selected)]} getData={getData} onData={handleDataFromQuestions} />
+      <Button onClick={handleSubmit} variant="contained">Submit</Button>
     </div>
   );
 }
