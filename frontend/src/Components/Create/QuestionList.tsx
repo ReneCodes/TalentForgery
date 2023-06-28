@@ -12,9 +12,9 @@ const QuestionList: FC<{imported: QuestionType}> = ({imported}) => {
 
   useEffect(() => {
     const obj = {
-      question: 'why did the chicken cross the road?',
-      options: ['cheese', 'ham', 'mcDonalds'],
-      answer: 'mcDonalds'
+      question: 'This is the Question',
+      options: ['this is an option', 'when its green its the answer', 'press delete to remove the tutorial'],
+      answer: 'when its green its the answer'
     }
     setQuestions([obj])
   }, [])
