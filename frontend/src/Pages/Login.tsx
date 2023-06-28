@@ -6,10 +6,12 @@ import {Visibility, VisibilityOff} from '@mui/icons-material';
 import {loginUser} from '../services/Api.service';
 import {LoginFormValues} from '../@types/Types';
 import {Navigate} from 'react-router';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 export const Login: FC = () => {
 	const [showPassword, setShowPassword] = useState(false);
 	const [loginError, setLoginError] = useState('');
+  const navigate: NavigateFunction = useNavigate();
 
 	const loginForm = useForm<LoginFormValues>({
 		defaultValues: {
@@ -24,7 +26,7 @@ export const Login: FC = () => {
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
 	async function handleLogin(formData: LoginFormValues) {
-		const requestAnswer = await loginUser(formData);
+		const requestAnswer = await loginUser(formData, navigate);
 
 		if (requestAnswer) setLoginError(requestAnswer);
 		else {
