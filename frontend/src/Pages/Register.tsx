@@ -277,12 +277,12 @@ const Register = () => {
 							helperText={errors.phone ? errors.phone?.message : ' '}
 							label="Phone Number - Optional"
 							variant="outlined"
-							inputProps={{inputMode: 'numeric', pattern: '[+0-9]*'}}
+							// inputProps={{inputMode: 'numeric', pattern: '[+0-9]*'}}
 							aria-label="phone number optional"
 							aria-invalid={errors.phone ? 'true' : 'false'}
 							{...register('phone', {
 								pattern: {
-									value: /^[+0-9]$/,
+									value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
 									message: 'Not a valid phonenumber',
 								},
 							})}
