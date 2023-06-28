@@ -3,7 +3,8 @@ const {
   loginTheUser,
   getUserInfo,
   deleteUser,
-  deleteAnUser
+  deleteAnUser,
+  getUsersPending
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -83,6 +84,16 @@ const getUserInformation = async (req: Request, res: Response) => {
   }
 };
 
+// GETS THE USERS THAT HAVE THE ROLE SET TO PENDING
+const getPendingUsers = async (req: Request, res: Response) =>{
+  try {
+    const data = await getUsersPending();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
+}
+
 // DELETES AN ACCOUNT
 const deleteMyAccount = async (req: Request, res: Response) => {
   const session_token = req.cookies.session_token;
@@ -112,5 +123,6 @@ module.exports = {
   registerUser,
   getUserInformation,
   loginUser,
-  deleteUserAccount
+  deleteUserAccount,
+  getPendingUsers
 };

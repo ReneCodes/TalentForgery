@@ -1,8 +1,7 @@
 const request = require('supertest');
 const expect = require('chai').expect;
 const crypto = require('crypto');
-const { User } = require('../dist/models/UserModel');
-const { Invites } = require('../dist/models/InviteModel');
+const { User, Invites } = require('../dist/models/Schemas');
 
 const server = require('../dist/index');
 
@@ -52,7 +51,7 @@ describe.only('Create a invite for new users', () => {
   afterEach(async () => {
     await User.destroy({ where: {} });
     await Invites.destroy({ where: {} });
-    role = role === 'admin' ? 'user' : 'admin';
+    role = 'admin';
   });
 
   it('Should not allow none admin users to get invites ', async () => {

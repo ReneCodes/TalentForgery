@@ -1,9 +1,7 @@
 const request = require("supertest");
 const server = require("../dist/index");
 const crypto = require("crypto");
-const { User } = require("../dist/models/UserModel");
-const { Tutorial } = require("../dist/models/TutorialModel");
-const { Invites } = require("../dist/models/InviteModel");
+const { Tutorial, User } = require("../dist/models/Schemas");
 const jwt = require("jsonwebtoken");
 
 afterAll((done) => {
@@ -141,6 +139,7 @@ describe("Admin create/see tutorials", () => {
     await User.destroy({ where: {} });
   });
 });
+
 describe("User create/see tutorials", () => {
   let sessionToken;
 
@@ -165,6 +164,10 @@ describe("User create/see tutorials", () => {
 
     expect(loginResponse.statusCode).toBe(200);
   });
+  afterAll(async () => {
+    // Clean up the user records
+    await User.destroy({ where: {} });
+  });
 
   it("Shouldn't be able to create a tutorial if user is logged in", async () => {
     const res = await request(server)
@@ -186,9 +189,3 @@ describe("User create/see tutorials", () => {
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
-
-  afterAll(async () => {
-    // Clean up the user records
-    await User.destroy({ where: {} });
-  });
-});
