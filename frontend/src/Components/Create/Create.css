@@ -1,0 +1,120 @@
+ul {
+  padding: 0px;
+}
+
+
+.question_list {
+  width: 90%;
+  height: 280px;
+  margin-left: 5%;
+  background-color: rgb(232, 232, 232);
+  border-radius: 15px;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+.question_top, 
+.question_bar {
+  display: flex;
+  justify-content: space-between;
+}
+
+.question_bar {
+  margin-bottom: 15px;
+}
+
+.add_question {
+  display: flex;
+  flex-direction: column;
+  width: 60%;
+  margin-left: 10px;
+}
+
+.question {
+  width: 60%;
+  margin-left: 10px;
+}
+
+.index {
+  margin-right: 10px;
+}
+
+.arrow {
+  cursor: pointer;
+}
+
+.delete {
+  cursor: pointer;
+  border: none;
+  background-color: rgb(86, 86, 255);
+  color: white;
+  height: 35px;
+  width: 120px;
+  border-radius: 5px;
+}
+
+.question_title {
+  text-align: left;
+  font-size: 18px;
+}
+
+.question_line {
+  height: 1px;
+  background-color: black;
+}
+
+.options_list {
+  display: flex;
+  justify-content: space-around;
+  padding: 0px;
+  margin: 8px;
+  flex-wrap: wrap;
+}
+
+.correct {
+  color: rgb(2, 203, 2);
+}
+
+.incorrect,
+.correct {
+  text-align: left;
+  list-style: none;
+}
+
+.option,
+.selected {
+  margin: 0px;
+  list-style: none;
+  cursor: pointer;
+  margin-right: 8px;
+}
+
+.selected {
+  color: rgb(2, 203, 2);
+}
+
+.option_input {
+  width: 100%;
+}
+
+.add_button {
+  border: none;
+  background-color: rgb(86, 86, 255);
+  color: white;
+  height: 25px;
+  width: 50px;
+  border-radius: 5px;
+  cursor: pointer;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  width: 60%;
+}
+
+.dropdown {
+  width: 200px;
+}
