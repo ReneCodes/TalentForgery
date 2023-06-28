@@ -189,4 +189,3 @@ describe("User create/see tutorials", () => {
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
-});
