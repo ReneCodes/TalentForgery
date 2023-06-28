@@ -1,5 +1,5 @@
 import {FC} from 'react';
-import {MinonStore} from '../../utils/zustand.store';
+import {MinonStore} from '../utils/zustand.store';
 import {Button, Box} from '@mui/material';
 import {useNavigate, NavigateFunction} from 'react-router-dom';
 
