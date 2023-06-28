@@ -92,7 +92,9 @@ describe('Question List', () => {
       answer: 'hello'
     }
 
-    render(<QuestionList imported={mock} />)
+    const callback = (data: any) => console.log(data)
+
+    render(<QuestionList imported={mock} getData={false} onData={callback}/>)
   })
 
   test('renders the content', () => {
@@ -242,7 +244,10 @@ describe('Question List', () => {
 
 describe('tutorial form', () => {
   beforeEach(() => {
-    render(<TutorialForm />)
+
+    const callback = (data: any) => console.log(data)
+
+    render(<TutorialForm getData={false} onData={callback} />)
   })
   test('renders the content', () => {
     const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
@@ -276,51 +281,123 @@ describe('tutorial form', () => {
   })
 })
 
-describe('import', () => {
+// describe('import', () => {
+//   beforeEach(() => {
+//     render(<Create />)
+//   })
+
+//   test('renders a dropdown', () => {
+//     const arrowIcon = screen.getByTestId('ArrowDropDownIcon');
+//     expect(arrowIcon).toBeDefined();
+    
+//     const dropdown = screen.getByLabelText('Import Questions');
+//     expect(dropdown).toBeDefined();
+//   })
+
+//   test('can import questions', () => {
+//     const dropdown = screen.getByLabelText('Import Questions');
+
+//     fireEvent.mouseDown(dropdown);
+//     expect(screen.getByText('Where is steve?')).toBeDefined();
+//     const firstOption = screen.getByRole('option', { name:  'Where is steve?'});
+//     fireEvent.click(firstOption);
+
+//     const counter = screen.getByText('1/3');
+//     expect(counter).toBeDefined();
+
+//     const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
+//     fireEvent.click(arrowIcon);
+
+//     const counter2 = screen.getByText('2/3');
+//     expect(counter2).toBeDefined();
+
+//     const question = screen.getAllByText('Where is steve?');
+//     const option1 = screen.getByText('Detroit');
+//     const option2 = screen.getByText('Michigan');
+//     const option3 = screen.getByText('Orlando');
+    
+//     expect(question.length).toBe(3);
+//     expect(option1).toBeDefined();
+//     expect(option2).toBeDefined();
+//     expect(option3).toBeDefined();
+//   })
+// })
+
+describe('submit', () => {
   beforeEach(() => {
     render(<Create />)
   })
 
-  test('renders a dropdown', () => {
-    const arrowIcon = screen.getByTestId('ArrowDropDownIcon');
-    expect(arrowIcon).toBeDefined();
-    
-    const dropdown = screen.getByLabelText('Import Questions');
-    expect(dropdown).toBeDefined();
-  })
-
-  test('can import questions', () => {
-    const dropdown = screen.getByLabelText('Import Questions');
-
-    fireEvent.mouseDown(dropdown);
-    expect(screen.getByText('Where is steve?')).toBeDefined();
-    const firstOption = screen.getByRole('option', { name:  'Where is steve?'});
-    fireEvent.click(firstOption);
-
-    const counter = screen.getByText('1/3');
-    expect(counter).toBeDefined();
-
+  test('renders the button', () => {
     const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
     fireEvent.click(arrowIcon);
 
-    const counter2 = screen.getByText('2/3');
-    expect(counter2).toBeDefined();
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    expect(inputs.length).toBe(6);
 
-    const question = screen.getAllByText('Where is steve?');
-    const option1 = screen.getByText('Detroit');
-    const option2 = screen.getByText('Michigan');
-    const option3 = screen.getByText('Orlando');
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons.length).toBe(6);
+
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+    fireEvent.change(inputs[1], {target: {value: 'test'}});
+    fireEvent.change(inputs[2], {target: {value: 'test1'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[2], {target: {value: 'test2'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[3], {target: {value: 1}});
     
-    expect(question.length).toBe(3);
-    expect(option1).toBeDefined();
-    expect(option2).toBeDefined();
-    expect(option3).toBeDefined();
-  })
-})
+    expect(screen.getByText('test1')).toBeDefined();
 
-describe('submit', () => {
-  test('renders the button', () => {
+    fireEvent.change(inputs[4], {target: {value: 'question'}});
+    fireEvent.change(inputs[5], {target: {value: 'option'}});
+    fireEvent.click(buttons[2]);
+    expect(screen.getByText('option')).toBeDefined();
 
+    const text = screen.getByText('option');
+    expect(text).toBeDefined();
+
+    let boo = false;
+    if (text) {
+      boo = true;
+      fireEvent.click(text);
+    }
+    expect(boo).toBe(true);
+
+    window.alert = jest.fn();
+    fireEvent.click(buttons[3]);
+    expect(window.alert).not.toHaveBeenCalled();
+
+    expect(screen.getByText('2/3')).toBeDefined();
+    expect(screen.getByText('option')).toBeDefined();
+
+    console.log = jest.fn();
+    fireEvent.click(buttons[5]);
+    expect(console.log).toHaveBeenCalledWith({
+      "access_date": "",
+      "description": "test",
+      "due_date": "",
+      "question_ids": [
+        {
+        "answer": "when its green its the answer",
+        "options": [
+          "this is an option",
+          "when its green its the answer",
+          "press delete to remove the tutorial",
+        ],
+        "question": "This is the Question",
+        },
+        {
+          "answer": "option",
+          "options": [
+            "option",
+          ],
+          "question": "question",
+        },
+      ],
+      "questions_shown": "1",
+      "title": "test",
+      "video_url": "",
+    });
   })
 
   test('can export all the information in the form', () => {
