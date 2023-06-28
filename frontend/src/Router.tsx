@@ -3,7 +3,9 @@ import ErrorPage from './Pages/Error';
 import {createBrowserRouter} from 'react-router-dom';
 import {Login} from './Pages/Login';
 import Register from './Pages/Register';
-import {Home} from './Pages/Home/Home';
+// import {Home} from './Pages/Home/Home';
+import {Home} from './Pages/Home';
+
 import ContactInfo from './Components/ContactInfo/ContactInfo';
 import Stats from './Components/Stats/Stats';
 import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
@@ -50,7 +52,7 @@ export const Router = createBrowserRouter([
 	{
 		path: '/staff',
 		element: <EmployeeInfo contactInfo={info} taskArr={['fire', 'water', 'earth', 'air']} />
-	}, 
+	},
 	{
 		path: '/piechart',
 		element: <PieChartComp width={120} passed={63} todo={17} failed={13} />

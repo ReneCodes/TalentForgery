@@ -7,8 +7,8 @@ import {Outlet} from 'react-router-dom';
 const App: React.FC = () => {
 	return (
 		<div className="app">
-			<h1 className="header">This is Minon Mentor</h1>
-			<Navbar></Navbar>
+			{/* <h1 className="header">This is Minon Mentor</h1> */}
+			{/* <Navbar></Navbar> */}
 			<Outlet />
 		</div>
 	);

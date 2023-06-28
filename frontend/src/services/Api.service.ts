@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-import {LoginFormValues, RegisterFormValues} from '../@types/Types';
+import { LoginFormValues, RegisterFormValues } from '../@types/Types';
 
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -25,24 +25,25 @@ export async function registerUser(userData: RegisterFormValues) {
 	const formData = new FormData();
 
 	Object.entries(userData).forEach(([key, value]) => {
-    formData.append(key, value);
-  });
-  formData.append('inviteID', 'stillNeedToChange');
+		if (value instanceof FileList) {
+			formData.append(key, value[0]);
+		} else {
+			formData.append(key, value);
+		}
+	});
+	formData.append('inviteID', 'stillNeedToChange');
 
-	const image = userData.profile_image['0'];
-  formData.append('profile_image', image);
-
-  try {
-    const response = await axios.post(baseURL + 'register', formData, {
-      headers: {
-        'Content-Type': 'multipart/form-data',
-      },
-    });
-    console.log('REGISTER RES:', JSON.stringify(response.data));
-  } catch (error: any) {
-    console.log('Error register', error.response.data);
-    errorMessage = error.response.data;
-  }
+	try {
+		const response = await axios.post(baseURL + 'register', formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
+		console.log('REGISTER RES:', JSON.stringify(response.data));
+	} catch (error: any) {
+		console.log('Error register', error.response.data);
+		errorMessage = error.response.data;
+	}
 
 	return errorMessage;
 }
