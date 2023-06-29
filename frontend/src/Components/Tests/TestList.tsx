@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import './test.css';
 
 interface TestQuestionComp {
+  id: number,
   question: string,
   options: string[],
   answer: string,
@@ -11,16 +12,19 @@ interface TestQuestionComp {
 }
 
 const mockQuestions: TestQuestionComp[] = [{
+  id: 3,
   question: 'Where is steve?',
   options: ['Detroit', 'Michigan', 'Orlando'],
   answer: 'Detroit'
 },
 {
+  id: 4,
   question: 'Ham or Cheese?',
   options: ['Ham', 'Cheese'],
   answer: 'Cheese'
 },
 {
+  id: 5,
   question: 'Whats the best drink?',
   options: ['Vodka', 'Beer', 'Cider'],
   answer: 'Cider'
@@ -42,11 +46,13 @@ const TestList = () => {
 
   useEffect(() => {
     if(index === questions.length && questions.length !== 0) {
-      const result = [];
+      const ids = [];
+      const choices = [];
       for(const question of questions) {
-        result.push(question.choice);
+        ids.push(question.id);
+        choices.push(question.choice);
       }
-      console.log(result);
+      console.log(ids, choices);
     }
   }, [index])
 
