@@ -5,9 +5,9 @@ import {BrowserRouter} from 'react-router-dom';
 import {Box, CssBaseline, ThemeProvider} from '@mui/material';
 import {SideNav} from './Components/Navbar/SideNav';
 import theme from './config/theme';
-import {AppRoutes} from './AppRoutes';
+import {AppRoutes} from './routes/AppRoutes';
 import {AppHeader} from './Components/Header/AppHeader';
-import {AuthRoutes} from './AuthRoutes';
+import {AuthRoutes} from './routes/AuthRoutes';
 import {LoginAndOut} from './utils/zustand.store';
 
 const App: React.FC = () => {

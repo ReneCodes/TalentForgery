@@ -1,12 +1,12 @@
 import {Route, Routes} from 'react-router-dom';
-import {HomeMe} from './Pages/Home/HomeMe';
-import PieChartComp from './Components/PieChart/PieChart';
-import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
-import Stats from './Components/Stats/Stats';
-import ContactInfo from './Components/ContactInfo/ContactInfo';
-import Create from './Pages/Create';
-import Dashboard from './Pages/Dashboard';
-import TestList from './Components/Tests/TestList';
+import {HomeMe} from '../Pages/Home/HomeMe';
+import PieChartComp from '../Components/PieChart/PieChart';
+import EmployeeInfo from '../Components/EmployeeInfo/EmployeeInfo';
+import Stats from '../Components/Stats/Stats';
+import ContactInfo from '../Components/ContactInfo/ContactInfo';
+import Create from '../Pages/Create';
+import Dashboard from '../Pages/Dashboard';
+import TestList from '../Components/Tests/QuizzList';
 
 const info = {
 	firstName: 'jon',
@@ -61,8 +61,8 @@ export const AppRoutes = () => {
 				path="/create"
 				element={<Create />}
 			/>
-			<Route 
-				path='/test'
+			<Route
+				path="/test"
 				element={<TestList />}
 			/>
 		</Routes>
