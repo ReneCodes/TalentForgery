@@ -25,20 +25,26 @@ const Schedule: FC<ScheduleComp> = ({onData}) => {
         <Card className="schedule" variant="outlined">
           <div className="calendars">
             <h2>Create Tutorial</h2>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker 
-                value={startDate}
-                onChange={(value) => setStartDate(value)}
-                data-testid="date-picker"
-              />
-            </LocalizationProvider>
-            <LocalizationProvider dateAdapter={AdapterDayjs}>
-              <DateTimePicker 
-                value={endDate}
-                onChange={(value) => setEndDate(value)}
-                data-testid="date-picker"
-              />
-            </LocalizationProvider>
+            <div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker 
+                  value={startDate}
+                  onChange={(value) => setStartDate(value)}
+                  data-testid="date-picker"
+                  className="date_picker"
+                />
+              </LocalizationProvider>
+            </div>
+            <div>
+              <LocalizationProvider dateAdapter={AdapterDayjs}>
+                <DateTimePicker 
+                  value={endDate}
+                  onChange={(value) => setEndDate(value)}
+                  data-testid="date-picker"
+                  className="date_picker"
+                />
+              </LocalizationProvider>
+            </div>
             <Button variant="contained" onClick={handleClick}>
               Create
             </Button>
