@@ -11,3 +11,21 @@ export const MinonStore = create<MinonState>()((set) => ({
 	increase: (by) => set((state) => ({minon: state.minon + by})),
 	decrease: (by) => set((state) => ({minon: state.minon === 0 ? (state.minon = 0) : state.minon - by})),
 }));
+
+interface NavbarStates {
+	collapsed: boolean;
+	toggled: boolean;
+	breakpoint: boolean;
+	isCollapsed: (bool: boolean) => void;
+	isToggled: (bool: boolean) => void;
+	reachedBreakpoint: (bool: boolean) => void;
+}
+
+export const NavbarStore = create<NavbarStates>()((set) => ({
+	collapsed: false,
+	toggled: false,
+	breakpoint: false,
+	isCollapsed: (bool) => set(() => ({collapsed: bool})),
+	isToggled: (bool) => set(() => ({toggled: bool})),
+	reachedBreakpoint: (bool) => set(() => ({breakpoint: bool})),
+}));

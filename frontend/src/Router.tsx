@@ -11,6 +11,7 @@ import ContactInfo from './Components/ContactInfo/ContactInfo';
 import Stats from './Components/Stats/Stats';
 import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
 import PieChartComp from './Components/PieChart/PieChart';
+import Create from './Pages/Create';
 
 
 const info = {
@@ -66,5 +67,9 @@ export const Router = createBrowserRouter([
 	{
 		path: '/piechart',
 		element: <PieChartComp width={120} passed={63} todo={17} failed={13} />
+	},
+	{
+		path: '/create',
+		element: <Create />
 	}
 ]);
