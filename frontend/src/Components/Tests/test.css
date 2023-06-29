@@ -1,0 +1,11 @@
+.checklist_box {
+  max-width: 300px;
+  margin-left: 25%;
+  margin-top: 50px;
+  padding-left: 10px;
+}
+
+.checklist_menu {
+  display: flex;
+  flex-direction: column;
+}
