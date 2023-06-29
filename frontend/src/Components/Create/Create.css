@@ -6,8 +6,7 @@ ul {
 .question_list {
   width: 90%;
   height: 280px;
-  margin-left: 5%;
-  background-color: rgb(232, 232, 232);
+  margin: 0px 5%;
   border-radius: 15px;
   display: flex;
   flex-direction: column;
@@ -103,9 +102,11 @@ ul {
   background-color: rgb(86, 86, 255);
   color: white;
   height: 25px;
-  width: 50px;
+  width: 110px;
   border-radius: 5px;
   cursor: pointer;
+  font-size: 16px;
+  margin-top: 3px;
 }
 
 .form {
@@ -115,8 +116,18 @@ ul {
   width: 60%;
 }
 
+.form_add {
+  margin-top: 5px;
+}
+
 .dropdown {
   width: 200px;
+  margin-left: 55%;
+  height: 40px;
+}
+
+.import_label {
+  margin-left: 55%;
 }
 
 .calendars {

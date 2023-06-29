@@ -132,7 +132,7 @@ const Create = () => {
       {!renderForm ? (
         <>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
-          <InputLabel id="label">Import Questions</InputLabel>
+          <InputLabel className="import_label" id="label">Import Questions</InputLabel>
           <Select
             onChange={(e) => setSelected(e.target.value as string)}
             labelId="label"
