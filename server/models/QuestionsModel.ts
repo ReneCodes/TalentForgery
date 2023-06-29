@@ -1,5 +1,6 @@
 const { DataTypes } = require("sequelize");
-const sequelize = require("../database/connection");
+const sequelize = require("./connection");
+const crypto = require("crypto");
 import { Question } from "../types/questions";
 
 const QuestionModel = sequelize.define("Question", {
@@ -19,15 +20,24 @@ const QuestionModel = sequelize.define("Question", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  question_id: {
+    type: DataTypes.STRING,
+    allowNull: false,
+    unique: true,
+  },
 });
 
 async function createQuestion(questionData: Question) {
   try {
-    const newQuestion = await QuestionModel.create(questionData);
+
+    const newQuestion = await QuestionModel.create({
+      ...questionData,
+      question_id: crypto.randomUUID(),
+    });
     return newQuestion;
   } catch (error) {
     throw new Error("Failed to create question");
   }
 }
 
-module.exports = { createQuestion };
+module.exports = { QuestionModel, createQuestion };

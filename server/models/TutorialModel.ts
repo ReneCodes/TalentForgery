@@ -4,9 +4,14 @@ const { DataTypes } = require("sequelize");
 const { User } = require("./UserModel");
 import { UUID } from "crypto";
 import { createdTutorial } from "../types/tutorial";
-const Question = require("./QuestionModel");
+const { QuestionModel, createQuestion } = require("./QuestionsModel");
 
 const Tutorial = sequelize.define("tutorial", {
+  tutorialId: {
+    type: DataTypes.UUID,
+    allowNull: false,
+    primaryKey: true,
+  },
   creator_id: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -23,8 +28,12 @@ const Tutorial = sequelize.define("tutorial", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  questions: {
+    type: DataTypes.ARRAY(DataTypes.JSONB),
+    allowNull: false,
+  },
   question_ids: {
-    type: DataTypes.ARRAY(DataTypes.INTEGER),
+    type: DataTypes.ARRAY(DataTypes.STRING),
     allowNull: false,
   },
   questions_shown: {
@@ -45,14 +54,17 @@ const Tutorial = sequelize.define("tutorial", {
   },
 });
 
-// Relations with Question Model
-Tutorial.hasMany(Question, {
-  foreignKey: "tutorialId",
-  sourceKey: "question_ids",
+Tutorial.hasMany(QuestionModel, {
+  foreignKey: {
+    name: "tutorialId",
+    allowNull: false,
+  },
 });
-Question.belongsTo(Tutorial, {
-  foreignKey: "tutorialId",
-  targetKey: "question_ids",
+QuestionModel.belongsTo(Tutorial, {
+  foreignKey: {
+    name: "tutorialId",
+    allowNull: false,
+  },
 });
 
 const createTheTutorial = async (
@@ -64,11 +76,19 @@ const createTheTutorial = async (
   if (creator.role !== "admin") {
     throw new Error("Unauthorized");
   } else {
-    await Tutorial.create({
+    const tutorial = await Tutorial.create({
       ...providedInformaion,
       creator_id: user_id,
     });
-    return "Tutorial created!";
+    const questionIds = [];
+    for (const questionData of providedInformaion.questions) {
+      const question = await QuestionModel.create(questionData);
+      await tutorial.addQuestion(question);
+      questionIds.push(question.id);
+
+      // Update the tutorial with question_ids
+      await tutorial.update({ question_ids: questionIds });
+    }
   }
 };
 
