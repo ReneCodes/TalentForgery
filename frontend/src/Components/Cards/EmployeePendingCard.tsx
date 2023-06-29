@@ -6,13 +6,13 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {useTheme} from '@mui/material/styles';
 import {Avatar, Box, Typography} from '@mui/material';
 import ContactInfo from '../ContactInfo/ContactInfo';
+import theme from '../../config/theme';
 
 export default function EmployeePendingCard() {
 	const [open, setOpen] = React.useState(false);
-	const theme = useTheme();
+
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
 	const handleClickOpen = () => {

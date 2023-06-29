@@ -4,6 +4,7 @@ import SmallVideoCard from '../../Components/Cards/SmallVideoCard';
 import {Box} from '@mui/material';
 import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
 import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
+import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
 
 const mockVideoArray = [
 	{
@@ -53,6 +54,7 @@ export const HomeMe = () => {
 			<Box sx={styles.noBar}>
 				<EmployeePendingCard />
 				<EmployeeProfileForm />
+				<WatchTutorial />
 			</Box>
 		</Box>
 	);
