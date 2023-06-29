@@ -3,7 +3,7 @@ import TutorialForm from "../Components/Create/TutorialForm";
 import Select from '@mui/material/Select';
 import MenuItem from '@mui/material/MenuItem';
 import InputLabel from '@mui/material/InputLabel';
-import { useEffect, useState } from "react";
+import { useEffect, useState, ChangeEvent } from "react";
 import { QuestionType } from '../utils/types';
 import Button from '@mui/material/Button';
 import Schedule from "../Components/Create/Schedule";
@@ -33,7 +33,7 @@ interface FormInfo {
 
 interface DataType {
   title: string,
-  video_url: string,
+  video_url: FormData,
   description: string,
   question_ids: QuestionType[],
   questions_shown: number,
@@ -62,7 +62,7 @@ const Create = () => {
   const [questionsForm, setQuestionsForm] = useState<QuestionType[]>([]);
   const [data, setData] = useState<DataType>({
     title: '',
-    video_url: '',
+    video_url: new FormData(),
     description: '',
     question_ids: [],
     questions_shown: 0,
@@ -91,14 +91,14 @@ const Create = () => {
         alert('must have more or equal questions to the length');
         setGetData(false);
       } else {
-        setData({
-          title: formInfo.title,
-          video_url: '',
-          description: formInfo.description,
-          question_ids: questionsForm,
-          questions_shown: questionsShown,
-          access_date: '',
-          due_date: '',
+        setData((prevState: DataType) => {
+          return {
+            ...prevState,
+            title: formInfo.title,
+            description: formInfo.description,
+            question_ids: questionsForm,
+            questions_shown: questionsShown,
+          }
         })
         setRenderForm(true);
       }
@@ -127,11 +127,31 @@ const Create = () => {
     });
   };
 
+  const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if(file) {
+      const formatedFile = new FormData();
+      formatedFile.append('video', file);
+      setData((prevState: DataType) => {
+        return {
+          ...prevState,
+          video_url: formatedFile
+        };
+      });
+    }
+  }
+
   return (
     <div>
       {!renderForm ? (
         <>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
+          <input 
+            type='file' 
+            accept ='video/**'
+            onChange={handleFileUpload}
+            />
           <InputLabel className="import_label" id="label">Import Questions</InputLabel>
           <Select
             onChange={(e) => setSelected(e.target.value as string)}
