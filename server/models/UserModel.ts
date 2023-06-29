@@ -39,10 +39,23 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   }
 };
 
+const acceptAnUser = async (email: string) => {
+  const findUser = await User.findOne({ where: { email } });
+  if (!findUser) throw new Error("User doesn't exist");
+  findUser.role = 'user';
+  await findUser.save();
+}
+
+const rejectAnUser = async (email: string) => {
+  const findUser = await User.findOne({ where: { email } });
+  if (!findUser) throw new Error("User doesn't exist");
+  return await deleteAnUser(email);
+}
+
 const getUserInfo = async (user_id: UUID) => {
   const userInfo = await User.findOne({
     where: { user_id },
-    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email','phone', 'department', 'profile_picture'],
+    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
   });
   if (!userInfo) throw new Error("user_id is invalid");
   else {
@@ -63,7 +76,7 @@ const deleteUser = async (user_id: UUID) => {
 };
 
 const deleteAnUser = async (userDeleteEmail: string) => {
-  User.destroy({ where: { email: userDeleteEmail } });
+  await User.destroy({ where: { email: userDeleteEmail } });
   return;
 };
 
@@ -73,5 +86,7 @@ module.exports = {
   getUserInfo,
   loginTheUser,
   deleteUser,
-  getUsersPending
+  getUsersPending,
+  acceptAnUser,
+  rejectAnUser
 };

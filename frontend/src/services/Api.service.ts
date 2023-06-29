@@ -1,7 +1,8 @@
 import axios from 'axios';
 
-import { LoginFormValues, RegisterFormValues } from '../@types/Types';
+import { LoginFormValues, RegisterFormValues, person } from '../@types/Types';
 import { NavigateFunction } from 'react-router-dom';
+import { SetStateAction } from 'react';
 
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -56,7 +57,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: {data: string} = await axios.get('/api/invite');
+		const invite: { data: string } = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
@@ -72,6 +73,57 @@ export async function getAdminInvite(setLinkText: any) {
 				}, 3000)
 			})
 			.catch(() => setLinkText('Failed'))
+
+	} catch (error: any) {
+		alert(error.response.data)
+	}
+};
+
+export async function rejectUser(email: string, setPeoplePending: any) {
+	try {
+
+		const data = JSON.stringify({ email });
+		await axios.post('/api/reject_user', data, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		setPeoplePending((currData: person[]) => {
+			const newArr = currData.filter(person => person.email !== email);
+			return newArr;
+		})
+
+	} catch (error: any) {
+		alert(error.response.data)
+	}
+};
+
+export async function acceptUser(email: string, setPeoplePending: any) {
+	try {
+
+		const data = JSON.stringify({ email });
+		await axios.post('/api/accept_user', data, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+
+		setPeoplePending((currData: person[]) => {
+			const newArr = currData.filter(person => person.email !== email);
+			return newArr;
+		})
+
+	} catch (error: any) {
+		alert(error.response.data)
+	}
+};
+
+export async function getPendingUsers(setPeoplePending: any) {
+	try {
+
+		const res = await axios.get('/api/pending_users');
+		setPeoplePending(res.data);
 
 	} catch (error: any) {
 		alert(error.response.data)

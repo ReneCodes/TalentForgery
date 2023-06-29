@@ -14,3 +14,12 @@ export type RegisterFormValues = {
 	phone: string,
 	profile_image: File,
 };
+
+export type person = {
+	first_name: string,
+	last_name: string,
+	email: string,
+	department: string,
+	phone: string,
+	profile_image: string,
+}
