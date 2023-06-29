@@ -173,3 +173,13 @@ ul {
   font-weight: bold;
   font-size: 16px;
 }
+
+.question_submit {
+  margin-left: 30%;
+  margin-top: 20px;
+  width: 40%;
+}
+
+.question_submit_btn {
+  width: 100%;
+}

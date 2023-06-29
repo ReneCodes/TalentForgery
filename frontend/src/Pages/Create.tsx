@@ -172,9 +172,11 @@ const Create = () => {
             getData={getData}
             onData={handleDataFromQuestions}
           />
-          <Button onClick={handleSubmit} variant="contained">
-            Submit
-          </Button>
+          <div className="question_submit">
+            <Button onClick={handleSubmit} variant="contained" className="question_submit_btn">
+              Submit
+            </Button>
+          </div>
         </>
       ) : (
         //@ts-ignore
