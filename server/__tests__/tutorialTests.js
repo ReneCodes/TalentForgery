@@ -2,7 +2,6 @@ const request = require("supertest");
 const server = require("../dist/index");
 const crypto = require("crypto");
 const { Tutorial, User } = require("../dist/models/Schemas");
-const jwt = require("jsonwebtoken");
 
 afterAll((done) => {
   server.close(async () => {
@@ -189,3 +188,4 @@ describe("User create/see tutorials", () => {
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
   });
+});

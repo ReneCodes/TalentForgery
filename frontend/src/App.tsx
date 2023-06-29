@@ -10,7 +10,7 @@ import {AppHeader} from './Components/Header/AppHeader';
 
 const App: React.FC = () => {
 	return (
-		<>
+
 			<ThemeProvider theme={theme}>
 				<CssBaseline />
 				<AppHeader />
@@ -25,7 +25,7 @@ const App: React.FC = () => {
 					</BrowserRouter>
 				</Box>
 			</ThemeProvider>
-		</>
+
 	);
 };
 

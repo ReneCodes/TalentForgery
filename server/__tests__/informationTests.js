@@ -3,6 +3,7 @@ const expect = require('chai').expect;
 const server = require('../dist/index');
 const crypto = require('crypto');
 const { User } = require('../dist/models/Schemas');
+const sequelize = require('../dist/models/connection');
 
 
 afterAll((done) => {
@@ -165,7 +166,7 @@ describe('Gets all of the pending users', () => {
     expect(res.text).to.equal('"user_id is invalid"');
   });
 
-  it('Should not allow to get pending users with a jwt that dosent have the user_id', async () => {
+  it("Should not allow to get pending users with a jwt that doesn't have the user_id", async () => {
     const res = await request(`http://localhost:${process.env.PORT}`)
       .get('/pending_users')
       .set('Cookie', ['session_token=eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJ0ZXN0IjoiaGVsbG8iLCJpYXQiOjE2ODc2MTg0NzAsImV4cCI6MTY5MDIxMDQ3MH0.UXE-LNRLM6i54yvtTUxi1KLVlk37NoZsz4o9e1-Klvg; path=/'])
@@ -204,25 +205,35 @@ describe('Gets all of the pending users', () => {
   });
 
   it('Should return the pending users if everything is right', async () => {
-    await User.destroy({where: {}});
-    await User.create({ role: 'admin', ...user_info, user_id: crypto.randomUUID() });
-    await User.create({ role: 'pending', ...second_user, user_id: crypto.randomUUID() });
-    await User.create({ role: 'pending', ...second_user, user_id: crypto.randomUUID() });
 
-    const loginResponse = await request(`http://localhost:${process.env.PORT}`)
-      .post('/login')
-      .send(JSON.stringify({ email: "admin@admin.com", password: "123" }))
-      .set('Content-Type', 'application/json');
-    const newSession = loginResponse.headers['set-cookie'][0];
+    const transaction = await sequelize.transaction();
+
+    try {
+      await User.destroy({ where: {} }, { transaction });
+      await User.create({ role: 'admin', ...user_info, user_id: crypto.randomUUID() });
+      await User.create({ role: 'pending', ...second_user, user_id: crypto.randomUUID() });
+      await User.create({ role: 'pending', ...second_user, user_id: crypto.randomUUID() });
+
+      await transaction.commit();
+
+      const loginResponse = await request(`http://localhost:${process.env.PORT}`)
+        .post('/login')
+        .send(JSON.stringify({ email: "admin@admin.com", password: "123" }))
+        .set('Content-Type', 'application/json');
+      const newSession = loginResponse.headers['set-cookie'][0];
 
 
-    const res = await request(`http://localhost:${process.env.PORT}`)
-      .get('/pending_users')
-      .set('Cookie', [newSession])
-      .expect('Content-Type', 'application/json; charset=utf-8')
+      const res = await request(`http://localhost:${process.env.PORT}`)
+        .get('/pending_users')
+        .set('Cookie', [newSession])
+        .expect('Content-Type', 'application/json; charset=utf-8')
 
-    expect(res.statusCode).equal(200);
-    const data = res.body;
-    expect(data).to.eql([expectedPendingUsers, expectedPendingUsers]);
+      expect(res.statusCode).equal(200);
+      const data = res.body;
+      expect(data).to.eql([expectedPendingUsers, expectedPendingUsers]);
+    } catch (error) {
+      await transaction.rollback();
+    }
+
   });
 });

@@ -9,25 +9,25 @@ const { checkInvite } = require('./InviteModel');
 const { User } = require('./Schemas');
 
 
-const registerNewUser = async (providedInformaion: registeredUser) => {
+const registerNewUser = async (providedInformation: registeredUser) => {
   const userList = await User.findOne({ where: {} });
-  const findUser = await User.findOne({ where: { email: providedInformaion.email } });
-  const inviteID = await checkInvite(providedInformaion.inviteID);
+  const findUser = await User.findOne({ where: { email: providedInformation.email } });
+  const inviteID = await checkInvite(providedInformation.inviteID);
   if (findUser) throw new Error('User already exists');
   else if (!inviteID && userList !== null) throw new Error('Invalid invite');
   else {
-    const hash = await hashAsync(providedInformaion.password, 10);
-    providedInformaion.password = hash;
+    const hash = await hashAsync(providedInformation.password, 10);
+    providedInformation.password = hash;
 
     const role = userList == null ? 'admin' : 'pending';
-    await User.create({ role, ...providedInformaion, user_id: crypto.randomUUID() });
+    await User.create({ role, ...providedInformation, user_id: crypto.randomUUID() });
     return role === 'admin' ? "Admin User created" : "User created";
   }
 };
 
 const loginTheUser = async ({ email, password }: loginUser) => {
   const findUser = await User.findOne({ where: { email } });
-  if (!findUser) throw new Error("User dosent exist");
+  if (!findUser) throw new Error("User doesn't exist");
   const samePassword = await bcrypt.compare(password, findUser.password);
   if (!samePassword) throw new Error("Wrong credentials");
   else {
@@ -39,10 +39,23 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   }
 };
 
+const acceptAnUser = async (email: string) => {
+  const findUser = await User.findOne({ where: { email } });
+  if (!findUser) throw new Error("User doesn't exist");
+  findUser.role = 'user';
+  await findUser.save();
+}
+
+const rejectAnUser = async (email: string) => {
+  const findUser = await User.findOne({ where: { email } });
+  if (!findUser) throw new Error("User doesn't exist");
+  return await deleteAnUser(email);
+}
+
 const getUserInfo = async (user_id: UUID) => {
   const userInfo = await User.findOne({
     where: { user_id },
-    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email','phone', 'department', 'profile_picture'],
+    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
   });
   if (!userInfo) throw new Error("user_id is invalid");
   else {
@@ -63,7 +76,7 @@ const deleteUser = async (user_id: UUID) => {
 };
 
 const deleteAnUser = async (userDeleteEmail: string) => {
-  User.destroy({ where: { email: userDeleteEmail } });
+  await User.destroy({ where: { email: userDeleteEmail } });
   return;
 };
 
@@ -73,5 +86,7 @@ module.exports = {
   getUserInfo,
   loginTheUser,
   deleteUser,
-  getUsersPending
+  getUsersPending,
+  acceptAnUser,
+  rejectAnUser
 };
