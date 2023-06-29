@@ -147,10 +147,12 @@ const Create = () => {
       {!renderForm ? (
         <>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
+          <h2 className="video_title">Video Upload</h2>
           <input 
             type='file' 
             accept ='video/**'
             onChange={handleFileUpload}
+            className='video_upload'
             />
           <InputLabel className="import_label" id="label">Import Questions</InputLabel>
           <Select
