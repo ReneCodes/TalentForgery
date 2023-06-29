@@ -6,8 +6,9 @@ import AddQuestion from '../src/Components/Create/AddQuestion';
 import QuestionList from '../src/Components/Create/QuestionList';
 import TutorialForm from '../src/Components/Create/TutorialForm';
 import Create from '../src/Pages/Create'
-import {expect, test, describe, beforeEach} from '@jest/globals';
+import {expect, test, describe} from '@jest/globals';
 import { jest } from '@jest/globals';
+import Schedule from '../src/Components/Create/Schedule';
 
 describe('Question', () => {
   test('Renders the content' ,() => {
@@ -93,7 +94,6 @@ describe('Question List', () => {
     }
 
     const callback = (data: any) => console.log(data)
-
     render(<QuestionList imported={mock} getData={false} onData={callback}/>)
   })
 
@@ -464,5 +464,37 @@ describe('submit', () => {
     fireEvent.click(buttons[3]);
     expect(console.log).not.toHaveBeenCalled();
     expect(mockAlert).toHaveBeenCalled();
+  })
+})
+
+describe('schedule', () => {
+  test('it renders the content', () => {
+    const callback = (data: any) => console.log(data);
+    render(<Schedule onData={callback} />);
+
+    const datePicker = screen.getAllByPlaceholderText('MM/DD/YYYY hh:mm aa');
+    expect(datePicker.length).toBe(2);
+
+    const buttons = screen.getAllByRole('button');
+    expect(buttons.length).toBe(3);
+  })
+
+  test('sends a callback', () => {
+    let dates = {};
+    const callback = (data: any) => dates = data;
+    render(<Schedule onData={callback} />);
+
+    const datePicker = screen.getAllByPlaceholderText('MM/DD/YYYY hh:mm aa');
+    const buttons = screen.getAllByRole('button');
+
+    const newDate = new Date("Wed, 14 Jun 2023 02:20:00 GMT");
+    fireEvent.change(datePicker[0], { target: { value: newDate.toISOString().slice(0, 10) } });
+
+    const newDate2 = new Date('2023-07-28');
+    fireEvent.change(datePicker[1], { target: { value: newDate2.toISOString().slice(0, 10) } });
+
+    fireEvent.click(buttons[2]);
+
+    expect(JSON.stringify(dates)).toBe('{"startDate":null,"endDate":null}');
   })
 })

@@ -5,6 +5,7 @@ import './Create.css';
 import ArrowForwardIosTwoToneIcon from '@mui/icons-material/ArrowForwardIosTwoTone';
 import ArrowBackIosNewTwoToneIcon from '@mui/icons-material/ArrowBackIosNewTwoTone';
 import AddQuestion from "./AddQuestion";
+import { Card } from "@mui/material";
 
 interface QuestionListComp {
   imported: QuestionType,
@@ -65,7 +66,7 @@ const QuestionList: FC<QuestionListComp> = ({imported, getData, onData}) => {
     })
   }
 
-  return <div className="question_list">
+  return <Card className="question_list">
     <div className="question_top">
       {counter === questions.length + 1 ? <AddQuestion onData={handleDataFromChildren} /> : <Question question={questions[counter - 1]} />}
       <h1 className="index">{counter}/{questions.length + 1}</h1>
@@ -75,7 +76,7 @@ const QuestionList: FC<QuestionListComp> = ({imported, getData, onData}) => {
       <button onClick={handleDelete} className="delete">Delete</button>
       <ArrowForwardIosTwoToneIcon onClick={handleRight}  className="arrow" />
     </div>
-  </div>
+  </Card>
 }
 
 export default QuestionList;

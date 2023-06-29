@@ -45,7 +45,9 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
       value={tag}
       onChange={(e) => setTag(e.target.value)}
     />
-    <Button onClick={handleAdd} variant="contained">Add</Button>
+    <div className='form_add'>
+      <Button onClick={handleAdd} variant="contained">Add Tag</Button>
+    </div>
     <ul className='options_list'>
       {tags.map((item, index) => (
         <li 
