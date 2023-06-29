@@ -3,6 +3,7 @@ import React, {FC} from 'react';
 import SmallVideoCard from '../../Components/Cards/SmallVideoCard';
 import {Box} from '@mui/material';
 import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
+import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
 
 const mockVideoArray = [
 	{
@@ -51,6 +52,7 @@ export const Home = () => {
 			</Box>
 			<Box sx={styles.noBar}>
 				<EmployeePendingCard />
+				<EmployeeProfileForm />
 			</Box>
 		</Box>
 	);
