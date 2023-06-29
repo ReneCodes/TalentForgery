@@ -323,149 +323,149 @@ describe('import', () => {
   })
 })
 
-// describe('submit', () => {
-//   beforeEach(() => {
-//     render(<Create />)
-//   })
+describe('submit', () => {
+  beforeEach(() => {
+    render(<Create />)
+  })
 
-//   test('renders the button', () => {
-//     const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
-//     fireEvent.click(arrowIcon);
+  test('renders the button', () => {
+    const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
+    fireEvent.click(arrowIcon);
 
-//     const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
-//     expect(inputs.length).toBe(6);
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    expect(inputs.length).toBe(6);
 
-//     const buttons = screen.queryAllByRole('button');
-//     expect(buttons.length).toBe(6);
-//   })
+    const buttons = screen.queryAllByRole('button');
+    expect(buttons.length).toBe(6);
+  })
 
-//   test('can export all the information in the form', () => {
-//     const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
-//     fireEvent.click(arrowIcon);
+  test('can export all the information in the form', () => {
+    const arrowIcon = screen.getByTestId('ArrowForwardIosTwoToneIcon');
+    fireEvent.click(arrowIcon);
 
-//     const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
-//     const buttons = screen.queryAllByRole('button');
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
-//     fireEvent.change(inputs[0], {target: {value: 'test'}});
-//     fireEvent.change(inputs[1], {target: {value: 'test'}});
-//     fireEvent.change(inputs[2], {target: {value: 'test1'}});
-//     fireEvent.click(buttons[0]);
-//     fireEvent.change(inputs[2], {target: {value: 'test2'}});
-//     fireEvent.click(buttons[0]);
-//     fireEvent.change(inputs[3], {target: {value: 1}});
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+    fireEvent.change(inputs[1], {target: {value: 'test'}});
+    fireEvent.change(inputs[2], {target: {value: 'test1'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[2], {target: {value: 'test2'}});
+    fireEvent.click(buttons[0]);
+    fireEvent.change(inputs[3], {target: {value: 1}});
     
-//     expect(screen.getByText('test1')).toBeDefined();
+    expect(screen.getByText('test1')).toBeDefined();
 
-//     fireEvent.change(inputs[4], {target: {value: 'question'}});
-//     fireEvent.change(inputs[5], {target: {value: 'option'}});
-//     fireEvent.click(buttons[2]);
+    fireEvent.change(inputs[4], {target: {value: 'question'}});
+    fireEvent.change(inputs[5], {target: {value: 'option'}});
+    fireEvent.click(buttons[2]);
 
-//     expect(screen.getByText('option')).toBeDefined();
+    expect(screen.getByText('option')).toBeDefined();
 
-//     const text = screen.getByText('option');
-//     expect(text).toBeDefined();
+    const text = screen.getByText('option');
+    expect(text).toBeDefined();
 
-//     let boo = false;
-//     if (text) {
-//       boo = true;
-//       fireEvent.click(text);
-//     }
-//     expect(boo).toBe(true);
+    let boo = false;
+    if (text) {
+      boo = true;
+      fireEvent.click(text);
+    }
+    expect(boo).toBe(true);
 
-//     window.alert = jest.fn();
-//     fireEvent.click(buttons[3]);
-//     expect(window.alert).not.toHaveBeenCalled();
+    window.alert = jest.fn();
+    fireEvent.click(buttons[3]);
+    expect(window.alert).not.toHaveBeenCalled();
 
-//     expect(screen.getByText('2/3')).toBeDefined();
-//     expect(screen.getByText('option')).toBeDefined();
+    expect(screen.getByText('2/3')).toBeDefined();
+    expect(screen.getByText('option')).toBeDefined();
 
-//     console.log = jest.fn();
-//     fireEvent.click(buttons[5]);
-//     expect(window.alert).not.toHaveBeenCalled();
-//     expect(console.log).toHaveBeenCalledWith({
-//       "access_date": "",
-//       "description": "test",
-//       "due_date": "",
-//       "question_ids": [
-//         {
-//         "answer": "when its green its the answer",
-//         "options": [
-//           "this is an option",
-//           "when its green its the answer",
-//           "press delete to remove the tutorial",
-//         ],
-//         "question": "This is the Question",
-//         },
-//         {
-//           "answer": "option",
-//           "options": [
-//             "option",
-//           ],
-//           "question": "question",
-//         },
-//       ],
-//       "questions_shown": 1,
-//       "title": "test",
-//       "video_url": "",
-//     });
-//   })
+    console.log = jest.fn();
+    fireEvent.click(buttons[5]);
+    expect(window.alert).not.toHaveBeenCalled();
+    expect(console.log).toHaveBeenCalledWith({
+      "access_date": "",
+      "description": "test",
+      "due_date": "",
+      "question_ids": [
+        {
+        "answer": "when its green its the answer",
+        "options": [
+          "this is an option",
+          "when its green its the answer",
+          "press delete to remove the tutorial",
+        ],
+        "question": "This is the Question",
+        },
+        {
+          "answer": "option",
+          "options": [
+            "option",
+          ],
+          "question": "question",
+        },
+      ],
+      "questions_shown": 1,
+      "title": "test",
+      "video_url": "",
+    });
+  })
 
-//   test('does not submit if any information is missing', () => {
-//     const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
-//     const buttons = screen.queryAllByRole('button');
+  test('does not submit if any information is missing', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
-//     console.log = jest.fn();
-//     const mockAlert = jest.spyOn(window, 'alert');
-//     mockAlert.mockReset();
-//     fireEvent.click(buttons[3]);
-//     expect(mockAlert).toHaveBeenCalled();
-//     fireEvent.change(inputs[0], {target: {value: 'test'}});
+    console.log = jest.fn();
+    const mockAlert = jest.spyOn(window, 'alert');
+    mockAlert.mockReset();
+    fireEvent.click(buttons[3]);
+    expect(mockAlert).toHaveBeenCalled();
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
 
-//     mockAlert.mockReset();
-//     fireEvent.click(buttons[3]);
-//     expect(mockAlert).toHaveBeenCalled();
-//     fireEvent.change(inputs[1], {target: {value: 'test2'}});
+    mockAlert.mockReset();
+    fireEvent.click(buttons[3]);
+    expect(mockAlert).toHaveBeenCalled();
+    fireEvent.change(inputs[1], {target: {value: 'test2'}});
 
-//     mockAlert.mockReset();
-//     fireEvent.click(buttons[3]);
-//     expect(mockAlert).toHaveBeenCalled();
-//     fireEvent.change(inputs[3], {target: {value: 1}});
+    mockAlert.mockReset();
+    fireEvent.click(buttons[3]);
+    expect(mockAlert).toHaveBeenCalled();
+    fireEvent.change(inputs[3], {target: {value: 1}});
 
-//     expect(console.log).not.toHaveBeenCalled();
-//   })
+    expect(console.log).not.toHaveBeenCalled();
+  })
 
-//   test('length must be a number', () => {
-//     const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
-//     const buttons = screen.queryAllByRole('button');
+  test('length must be a number', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
-//     console.log = jest.fn();
-//     const mockAlert = jest.spyOn(window, 'alert');
+    console.log = jest.fn();
+    const mockAlert = jest.spyOn(window, 'alert');
 
-//     fireEvent.change(inputs[0], {target: {value: 'test'}});
-//     fireEvent.change(inputs[1], {target: {value: 'test2'}});
-//     fireEvent.change(inputs[3], {target: {value: 'wrong'}});
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+    fireEvent.change(inputs[1], {target: {value: 'test2'}});
+    fireEvent.change(inputs[3], {target: {value: 'wrong'}});
 
-//     fireEvent.click(buttons[3]);
-//     expect(console.log).not.toHaveBeenCalled();
-//     expect(mockAlert).toHaveBeenCalled();
-//   })
+    fireEvent.click(buttons[3]);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(mockAlert).toHaveBeenCalled();
+  })
 
-//   test('questions.length >= test length', () => {
-//     const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
-//     const buttons = screen.queryAllByRole('button');
+  test('questions.length >= test length', () => {
+    const inputs = screen.queryAllByRole('textbox') as HTMLInputElement[];
+    const buttons = screen.queryAllByRole('button');
 
-//     console.log = jest.fn();
-//     const mockAlert = jest.spyOn(window, 'alert');
+    console.log = jest.fn();
+    const mockAlert = jest.spyOn(window, 'alert');
 
-//     fireEvent.change(inputs[0], {target: {value: 'test'}});
-//     fireEvent.change(inputs[1], {target: {value: 'test2'}});
-//     fireEvent.change(inputs[3], {target: {value: 7}});
+    fireEvent.change(inputs[0], {target: {value: 'test'}});
+    fireEvent.change(inputs[1], {target: {value: 'test2'}});
+    fireEvent.change(inputs[3], {target: {value: 7}});
 
-//     fireEvent.click(buttons[3]);
-//     expect(console.log).not.toHaveBeenCalled();
-//     expect(mockAlert).toHaveBeenCalled();
-//   })
-// })
+    fireEvent.click(buttons[3]);
+    expect(console.log).not.toHaveBeenCalled();
+    expect(mockAlert).toHaveBeenCalled();
+  })
+})
 
 describe('schedule', () => {
   test('it renders the content', () => {
