@@ -52,6 +52,7 @@ const Create = () => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [selected, setSelected] = useState('');
   const [getData, setGetData] = useState(false);
+  const [renderForm, setRenderForm] = useState(false);
   const [formInfo, setFormInfo] = useState<FormInfo>({
     title: '',
     description: '',
@@ -99,6 +100,7 @@ const Create = () => {
           access_date: '',
           due_date: '',
         })
+        setRenderForm(true);
       }
     }
   }, [questionsForm, formInfo])
@@ -119,15 +121,15 @@ const Create = () => {
     setData((prevState: DataType) => {
       return {
         ...prevState,
-        access_date: `${childData.startTime}: ${childData.startDate}`,
-        due_date: `${childData.endTime}: ${childData.endDate}`,
+        access_date: `${childData.startDate}`,
+        due_date: `${childData.endDate}`,
       };
     });
   };
 
   return (
     <div>
-      {!getData ? (
+      {!renderForm ? (
         <>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
           <InputLabel id="label">Import Questions</InputLabel>
@@ -144,6 +146,7 @@ const Create = () => {
           </Select>
           <QuestionList
             imported={questions[parseInt(selected)]}
+            //@ts-ignore
             getData={getData}
             onData={handleDataFromQuestions}
           />
@@ -152,6 +155,7 @@ const Create = () => {
           </Button>
         </>
       ) : (
+        //@ts-ignore
         <Schedule onData={handleDataFromSchedule} />
       )}
     </div>

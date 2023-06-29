@@ -132,11 +132,6 @@ ul {
   font-size: 18px;
 }
 
-.timePicker {
-  margin-left: 10px;
-  margin-bottom: 40px;
-}
-
-.popup {
-  position: fixed;
+.schedule {
+  max-width: 400px;
 }
