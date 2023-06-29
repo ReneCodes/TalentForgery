@@ -1,5 +1,5 @@
-import {FC, useState} from 'react';
-import {useForm} from 'react-hook-form';
+import { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
 import {
 	Container,
 	Input,
@@ -14,17 +14,17 @@ import {
 	FormHelperText,
 	Box,
 } from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-import {loginUser} from '../services/Api.service';
-import {LoginFormValues} from '../@types/Types';
-import {NavigateFunction, useNavigate} from 'react-router-dom';
+import { loginUser } from '../services/Api.service';
+import { LoginFormValues } from '../@types/Types';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 import theme from '../config/theme';
-import {LoginAndOut} from '../utils/zustand.store';
+import { LoginAndOut } from '../utils/zustand.store';
 
 const Login: FC = () => {
-	const {MinonLogin} = LoginAndOut();
+	const { MinonLogin } = LoginAndOut();
 
 	const [showPassword, setShowPassword] = useState(false);
 	const [loginError, setLoginError] = useState('');
@@ -37,8 +37,8 @@ const Login: FC = () => {
 		},
 	});
 
-	const {register, handleSubmit, formState, reset} = loginForm;
-	const {errors} = formState;
+	const { register, handleSubmit, formState, reset } = loginForm;
+	const { errors } = formState;
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
@@ -47,6 +47,7 @@ const Login: FC = () => {
 
 		if (requestAnswer) setLoginError(requestAnswer);
 		else {
+			MinonLogin();
 			reset({
 				email: '',
 				password: '',
@@ -55,26 +56,26 @@ const Login: FC = () => {
 	}
 
 	return (
-		<Container sx={{height: '100vh', width: '100%', overflow: 'hidden', py: 2}}>
-			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+		<Container sx={{ height: '100vh', width: '100%', overflow: 'hidden', py: 2 }}>
+			<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
 				<Typography
 					variant="h5"
-					sx={{':hover': {cursor: 'pointer'}}}
+					sx={{ ':hover': { cursor: 'pointer' } }}
 					onClick={() => navigate('/')}>
-					<span style={{color: '#BFA622'}}> Minon </span>
-					<span style={{color: '#00407E'}}> Mentor </span>
+					<span style={{ color: '#BFA622' }}> Minon </span>
+					<span style={{ color: '#00407E' }}> Mentor </span>
 				</Typography>
 
 				<Button
 					onClick={() => navigate('/register')}
-					sx={{width: {xs: '100px', sm: '100px', md: '170px'}, height: '50px', marginLeft: 'auto'}}
-					style={{backgroundColor: 'rgb(180, 166, 34)', color: 'white'}}>
-					<Typography sx={{variant: {xs: 'h4', sm: 'h6', md: 'h6'}}}>Register</Typography>
+					sx={{ width: { xs: '100px', sm: '100px', md: '170px' }, height: '50px', marginLeft: 'auto' }}
+					style={{ backgroundColor: 'rgb(180, 166, 34)', color: 'white' }}>
+					<Typography sx={{ variant: { xs: 'h4', sm: 'h6', md: 'h6' } }}>Register</Typography>
 				</Button>
 			</Box>
 			<Container
 				maxWidth="xs"
-				sx={{pb: 8, pt: 3, boxShadow: 10, borderRadius: 5, mt: 4}}>
+				sx={{ pb: 8, pt: 3, boxShadow: 10, borderRadius: 5, mt: 4 }}>
 				<Typography variant="h4">
 					<span>
 						<strong>Login</strong>
@@ -165,7 +166,7 @@ const Login: FC = () => {
 							type="submit"
 							variant="contained"
 							aria-label="login"
-							sx={{backgroundColor: 'rgb(0, 64, 126)'}}>
+							sx={{ backgroundColor: 'rgb(0, 64, 126)' }}>
 							Login
 						</Button>
 					</Stack>
@@ -176,7 +177,7 @@ const Login: FC = () => {
 				onClick={MinonLogin}
 				variant="contained"
 				aria-label="login"
-				sx={{backgroundColor: theme.palette.red.main}}>
+				sx={{ backgroundColor: theme.palette.red.main }}>
 				Special Login
 			</Button>
 		</Container>

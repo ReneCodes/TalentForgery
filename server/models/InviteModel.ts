@@ -14,8 +14,12 @@ const getUserInvite = async (user_id: UUID) => {
 };
 
 const checkInvite = async (inviteID: string) => {
-  const inviteFound = await Invites.findOne({ where: { inviteID } });
-  return Boolean(inviteFound);
+  const inviteFound = await Invites.findOne({
+    where: { inviteID },
+    attributes: ['inviteID', 'user_created']
+  });
+
+  return inviteFound;
 };
 
 module.exports = {
