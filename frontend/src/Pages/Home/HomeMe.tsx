@@ -5,6 +5,7 @@ import {Box} from '@mui/material';
 import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
 import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
 import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
+import {TutorialVideoDataType} from '../../@types/Types';
 
 const mockVideoArray = [
 	{
@@ -54,7 +55,14 @@ export const HomeMe = () => {
 			<Box sx={styles.noBar}>
 				<EmployeePendingCard />
 				<EmployeeProfileForm />
-				<WatchTutorial />
+				<Box sx={styles.noBar}>
+					{mockVideoArray.length > 0 &&
+						mockVideoArray.map((videoData: TutorialVideoDataType) => (
+							<Box key={Math.floor(Math.random() * 99999)}>
+								<WatchTutorial videoData={videoData} />
+							</Box>
+						))}
+				</Box>
 			</Box>
 		</Box>
 	);
