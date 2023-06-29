@@ -18,7 +18,9 @@ const corsConfig = {
 app.use(cors(corsConfig));
 app.use(bodyParser());
 app.use(cookieParser());
-app.use('/images', express.static(path.join(__dirname, 'images')));
+console.log(path.join(__dirname + '/../', 'images'));
+
+app.use('/images', express.static(path.join(__dirname + '../../', 'images')));
 app.use(router);
 
 const server = app.listen(PORT, () => console.log(`Running at http://localhost:${PORT}/`));

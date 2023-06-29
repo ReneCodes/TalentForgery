@@ -1,21 +1,23 @@
 import { Container, Box, Button, Typography } from "@mui/material";
 import PieChartComp from "../Components/PieChart/PieChart";
 import { useEffect, useState } from "react";
-import { acceptUser, getAdminInvite, getPendingUsers, rejectUser } from "../services/Api.service";
+import { acceptUser, authUser, getAdminInvite, getPendingUsers, rejectUser } from "../services/Api.service";
 import SmallInfo from "../Components/SmallInfo/SmallInfo";
 import { person } from "../@types/Types";
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
 const Dashboard = () => {
 
   const [linkText, setLinkText] = useState<String>('Copy your link');
   const [peoplePending, setPeoplePending] = useState<person[]>([]);
+  const navigate: NavigateFunction = useNavigate();
 
   function handleInviteClick() {
     getAdminInvite(setLinkText);
   }
 
-  useEffect(()=>{
-    getPendingUsers(setPeoplePending)
+  useEffect(() => {
+    authUser(navigate, () => getPendingUsers(setPeoplePending))
   }, []);
 
 
@@ -76,7 +78,7 @@ const Dashboard = () => {
           {peoplePending.map((person: person) => <SmallInfo
             first_name={person.first_name}
             last_name={person.last_name}
-            profile_image={person.profile_image}
+            profile_picture={person.profile_picture}
             accept={() => acceptPerson(person.email)}
             reject={() => rejectPerson(person.email)}
           />)}

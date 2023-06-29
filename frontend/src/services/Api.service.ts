@@ -2,9 +2,18 @@ import axios from 'axios';
 
 import { LoginFormValues, RegisterFormValues, person } from '../@types/Types';
 import { NavigateFunction } from 'react-router-dom';
-import { SetStateAction } from 'react';
 
-const baseURL = import.meta.env.VITE_BE_BASE_URL;
+// const baseURL = import.meta.env.VITE_BE_BASE_URL;
+
+export async function authUser(navigate: NavigateFunction, callback?: any) {
+	try {
+		await axios.get('/api/auth_user');
+		if(callback) callback();
+	} catch (error: any) {
+		console.log(error);
+		// navigate('/login');
+	}
+}
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
 	let errorMessage: string = '';

@@ -21,10 +21,10 @@ interface PieChartCompProps {
 
 class PieChartComp extends Component<PieChartCompProps> {
   colours: string[] = ['green', 'grey', 'red'];
-  
+
   get pieData(): PieData[] {
     const { passed, todo, failed } = this.props;
-    
+
     return [
       {
         name: "Watched",
@@ -40,7 +40,7 @@ class PieChartComp extends Component<PieChartCompProps> {
       }
     ];
   }
-  
+
   CustomTooltip = ({ active, payload }: CustomTooltipProps) => {
     if (active && payload && payload.length) {
       return (
@@ -63,7 +63,7 @@ class PieChartComp extends Component<PieChartCompProps> {
     const { width } = this.props;
 
     return (
-      <PieChart width={730} height={300}>
+      <PieChart width={380} height={300}>
         <Pie
           data={this.pieData}
           color="#000000"

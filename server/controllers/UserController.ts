@@ -76,7 +76,6 @@ const loginUser = async (req: Request, res: Response) => {
 
 const acceptUser = async (req: Request, res: Response) => {
   const { email } = req.body;
-  console.log(email);
 
   if (!email) return res.status(400).json("Not enough information provided");
   try {
@@ -91,7 +90,6 @@ const acceptUser = async (req: Request, res: Response) => {
 
 const rejectUser = async (req: Request, res: Response) => {
   const { email } = req.body;
-  console.log(email);
 
   if (!email) return res.status(400).json("Not enough information provided");
   try {

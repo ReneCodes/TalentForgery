@@ -21,5 +21,5 @@ export type person = {
 	email: string,
 	department: string,
 	phone: string,
-	profile_image: string,
+	profile_picture: string,
 }

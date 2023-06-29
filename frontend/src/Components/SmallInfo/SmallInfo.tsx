@@ -1,11 +1,16 @@
 import { Container, Box, Typography, Button } from "@mui/material";
 import CheckIcon from '@mui/icons-material/Check';
 import CloseIcon from '@mui/icons-material/Close';
+const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
-function SmallInfo({ first_name, last_name, profile_image, accept, reject }:
-  {first_name:string, last_name:string, profile_image: string, accept: any, reject: any }) {
+function SmallInfo({ first_name, last_name, profile_picture, accept, reject }:
+  { first_name: string, last_name: string, profile_picture: string, accept: any, reject: any }) {
 
-  const imageUrl = profile_image;
+  console.log(profile_picture);
+
+  const imageUrl = `${baseURL}images/profile_pictures/${profile_picture}`;
+  console.log(imageUrl);
+
 
   return (
     <Container key={first_name} sx={{
