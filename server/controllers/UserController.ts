@@ -61,7 +61,7 @@ const loginUser = async (req: Request, res: Response) => {
       const token = jwt.sign({ user_id }, process.env.SECRET, {
         expiresIn: process.env.EXPIRITY_IN_HOURS,
       });
-      res.setHeader("Set-Cookie", `session_token=${token}; path=/`);
+      res.setHeader("Set-Cookie", `session_token=${token}; path=/; SameSite=None; Secure`);
       res.status(200).json(user_info);
     } catch (error) {
       const errorMessage = (error as Error).message;
@@ -106,7 +106,7 @@ const deleteMyAccount = async (req: Request, res: Response) => {
   }
 };
 
-//  DELETES A USER -> ONLY ADMIM
+//  DELETES A USER -> ONLY ADMIN
 const deleteUserAccount = async (req: Request, res: Response) => {
   const { user_delete } = req.body;
   if (!user_delete) return res.status(400).json('Not enough information provided');

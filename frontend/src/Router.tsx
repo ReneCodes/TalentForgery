@@ -1,15 +1,17 @@
 import App from './App';
 import ErrorPage from './Pages/Error';
-import {createBrowserRouter} from 'react-router-dom';
-import {Login} from './Pages/Login';
+import { createBrowserRouter } from 'react-router-dom';
+
+import Login from './Pages/Login';
 import Register from './Pages/Register';
-// import {Home} from './Pages/Home/Home';
-import {Home} from './Pages/Home';
+import Home from './Pages/Home';
+import Dashboard from './Pages/Dashboard';
 
 import ContactInfo from './Components/ContactInfo/ContactInfo';
 import Stats from './Components/Stats/Stats';
 import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
 import PieChartComp from './Components/PieChart/PieChart';
+
 
 const info = {
 	firstName: 'jon',
@@ -22,6 +24,10 @@ const info = {
 }
 
 export const Router = createBrowserRouter([
+	{
+		path: '/Dashboard',
+		element: <Dashboard />,
+	},
 	{
 		path: '/',
 		element: <App />,
@@ -38,7 +44,11 @@ export const Router = createBrowserRouter([
 		element: <Login />,
 	},
 	{
-		path: '/register',
+		path: '/register/',
+		element: <Register />,
+	},
+	{
+		path: '/register/:inviteID',
 		element: <Register />,
 	},
 	{

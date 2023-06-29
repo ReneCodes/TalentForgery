@@ -3,7 +3,7 @@ import React, { ChangeEvent, useState } from 'react';
 import Button from '@mui/material/Button';
 import TextField from '@mui/material/TextField';
 import { useForm } from 'react-hook-form';
-import { Box, Input, Container, Typography, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, OutlinedInput, Stack, ImageListItem } from '@mui/material';
+import { Box, Input, Container, Typography, FormControl, FormHelperText, IconButton, InputAdornment, InputLabel, Stack, ImageListItem } from '@mui/material';
 import { Visibility, VisibilityOff } from '@mui/icons-material';
 import FaceIcon from '@mui/icons-material/Face';
 import { Navigate } from 'react-router';
@@ -95,18 +95,18 @@ const Register = () => {
 	};
 
 	return (
-		<Container sx={{ height: '100%', py: 2 }}>
+		<Container sx={{ height: { xs: 'max-content', sm: 'max-content', md: '100vh', }, py: 2 }}>
 
 			<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
-				<Typography variant='h5'>
+				<Typography variant='h5' sx={{ ':hover': { cursor: 'pointer' } }} onClick={() => navigate('/')}>
 					<span style={{ color: '#BFA622' }}> Minon </span>
 					<span style={{ color: '#00407E' }}> Mentor </span>
 				</Typography>
 
 				<Button onClick={() => navigate('/login')}
 					sx={{ width: { xs: '100px', sm: '100px', md: '170px', }, height: '50px', marginLeft: 'auto', }}
-					style={{ backgroundColor: '#353535', color: 'white' }}>
-					<Typography sx={{variant: { xs: 'h4', sm: 'h6', md: 'h6' }}}>Login</Typography>
+					style={{ backgroundColor: 'rgb(180, 166, 34)', color: 'white' }}>
+					<Typography sx={{ variant: { xs: 'h4', sm: 'h6', md: 'h6' } }}>Login</Typography>
 				</Button>
 			</Box>
 
@@ -368,7 +368,10 @@ const Register = () => {
 						<Box sx={{ display: 'flex', flexDirection: { xs: 'column', sm: 'column', md: 'row' }, justifyContent: 'start', alignItems: 'center' }}>
 							<Button
 								type="submit"
-								sx={{ width: '200px', height: '50px', margin: 'auto' }}
+								sx={{
+									width: '200px', height: '50px', margin: 'auto',
+									backgroundColor: 'rgb(0, 64, 126)'
+								}}
 								variant="contained"
 								aria-label="register now">
 								Register Now

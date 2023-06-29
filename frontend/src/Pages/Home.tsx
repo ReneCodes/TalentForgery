@@ -2,7 +2,7 @@ import Button from '@mui/material/Button';
 import {Container, Box} from '@mui/material';
 import { NavigateFunction, useNavigate } from 'react-router-dom';
 
-export const Home = () => {
+const Home = () => {
   const navigate: NavigateFunction = useNavigate();
 
   return (
@@ -29,7 +29,7 @@ export const Home = () => {
           <h2>Start using <span style={{ color: '#BFA622' }}>Minon</span> <span style={{ color: '#00407E' }}>Mentor</span> <span style={{ color: 'black' }}>Today</span></h2>
           <Button variant="contained"
             onClick={() => navigate('/register')}
-            sx={{ width: '200px', height: '70px', margin: 'auto auto 20px' }}
+            sx={{ width: '200px', height: '70px', margin: 'auto auto 20px', ':hover': {} }}
             style={{ backgroundColor: '#353535', color: 'white' }}>
             <h3>Register</h3>
           </Button>
@@ -40,4 +40,6 @@ export const Home = () => {
     </Container >
   )
 
-}
+};
+
+export default Home;
