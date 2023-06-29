@@ -137,7 +137,7 @@ ul {
 }
 
 .calendars {
-  width: 500px;
+  max-width: 500px;
   height: 300px;
   margin-bottom: 15px;
   font-size: 18px;
@@ -153,7 +153,7 @@ ul {
 }
 
 .date_picker {
-  width: 250px;
+  max-width: 300px;
 }
 
 .video_title {
