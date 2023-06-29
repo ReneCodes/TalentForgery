@@ -105,6 +105,7 @@ export const SideNav = () => {
 						<Typography variant="body2">Dashboard</Typography>
 					</MenuItem>
 					<MenuItem
+						suffix="🔥" // TODO: we could add notification info here
 						active={location.pathname === '/login'}
 						component={<Link to="/login" />}
 						icon={<SourceOutlinedIcon name="Login" />}>

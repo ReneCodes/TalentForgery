@@ -12,6 +12,7 @@ declare module '@mui/material/styles' {
 			secondary: {
 				100: string;
 				main: string;
+				900: string;
 			};
 			gray: {
 				main: string;
@@ -59,6 +60,7 @@ let theme = createTheme({
 		secondary: {
 			100: yellow[100],
 			main: yellow[800],
+			900: yellow[900],
 		},
 		gray: {
 			main: grey[500],
