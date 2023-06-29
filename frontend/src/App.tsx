@@ -7,25 +7,39 @@ import {SideNav} from './Components/Navbar/SideNav';
 import theme from './config/theme';
 import {AppRoutes} from './AppRoutes';
 import {AppHeader} from './Components/Header/AppHeader';
+import {AuthRoutes} from './AuthRoutes';
+import {LoginAndOut} from './utils/zustand.store';
 
 const App: React.FC = () => {
+	const {logedIn} = LoginAndOut();
+
+	const authenticated = logedIn;
+
 	return (
+		<ThemeProvider theme={theme}>
+			<CssBaseline />
+			{!authenticated && (
+				<BrowserRouter>
+					<AuthRoutes />
+				</BrowserRouter>
+			)}
 
-			<ThemeProvider theme={theme}>
-				<CssBaseline />
-				<AppHeader />
-				<Box sx={styles.container}>
-					<BrowserRouter>
-						<SideNav />
-						<Box
-							component={'main'}
-							sx={styles.mainSection}>
-							<AppRoutes />
-						</Box>
-					</BrowserRouter>
+			{authenticated && (
+				<Box>
+					<AppHeader />
+					<Box sx={styles.container}>
+						<BrowserRouter>
+							<SideNav />
+							<Box
+								component={'main'}
+								sx={styles.mainSection}>
+								<AppRoutes />
+							</Box>
+						</BrowserRouter>
+					</Box>
 				</Box>
-			</ThemeProvider>
-
+			)}
+		</ThemeProvider>
 	);
 };
 

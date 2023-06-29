@@ -17,7 +17,7 @@ html,
 body,
 #root {
 	height: 100%;
-	max-width: 1400px;
+	/* max-width: 1400px; */
 	margin: auto;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
 }

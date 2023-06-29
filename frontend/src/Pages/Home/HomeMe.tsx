@@ -38,7 +38,7 @@ const mockVideoArray = [
 	},
 ];
 
-export const Home = () => {
+export const HomeMe = () => {
 	return (
 		<Box>
 			<h1>Home</h1>
