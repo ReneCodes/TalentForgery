@@ -29,3 +29,15 @@ export const NavbarStore = create<NavbarStates>()((set) => ({
 	isToggled: (bool) => set(() => ({toggled: bool})),
 	reachedBreakpoint: (bool) => set(() => ({breakpoint: bool})),
 }));
+
+interface LoginAndOut {
+	logedIn: boolean;
+	MinonLogin: () => void;
+	MinonLogout: () => void;
+}
+
+export const LoginAndOut = create<LoginAndOut>()((set) => ({
+	logedIn: false,
+	MinonLogin: () => set(() => ({logedIn: true})),
+	MinonLogout: () => set(() => ({logedIn: false})),
+}));

@@ -4,10 +4,11 @@ import {AppBar, Box, IconButton, Toolbar} from '@mui/material';
 import WindowIcon from '@mui/icons-material/Window';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {NavbarStore} from '../../utils/zustand.store';
+import {LoginAndOut, NavbarStore} from '../../utils/zustand.store';
 
 export const AppHeader = () => {
 	const {collapsed, toggled, breakpoint, isCollapsed, isToggled} = NavbarStore();
+	const {MinonLogout} = LoginAndOut();
 
 	function handleNavbar() {
 		if (breakpoint) {
@@ -51,6 +52,7 @@ export const AppHeader = () => {
 					</IconButton>
 					<IconButton
 						title="Logout"
+						onClick={MinonLogout}
 						color="inherit">
 						<LogoutIcon />
 					</IconButton>
