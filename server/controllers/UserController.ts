@@ -4,7 +4,9 @@ const {
   getUserInfo,
   deleteUser,
   deleteAnUser,
-  getUsersPending
+  getUsersPending,
+  acceptAnUser,
+  rejectAnUser,
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -61,14 +63,42 @@ const loginUser = async (req: Request, res: Response) => {
       const token = jwt.sign({ user_id }, process.env.SECRET, {
         expiresIn: process.env.EXPIRITY_IN_HOURS,
       });
-      res.setHeader("Set-Cookie", `session_token=${token}; path=/`);
+      res.setHeader("Set-Cookie", `session_token=${token}; path=/; SameSite=None; Secure`);
       res.status(200).json(user_info);
     } catch (error) {
       const errorMessage = (error as Error).message;
-      if (errorMessage === 'User dosent exist') res.status(404).json(errorMessage);
-      else if (errorMessage === 'Wrong credentials') res.status(422).json(errorMessage);
-      else res.status(500).json('Server Failed');
+      if (errorMessage === "User doesn't exist") { res.status(404).json(errorMessage); }
+      else if (errorMessage === 'Wrong credentials') { res.status(422).json(errorMessage); }
+      else { res.status(500).json('Server Failed'); }
     }
+  }
+};
+
+const acceptUser = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json("Not enough information provided");
+  try {
+    const data = await acceptAnUser(email);
+    res.status(200).json(data);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+    if (errorMessage === "User doesn't exist") { res.status(404).json(errorMessage); }
+    else res.status(500).json('Server failed');
+  }
+};
+
+const rejectUser = async (req: Request, res: Response) => {
+  const { email } = req.body;
+
+  if (!email) return res.status(400).json("Not enough information provided");
+  try {
+    const data = await rejectAnUser(email);
+    res.status(200).json(data);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+    if (errorMessage === "User doesn't exist") { res.status(404).json(errorMessage); }
+    else res.status(500).json('Server failed');
   }
 };
 
@@ -85,7 +115,7 @@ const getUserInformation = async (req: Request, res: Response) => {
 };
 
 // GETS THE USERS THAT HAVE THE ROLE SET TO PENDING
-const getPendingUsers = async (req: Request, res: Response) =>{
+const getPendingUsers = async (req: Request, res: Response) => {
   try {
     const data = await getUsersPending();
     res.status(200).json(data);
@@ -106,7 +136,7 @@ const deleteMyAccount = async (req: Request, res: Response) => {
   }
 };
 
-//  DELETES A USER -> ONLY ADMIM
+//  DELETES A USER -> ONLY ADMIN
 const deleteUserAccount = async (req: Request, res: Response) => {
   const { user_delete } = req.body;
   if (!user_delete) return res.status(400).json('Not enough information provided');
@@ -121,6 +151,8 @@ const deleteUserAccount = async (req: Request, res: Response) => {
 module.exports = {
   deleteMyAccount,
   registerUser,
+  rejectUser,
+  acceptUser,
   getUserInformation,
   loginUser,
   deleteUserAccount,

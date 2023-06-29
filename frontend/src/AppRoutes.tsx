@@ -6,6 +6,7 @@ import PieChartComp from './Components/PieChart/PieChart';
 import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
 import Stats from './Components/Stats/Stats';
 import ContactInfo from './Components/ContactInfo/ContactInfo';
+import Create from './Pages/Create';
 
 const info = {
 	firstName: 'jon',
@@ -59,6 +60,10 @@ export const AppRoutes = () => {
 						failed={13}
 					/>
 				}
+			/>
+			<Route 
+				path='/create'
+				element={<Create />}
 			/>
 		</Routes>
 	);

@@ -46,7 +46,7 @@ const AddQuestion:FC<{onData: any}> = ({onData}) => {
         onChange={(e) => setOption(e.target.value)}
         className='option_input'
       />
-      <button className='add_button' onClick={handleAdd}>Add</button>
+      <button className='add_button' onClick={handleAdd}>Add Option</button>
     </div>
     <ul className='options_list'>
       {options.map((item, index) => (
