@@ -7,6 +7,7 @@ import { useEffect, useState, ChangeEvent } from "react";
 import { QuestionType } from '../utils/types';
 import Button from '@mui/material/Button';
 import Schedule from "../Components/Create/Schedule";
+import { postTutorial } from "../services/Api.service";
 
 const mockQuestions = [{
   question: 'Where is steve?',
@@ -126,6 +127,17 @@ const Create = () => {
       };
     });
   };
+
+  useEffect(() => {
+    if(data.access_date && data.due_date) {
+      try {
+        const res = postTutorial(data);
+        console.log(res);
+      } catch (error) {
+        alert(error);
+      }
+    }
+  }, [data])
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
