@@ -14,16 +14,15 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
   });
 
   const questionsParsed = JSON.parse(providedInformation.question_ids);
-  console.log(questionsParsed[0]);
 
-  // for (const question of providedInformation.question_ids) {
-  //   await createQuestion({
-  //     question: question.question,
-  //     options: question.options,
-  //     answer: question.answer,
-  //     tutorial_id: tutorial.tutorial_id,
-  //   })
-  // }
+  for (const question of questionsParsed) {
+    await createQuestion({
+      question: question.question,
+      options: question.options,
+      answer: question.answer,
+      tutorial_id: tutorial.tutorial_id,
+    })
+  }
 
 }
 
