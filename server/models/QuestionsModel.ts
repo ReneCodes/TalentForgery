@@ -22,7 +22,7 @@ async function getTutorialQuestions(tutorial_id: UUID) {
     const questions = await Question.findAll(
       {
         where: { tutorial_id },
-        attributes: ['question', 'options', 'answer'],
+        attributes: ['question', 'options', 'answer', 'question_id'],
       });
     return questions;
   }
@@ -31,7 +31,7 @@ async function getTutorialQuestions(tutorial_id: UUID) {
 async function getTheQuestions() {
   const allQuestions = await Question.findAll({
     where: {},
-    attributes: ['question', 'options', 'answer'],
+    attributes: ['question', 'options', 'answer', 'question_id'],
   });
   return allQuestions;
 };
