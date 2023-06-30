@@ -73,7 +73,9 @@ async function correctQuestions(answers: string[], question_ids: UUID[]) {
     index++;
   };
 
-  return [everything, totalRight, totalWrong];
+  const userPassed = totalRight >= Math.floor((totalRight + totalWrong) / 2) ? true : false;
+
+  return [everything, userPassed, totalRight, totalWrong];
 };
 
 module.exports = {

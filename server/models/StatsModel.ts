@@ -1,12 +1,11 @@
 export { };
 const { Stats } = require('./Schemas');
 
-const updateUserStats = async (user_id: string, totalRight: number, totalWrong: number) => {
+const updateUserStats = async (user_id: string, userPassed: boolean, totalRight: number, totalWrong: number) => {
 
   const userStats = await Stats.findOne({ where: { user_id } });
-  const halfOfQuestions = Math.floor((totalRight + totalWrong) / 2);
 
-  if (totalRight >= halfOfQuestions) {
+  if (userPassed) {
     userStats.passed += 1;
   } else {
     userStats.failed += 1;
