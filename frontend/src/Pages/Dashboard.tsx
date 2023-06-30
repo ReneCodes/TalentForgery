@@ -25,10 +25,14 @@ const Dashboard = () => {
 	}, []);
 
 	function rejectPerson(email: string) {
+		setShowStats(false);
+		setStats(undefined);
 		rejectUser(email, setPeoplePending);
 	};
 
 	function acceptPerson(email: string) {
+		setShowStats(false);
+		setStats(undefined);
 		acceptUser(email, setPeoplePending);
 	};
 
@@ -87,13 +91,15 @@ const Dashboard = () => {
 							alignItems: 'center',
 							pt: '10px',
 							borderRadius: 5,
-							backgroundColor: '#00407E',
-							color: '#ffffff',
+							border: '2px solid #3f51b5',
+							backgroundColor: '#ffffff',
+							color: '#000000',
 						}}
 						boxShadow={10}>
 						<Typography fontSize="20px" mb='5px'>Invite new people</Typography>
 						<Button
-							sx={{ width: '100%', height: 'max-content', p: 2, backgroundColor: '#BFA622', ':hover': { backgroundColor: '#fff5be', color: '#00407e' } }}
+							sx={{ width: '100%', borderTop: '2px solid lightgrey', height: 'max-content', color: '#000', backgroundColor:'#ffffff',
+							 p: 2, ':hover': { backgroundColor: '#3f51b5', color: '#fff' } }}
 							variant="contained"
 							onClick={handleInviteClick}>
 							<Typography fontSize="16px">
@@ -118,14 +124,13 @@ const Dashboard = () => {
 							borderRadius: 5,
 							color: '#00000',
 						}}>
-						{peoplePending.map((person: person) => (
+						{peoplePending.map((person: any) => (
 							<SmallInfo
-								key={person.first_name}
-								first_name={person.first_name}
-								last_name={person.last_name}
+								key={person.dataValues.first_name}
+								first_name={person.dataValues.first_name}
 								profile_picture={person.profile_picture}
-								accept={() => acceptPerson(person.email)}
-								reject={() => rejectPerson(person.email)}
+								accept={() => acceptPerson(person.dataValues.email)}
+								reject={() => rejectPerson(person.dataValues.email)}
 								userInfo={() => showUserStats(person)}
 							/>
 						))}

@@ -5,8 +5,8 @@ import FaceIcon from '@mui/icons-material/Face';
 
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
-function SmallInfo({ first_name, last_name, profile_picture, accept, reject, userInfo }:
-  { first_name: string, last_name: string, profile_picture: string, accept: any, reject: any, userInfo: any }) {
+function SmallInfo({ first_name, profile_picture, accept, reject, userInfo }:
+  { first_name: string, profile_picture: string, accept: any, reject: any, userInfo: any }) {
   const imageUrl = `${baseURL}images/profile_pictures/${profile_picture}`;
 
   return (
@@ -36,7 +36,7 @@ function SmallInfo({ first_name, last_name, profile_picture, accept, reject, use
 
 
           <Typography variant='h6' sx={{ maxWidth: '270px', color: '#00000' }}>
-            {first_name} {last_name}
+            {first_name}
           </Typography>
 
         </Box>
@@ -48,6 +48,7 @@ function SmallInfo({ first_name, last_name, profile_picture, accept, reject, use
           <Button onClick={accept} variant="outlined" sx={{
             minWidth: '0', p: '0',
             backgroundColor: '#008000', color: '#ffffff',
+            position: 'relative', zIndex: 3,
             width: '50px', height: '50px', borderRadius: 99, display: 'flex', justifyContent: 'center',
             textAlign: 'center', ':hover': { backgroundColor: 'lightgreen' }
           }}
@@ -60,6 +61,7 @@ function SmallInfo({ first_name, last_name, profile_picture, accept, reject, use
               minWidth: '0', p: '0',
               backgroundColor: '#ff0000', color: '#ffffff',
               width: '50px', height: '50px', borderRadius: 99, display: 'flex', justifyContent: 'center',
+              position: 'relative', zIndex: 3,
               textAlign: 'center', ':hover': { backgroundColor: 'darkred' }
             }}
             startIcon={<CloseIcon sx={{ margin: '0 0 0 9px' }} />}>

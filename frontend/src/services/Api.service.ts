@@ -131,8 +131,6 @@ export async function getPendingUsers(setPeoplePending: any) {
 	try {
 
 		const res = await axios.get('/api/pending_users');
-		console.log(res);
-
 		setPeoplePending(res.data);
 
 	} catch (error: any) {

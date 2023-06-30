@@ -15,7 +15,9 @@ function PendingUsersCard(props: any) {
 
   const { closeStats, accept, reject, stats } = props;
 
-  const imgPath = `${baseURL}images/profile_pictures/${stats.profile_picture}`
+  console.log(stats);
+
+  const imgPath = `${baseURL}images/profile_pictures/${stats.dataValues.profile_picture}`
 
   return (
     <Dialog open>
@@ -28,14 +30,14 @@ function PendingUsersCard(props: any) {
           position: 'relative'
         }}>
           <Typography variant='h5' maxWidth='170px'>
-            <span style={{ color: '#BFA622' }}> {stats.first_name} </span>
-            <span style={{ color: '#00407E' }}> {stats.last_name} </span>
+            <span style={{ color: '#BFA622' }}> {stats.dataValues.first_name} </span>
+            <span style={{ color: '#00407E' }}> {stats.dataValues.last_name} </span>
           </Typography>
           <Box sx={{
             width: '100px', height: '100px', borderRadius: 99, overflow: 'hidden',
             position: 'absolute', top: 0, left: 0, right: 0, margin: 'auto'
           }}>
-            {stats.profile_picture ?
+            {stats.dataValues.profile_picture ?
               <img src={imgPath} style={{ objectFit: 'cover', width: '100%', height: '100%' }} alt="" />
               :
               <FaceIcon sx={{ width: '100%', height: '100%' }} />
@@ -50,12 +52,12 @@ function PendingUsersCard(props: any) {
 
           <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }} fontSize='20px'>
             <EmailIcon />
-            <strong>Email:</strong> {stats.email}
+            <strong>Email:</strong> {stats.dataValues.email}
           </Typography>
 
           <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }} fontSize='20px'>
             <ApartmentIcon />
-            <strong>Department:</strong> {stats.department}
+            <strong>Department:</strong> {stats.dataValues.department}
           </Typography>
 
           <Typography sx={{ display: 'flex', alignItems: 'center', gap: 1 }} fontSize='20px'>
