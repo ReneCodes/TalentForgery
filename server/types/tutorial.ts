@@ -6,8 +6,7 @@ export type createdTutorial = {
   questions: {
     question: string;
     options: string[];
-    actual_answer: string;
-    correct_answer: string;
+    answer: string;
   }[];
   question_ids: String[];
   questions_shown: String[];
