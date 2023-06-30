@@ -10,6 +10,7 @@ export interface contactInfo {
 	email: string;
 	secondEmail?: string;
 	phoneNumber?: string;
+	profile_picture?: string;
 }
 
 export interface QuestionType {
