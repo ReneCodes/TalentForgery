@@ -21,7 +21,7 @@ const Dashboard = () => {
 	}
 
 	useEffect(() => {
-		authUser(navigate, () => getPendingUsers(setPeoplePending));
+		getPendingUsers(setPeoplePending)
 	}, []);
 
 	function rejectPerson(email: string) {
@@ -128,7 +128,7 @@ const Dashboard = () => {
 							<SmallInfo
 								key={person.dataValues.first_name}
 								first_name={person.dataValues.first_name}
-								profile_picture={person.profile_picture}
+								profile_picture={person.dataValues.profile_picture}
 								accept={() => acceptPerson(person.dataValues.email)}
 								reject={() => rejectPerson(person.dataValues.email)}
 								userInfo={() => showUserStats(person)}
