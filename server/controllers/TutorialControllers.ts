@@ -4,7 +4,7 @@ const {
   createTheTutorial,
   getAllTheTutorials,
 } = require("../models/TutorialModel");
-const { getTutorialQuestions } = require('../models/QuestionsModel');
+const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
 import { Request, Response } from "express";
 
 
@@ -84,4 +84,16 @@ export async function getQuestions(req: Request, res: Response) {
 
 };
 
-module.exports = { createTutorial, getAllTutorials, getQuestions };
+export async function getAllQuestions(req: Request, res: Response) {
+
+  try {
+    const questions = await getTheQuestions();
+    res.status(200).json(questions);
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
+
+
+};
+
+module.exports = { createTutorial, getAllTutorials, getQuestions, getAllQuestions };

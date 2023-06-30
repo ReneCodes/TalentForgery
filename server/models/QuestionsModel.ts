@@ -26,6 +26,14 @@ async function getTutorialQuestions(tutorial_id: UUID) {
       });
     return questions;
   }
-}
+};
 
-module.exports = { createQuestion, getTutorialQuestions };
+async function getTheQuestions() {
+  const allQuestions = await Question.findAll({
+    where: {},
+    attributes: ['question', 'options', 'answer'],
+  });
+  return allQuestions;
+};
+
+module.exports = { createQuestion, getTutorialQuestions, getTheQuestions };
