@@ -138,3 +138,59 @@ export async function getPendingUsers(setPeoplePending: any) {
 		alert(error.response.data)
 	}
 };
+
+export async function postTutorial(data: any) {
+	try {
+		const { title,
+    video_url,
+    description,
+    question_ids,
+    questions_shown,
+    access_date,
+    due_date } = data;
+
+		const res = await axios.post('/api/tutorials', {
+			title,
+			video_url,
+			description,
+			question_ids,
+			questions_shown,
+			access_date,
+			due_date
+		});
+
+		return res;
+	} catch(error: any) {
+		alert(error.response.data);
+	}
+}
+
+export async function getTutorials() {
+	try {
+		const res = await axios.get('/api/tutorials');
+
+		return res;
+	} catch (error: any) {
+		alert(error.response.data);
+	}
+}
+
+export async function getQuestions() {
+	try {
+		const res = await axios.get('/api/questions');
+
+		return res;
+	} catch (error: any) {
+		alert(error.response.data);
+	}
+}
+
+export async function getQuestionsByIds(idArr: any[]) {
+	try {
+		const res = await axios.get(`/api/questions/${idArr}`);
+
+		return res;
+	} catch (error: any) {
+		alert(error.response.data);
+	}
+}
