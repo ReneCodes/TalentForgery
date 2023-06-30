@@ -121,13 +121,19 @@ export const SideNav = () => {
 						icon={<SourceOutlinedIcon name="Login" />}>
 						<Typography variant="body2">Login</Typography>
 					</MenuItem>
-				*/}
 					<MenuItem
 						active={location.pathname === '/register'}
 						component={<Link to="/register" />}
 						icon={<SourceOutlinedIcon name="register" />}>
 						<Typography variant="body2">register</Typography>
-					</MenuItem> */}
+					</MenuItem>
+				*/}
+				<MenuItem
+					active={location.pathname === '/create'}
+					component={<Link to="/create" />}
+					icon={<SourceOutlinedIcon name="create" />}>
+					<Typography variant="body2">Create</Typography>
+				</MenuItem>
 				<MenuItem
 					active={location.pathname === '/profile'}
 					component={<Link to="/profile" />}
