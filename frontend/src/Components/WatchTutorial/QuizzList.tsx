@@ -34,6 +34,8 @@ const mockQuestions: TestQuestionComp[] = [
 	},
 ];
 
+const mockLength = 2;
+
 interface QuizzListProps {
 	setQuizzDone: React.Dispatch<React.SetStateAction<boolean>>;
 	setQuizzToDo: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,8 +46,21 @@ const QuizzList: React.FC<QuizzListProps> = ({setQuizzDone, setQuizzToDo}) => {
 	const [questions, setQuestions] = useState<TestQuestionComp[]>([]);
 
 	useEffect(() => {
-		setQuestions(mockQuestions);
+		setQuestions(randomizeArray(mockQuestions, mockLength));
 	}, []);
+
+	const randomizeArray = (arr: TestQuestionComp[], length: number) => {
+		if (arr.length <= length) return arr;
+
+		while (arr.length > length) {
+			const randIndex = Math.floor(Math.random() * arr.length);
+			arr.splice(randIndex, 1);
+		}
+
+		arr.sort(() => Math.random() - 0.5);
+
+		return arr;
+	}
 
 	const handleAnswer = (e: SyntheticEvent<Element, Event>) => {
 		const target = e.target as HTMLInputElement;
