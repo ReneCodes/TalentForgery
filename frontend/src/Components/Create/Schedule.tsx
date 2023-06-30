@@ -15,12 +15,15 @@ const Schedule: FC<ScheduleComp> = ({onData}) => {
 	const [endDate, setEndDate] = useState<Date | null>(null);
 
 	const handleClick = () => {
+    const newDate = new Date();
     if (!startDate) {
       alert('you must provide an start date');
     } else if (!endDate) {
       alert('you must provide an end date');
     } else if (startDate && endDate && startDate > endDate) {
       alert('startdate must be before end date');
+    } else if (endDate < newDate) {
+      alert('endDate must be in the future');
     } else {
       onData({
         startDate,
