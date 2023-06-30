@@ -478,4 +478,58 @@ describe("Admin accepts/rejects users", () => {
     expect(acceptUserRes.status).to.eql(200);
     expect(acceptedUser.role).to.equal("user");
   });
+
+  it("should not reject email if it's not in DB", async () => {
+    const loginResponse = await request(`http://localhost:${process.env.PORT}`)
+      .post("/login")
+      .send({
+        email: "admin@admin.com",
+        password: "123",
+      })
+      .set("Content-Type", "application/json");
+
+    const userId = loginResponse.body.user_id;
+    sessionToken = loginResponse.headers["set-cookie"][0];
+
+    expect(loginResponse.statusCode).to.eql(200);
+    // Admins login
+
+    const emailToReject = "somerandomemail@gmail.com";
+    const rejectUserRes = await request(`http://localhost:${process.env.PORT}`)
+      .post("/reject_user")
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken])
+      .send(JSON.stringify({ email: emailToReject }));
+
+    expect(rejectUserRes.status).to.eql(404);
+    expect(rejectUserRes.text).to.equal(JSON.stringify("User doesn't exist"));
+  });
+  it("should delete user if it's in DB", async () => {
+    const loginResponse = await request(`http://localhost:${process.env.PORT}`)
+      .post("/login")
+      .send({
+        email: "admin@admin.com",
+        password: "123",
+      })
+      .set("Content-Type", "application/json");
+
+    const userId = loginResponse.body.user_id;
+    sessionToken = loginResponse.headers["set-cookie"][0];
+
+    expect(loginResponse.statusCode).to.eql(200);
+    // Admin's login
+
+    const emailToDelete = "1@1.com";
+    const rejectUserRes = await request(`http://localhost:${process.env.PORT}`)
+      .post("/reject_user")
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken])
+      .send(JSON.stringify({ email: emailToDelete }));
+
+    const deletedUser = await User.findOne({
+      where: { email: emailToDelete },
+    });
+    expect(rejectUserRes.status).to.eql(200);
+    expect(deletedUser).to.equal(null);
+  });
 });
