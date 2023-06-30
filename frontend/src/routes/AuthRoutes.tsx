@@ -3,7 +3,6 @@ import Home from '../Pages/Home';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import ErrorPage from '../Pages/Error';
-import TestList from '../Components/WatchTutorial/QuizzList';
 
 export const AuthRoutes = () => {
 	return (
@@ -27,10 +26,6 @@ export const AuthRoutes = () => {
 			<Route
 				path="/**"
 				element={<ErrorPage />}
-			/>
-			<Route
-				path="/test"
-				element={<TestList />}
 			/>
 		</Routes>
 	);
