@@ -5,7 +5,7 @@ import {CSSObject, Menu, MenuItem, MenuItemStylesParams, Sidebar, menuClasses} f
 // Icons
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
-// import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
+import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
 import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
 import {Link, useLocation} from 'react-router-dom';
 import {NavbarStore} from '../../utils/zustand.store';
@@ -121,6 +121,7 @@ export const SideNav = () => {
 						icon={<SourceOutlinedIcon name="Login" />}>
 						<Typography variant="body2">Login</Typography>
 					</MenuItem>
+				*/}
 					<MenuItem
 						active={location.pathname === '/register'}
 						component={<Link to="/register" />}
