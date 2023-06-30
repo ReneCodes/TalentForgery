@@ -2,7 +2,9 @@ import { Request, Response } from 'express';
 const jwt = require('jsonwebtoken');
 const { correctQuestions } = require("../models/QuestionsModel");
 const { updateUserStats } = require('../models/StatsModel');
+const { getUserInfo } = require('../models/UserModel');
 const nodemailer = require('nodemailer');
+
 
 import { TestCorrectionType } from '../types/questions';
 
@@ -19,7 +21,9 @@ const handleTest = async (req: Request, res: Response) => {
 
     await updateUserStats(user_id, userPassed, totalRight, totalWrong);
     const [questionsString, userPassedText] = await handleEmailData(testCorrection, userPassed);
-    await sendEmail(userPassedText, totalRight, totalWrong, questionsString);
+
+    const userEmail = await getUserInfo(user_id).email;
+    await sendEmail(userPassedText, totalRight, totalWrong, questionsString, userEmail);
 
     return res.status(200).json('Check your email');
   } catch (error) {
@@ -58,7 +62,8 @@ const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed:
 const sendEmail = async (
   userPassed: string, totalRight: number,
   totalWrong: number,
-  questionsString: string
+  questionsString: string,
+  userEmail: string,
 ) => {
 
   const html = `<!DOCTYPE html>
@@ -104,6 +109,7 @@ const sendEmail = async (
 
   const mailOptions = {
     from: process.env.EMAIL_ACCOUNT,
+    // to: userEmail,
     to: process.env.EMAIL_ACCOUNT,
     subject: "Nodemailer Test",
     html: html,
