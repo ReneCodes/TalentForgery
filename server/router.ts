@@ -28,7 +28,7 @@ router.get('/get_all_questions', authUser, TutorialController.getAllQuestions);
 router.post('/questions', authUser, TutorialController.getQuestions);
 
 // TEST ROUTES
-router.post('/handle_test_done', TestController.handleTest);
+router.post('/handle_test_done', authUser, TestController.handleTest);
 
 // DELETE USER
 router.delete('/user', authUser, UserController.deleteMyAccount);
