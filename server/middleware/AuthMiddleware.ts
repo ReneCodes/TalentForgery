@@ -42,4 +42,8 @@ const authAdminUser = async (req: Request, res: Response, next: NextFunction) =>
 
 };
 
-module.exports = { authUser, authAdminUser };
+const userExists = async(req: Request, res: Response) =>{
+  return res.status(200).json('User verified and exists');
+}
+
+module.exports = { authUser, authAdminUser, userExists };

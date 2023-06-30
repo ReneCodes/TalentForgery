@@ -1,12 +1,11 @@
 import {Route, Routes} from 'react-router-dom';
-import {Home} from './Pages/Home/Home';
-import {Login} from './Pages/Login';
-import Register from './Pages/Register';
+import {HomeMe} from './Pages/Home/HomeMe';
 import PieChartComp from './Components/PieChart/PieChart';
 import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
 import Stats from './Components/Stats/Stats';
 import ContactInfo from './Components/ContactInfo/ContactInfo';
 import Create from './Pages/Create';
+import Dashboard from './Pages/Dashboard';
 
 const info = {
 	firstName: 'jon',
@@ -23,19 +22,11 @@ export const AppRoutes = () => {
 		<Routes>
 			<Route
 				path="/"
-				element={<Home />}
+				element={<HomeMe />}
 			/>
 			<Route
-				path="/create-tutorial"
-				element={<Create />}
-			/>
-			<Route
-				path="/login"
-				element={<Login />}
-			/>
-			<Route
-				path="/register"
-				element={<Register />}
+				path="/dashboard"
+				element={<Dashboard />}
 			/>
 			<Route
 				path="/profile"
@@ -64,6 +55,10 @@ export const AppRoutes = () => {
 						failed={13}
 					/>
 				}
+			/>
+			<Route
+				path="/create"
+				element={<Create />}
 			/>
 		</Routes>
 	);

@@ -36,6 +36,10 @@ const User = sequelize.define("user", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  invited_by: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
   profile_picture: {
     type: DataTypes.TEXT,
     allowNull: true,
@@ -137,15 +141,15 @@ const Stats = sequelize.define("stats", {
 });
 
 if (process.env.ENV !== 'Test') {
-  // SETING UP THE FOREIGN KEY OF THE INVITES TABLE
+  // SETTING UP THE FOREIGN KEY OF THE INVITES TABLE
   User.hasOne(Invites, { foreignKey: 'user_created', sourceKey: 'user_id' });
   Invites.belongsTo(User, { foreignKey: 'user_created', targetKey: 'user_id' });
 
-  // SETING UP THE FOREIGN KEY OF THE STATS TABLE
+  // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
   User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
   Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
 
-  // SETING UP THE FOREIGN KEY OF THE STATS TABLE
+  // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
   User.hasOne(Stats, { foreignKey: 'user_id', sourceKey: 'user_id' });
   Stats.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
 }
