@@ -7,7 +7,7 @@ import {useEffect, useState, ChangeEvent} from 'react';
 import {QuestionType} from '../utils/types';
 import Button from '@mui/material/Button';
 import Schedule from '../Components/Create/Schedule';
-import {getQuestions, postTutorial} from '../services/Api.service';
+import {/*getQuestions,*/ postTutorial} from '../services/Api.service';
 
 const mockQuestions = [
 	{
