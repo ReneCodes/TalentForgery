@@ -36,7 +36,7 @@ interface FormInfo {
 
 interface DataType {
 	title: string;
-	video_url: FormData;
+	video_url: any;
 	description: string;
 	question_ids: QuestionType[];
 	questions_shown: number;
@@ -65,7 +65,7 @@ const Create = () => {
 	const [questionsForm, setQuestionsForm] = useState<QuestionType[]>([]);
 	const [data, setData] = useState<DataType>({
 		title: '',
-		video_url: new FormData(),
+		video_url: {} as File,
 		description: '',
 		question_ids: [],
 		questions_shown: 0,
