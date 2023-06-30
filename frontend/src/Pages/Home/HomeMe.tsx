@@ -6,6 +6,7 @@ import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
 import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
 import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
 import {TutorialVideoDataType} from '../../@types/Types';
+import TimedTutorialCard from '../../Components/Cards/TimedTutorial/TimedTutorialCard';
 
 const mockVideoArray = [
 	{
@@ -63,6 +64,7 @@ export const HomeMe = () => {
 							</Box>
 						))}
 				</Box>
+				<TimedTutorialCard />
 			</Box>
 		</Box>
 	);
