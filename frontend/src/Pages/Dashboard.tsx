@@ -90,7 +90,7 @@ const Dashboard = () => {
 							justifyContent: 'space-between',
 							alignItems: 'center',
 							pt: '10px',
-							borderRadius: 5,
+							borderRadius: 3,
 							border: '2px solid #3f51b5',
 							backgroundColor: '#ffffff',
 							color: '#000000',

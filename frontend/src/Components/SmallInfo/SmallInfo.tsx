@@ -11,7 +11,7 @@ function SmallInfo({ first_name, profile_picture, accept, reject, userInfo }:
 
   return (
     <Container sx={{
-      width: '250px', height: 'max-content', backgroundColor: '#ffffff', border: '2px solid black', borderRadius: 9,
+      width: '250px', height: 'max-content', backgroundColor: '#ffffff', border: '2px solid black', borderRadius: 3,
       display: 'flex', flexDirection: 'row', gap: 3, justifyContent: 'start',
       alignItems: 'start', py: 1, px: 2, ':hover': { cursor: 'pointer' }
     }} onClick={() => userInfo()}>
