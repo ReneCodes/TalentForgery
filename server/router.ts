@@ -18,11 +18,12 @@ router.post("/reject_user", authAdminUser, UserController.rejectUser);
 router.get('/invite', authAdminUser, InviteController.getInvite);
 router.get('/user', authUser, UserController.getUserInformation);
 router.get('/pending_users', authAdminUser, UserController.getPendingUsers);
-router.post('/questions', authUser, TutorialController.getQuestions);
 
 // TUTORIAL ROUTES
 router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
 router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial);
+router.get('/get_all_questions', authUser, TutorialController.getAllQuestions);
+router.post('/questions', authUser, TutorialController.getQuestions);
 
 // DELETE USER
 router.delete('/user', authUser, UserController.deleteMyAccount);
