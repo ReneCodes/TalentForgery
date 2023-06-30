@@ -6,7 +6,6 @@ import Stats from '../Components/Stats/Stats';
 import ContactInfo from '../Components/ContactInfo/ContactInfo';
 import Create from '../Pages/Create';
 import Dashboard from '../Pages/Dashboard';
-import TestList from '../Components/WatchTutorial/QuizzList';
 
 const info = {
 	firstName: 'jon',
@@ -60,10 +59,6 @@ export const AppRoutes = () => {
 			<Route
 				path="/create"
 				element={<Create />}
-			/>
-			<Route
-				path="/test"
-				element={<TestList />}
 			/>
 		</Routes>
 	);

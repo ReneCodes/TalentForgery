@@ -1,6 +1,6 @@
 // @ts-ignore
 import React from 'react';
-import {Avatar, Box, Typography, useTheme} from '@mui/material';
+import {Avatar, Box, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {CSSObject, Menu, MenuItem, MenuItemStylesParams, Sidebar, menuClasses} from 'react-pro-sidebar';
 // Icons
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
@@ -28,91 +28,93 @@ export const SideNav = () => {
 
 	const theme = useTheme();
 	const location = useLocation();
+	// check screen width to allow nav toggle
+	// when opened on small devices
+	const matches = useMediaQuery('(max-width:767px)');
 
 	return (
-		<>
-			<Sidebar
-				style={{
-					height: '100%',
-					top: 'auto',
-				}}
-				breakPoint="md"
-				onBreakPoint={() => reachedBreakpoint(!breakpoint)}
-				collapsed={collapsed}
-				toggled={toggled}
-				onBackdropClick={() => isToggled(false)}
-				backgroundColor={theme.palette.white.main}>
-				<Box sx={styles.avatarContainer}>
-					<Avatar
-						sx={styles.avatar}
-						alt="profile image"
-						src="src/assets/bob_minion.png"></Avatar>
-					{!collapsed && (
-						<>
-							<Typography
-								variant="body2"
-								sx={styles.department}>
-								Department
-							</Typography>
-							<Typography variant="overline">Bob</Typography>
-						</>
-					)}
-				</Box>
-				<Menu
-					className="menu"
-					menuItemStyles={
-						{
-							button: ({active}) => {
-								return {
-									backgroundColor: active && 'transparent',
-								};
-							},
-							icon: ({active}) => {
-								return {
-									scale: active && '1.2',
-									backgroundColor: active && theme.palette.secondary.main,
-								};
-							},
-							label: ({active}) => {
-								return {
-									paddingBottom: '5px',
-									borderBottom: active && '1px solid',
-									borderColor: active && theme.palette.gray[900],
-								};
-							},
-						} as MenuItemStyles
-					}
-					rootStyles={{
-						['.' + menuClasses.button]: {
-							color: theme.palette.gray[900],
-							scale: '1',
-							'&:hover': {
-								[`.${menuClasses.icon}`]: {
-									transition: 'scale 0.3s linear',
-									backgroundColor: theme.palette.secondary.main,
-									scale: '1.2',
-								},
-								backgroundColor: 'transparent',
-								// color: 'white',
-							},
+		<Sidebar
+			style={{
+				height: '100%',
+				top: 'auto',
+			}}
+			breakPoint="md"
+			onBreakPoint={() => reachedBreakpoint(matches ? false : !breakpoint)}
+			collapsed={collapsed}
+			toggled={toggled}
+			onBackdropClick={() => isToggled(false)}
+			backgroundColor={theme.palette.white.main}>
+			<Box sx={styles.avatarContainer}>
+				<Avatar
+					sx={styles.avatar}
+					alt="profile image"
+					src="src/assets/bob_minion.png"></Avatar>
+				{!collapsed && (
+					<Box textAlign={'center'}>
+						<Typography
+							variant="body2"
+							sx={styles.department}>
+							Department
+						</Typography>
+						<Typography variant="overline">Bob</Typography>
+					</Box>
+				)}
+			</Box>
+			<Menu
+				className="menu"
+				menuItemStyles={
+					{
+						button: ({active}) => {
+							return {
+								backgroundColor: active && 'transparent',
+							};
 						},
-					}}>
-					<MenuItem
-						className="menu-item"
-						active={location.pathname === '/'}
-						component={<Link to="/" />}
-						icon={<DashboardOutlinedIcon name="dash-board" />}>
-						<Typography variant="body2">Home</Typography>
-					</MenuItem>
-					<MenuItem
-						suffix="🔥"
-						className="menu-item"
-						active={location.pathname === '/dashboard'}
-						component={<Link to="/dashboard" />}
-						icon={<DashboardOutlinedIcon name="dash-board" />}>
-						<Typography variant="body2">Dashboard</Typography>
-					</MenuItem>
-					{/* <MenuItem
+						icon: ({active}) => {
+							return {
+								scale: active && '1.2',
+								backgroundColor: active && theme.palette.secondary.main,
+							};
+						},
+						label: ({active}) => {
+							return {
+								paddingBottom: '5px',
+								borderBottom: active && '1px solid',
+								borderColor: active && theme.palette.gray[900],
+							};
+						},
+					} as MenuItemStyles
+				}
+				rootStyles={{
+					['.' + menuClasses.button]: {
+						color: theme.palette.gray[900],
+						scale: '1',
+						'&:hover': {
+							[`.${menuClasses.icon}`]: {
+								transition: 'scale 0.3s linear',
+								backgroundColor: theme.palette.secondary.main,
+								scale: '1.2',
+							},
+							backgroundColor: 'transparent',
+							// color: 'white',
+						},
+					},
+				}}>
+				<MenuItem
+					className="menu-item"
+					active={location.pathname === '/'}
+					component={<Link to="/" />}
+					icon={<DashboardOutlinedIcon name="dash-board" />}>
+					<Typography variant="body2">Home</Typography>
+				</MenuItem>
+				<MenuItem
+					suffix="🔥"
+					className="menu-item"
+					active={location.pathname === '/dashboard'}
+					component={<Link to="/dashboard" />}
+					icon={<DashboardOutlinedIcon name="dash-board" />}>
+					<Typography variant="body2">Dashboard</Typography>
+				</MenuItem>
+				{/* <MenuItem
 						suffix="🔥" // TODO: we could add notification info here
 						active={location.pathname === '/login'}
 						component={<Link to="/login" />}
@@ -125,33 +127,32 @@ export const SideNav = () => {
 						icon={<SourceOutlinedIcon name="register" />}>
 						<Typography variant="body2">register</Typography>
 					</MenuItem> */}
-					<MenuItem
-						active={location.pathname === '/profile'}
-						component={<Link to="/profile" />}
-						icon={<AutoGraphOutlinedIcon name="profile" />}>
-						<Typography variant="body2">Profile</Typography>
-					</MenuItem>
-					<MenuItem
-						active={location.pathname === '/stats'}
-						component={<Link to="/stats" />}
-						icon={<AutoGraphOutlinedIcon name="stats" />}>
-						<Typography variant="body2">stats</Typography>
-					</MenuItem>
-					<MenuItem
-						active={location.pathname === '/staff'}
-						component={<Link to="/staff" />}
-						icon={<StyleOutlinedIcon name="staff" />}>
-						<Typography variant="body2">staff</Typography>
-					</MenuItem>
-					<MenuItem
-						active={location.pathname === '/piechart'}
-						component={<Link to="/piechart" />}
-						icon={<StyleOutlinedIcon name="piechart" />}>
-						<Typography variant="body2">piechart</Typography>
-					</MenuItem>
-				</Menu>
-			</Sidebar>
-		</>
+				<MenuItem
+					active={location.pathname === '/profile'}
+					component={<Link to="/profile" />}
+					icon={<AutoGraphOutlinedIcon name="profile" />}>
+					<Typography variant="body2">Profile</Typography>
+				</MenuItem>
+				<MenuItem
+					active={location.pathname === '/stats'}
+					component={<Link to="/stats" />}
+					icon={<AutoGraphOutlinedIcon name="stats" />}>
+					<Typography variant="body2">stats</Typography>
+				</MenuItem>
+				<MenuItem
+					active={location.pathname === '/staff'}
+					component={<Link to="/staff" />}
+					icon={<StyleOutlinedIcon name="staff" />}>
+					<Typography variant="body2">staff</Typography>
+				</MenuItem>
+				<MenuItem
+					active={location.pathname === '/piechart'}
+					component={<Link to="/piechart" />}
+					icon={<StyleOutlinedIcon name="piechart" />}>
+					<Typography variant="body2">piechart</Typography>
+				</MenuItem>
+			</Menu>
+		</Sidebar>
 	);
 };
 

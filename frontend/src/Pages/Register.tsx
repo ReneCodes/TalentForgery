@@ -19,9 +19,12 @@ import {
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import FaceIcon from '@mui/icons-material/Face';
-import {Navigate} from 'react-router';
-import {registerUser} from '../services/Api.service';
-import {NavigateFunction, useNavigate} from 'react-router-dom';
+
+import { Navigate } from 'react-router';
+import { registerUser } from '../services/Api.service';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
+import { LoginAndOut } from '../utils/zustand.store';
+
 
 // import './register.css';
 
@@ -43,6 +46,7 @@ const Register = () => {
 	const [registerError, setRegisterError] = useState('');
 	const [file, setFile] = useState<File>({} as File);
 	const navigate: NavigateFunction = useNavigate();
+	const { MinonLogin } = LoginAndOut();
 
 	const registerForm = useForm<RegisterFormValues>({
 		defaultValues: {
@@ -84,6 +88,7 @@ const Register = () => {
 			const requestAnswer = await registerUser(formData, navigate);
 			if (requestAnswer) setRegisterError(requestAnswer);
 			else {
+				MinonLogin();
 				reset({
 					profile_image: {} as File,
 					first_name: '',
