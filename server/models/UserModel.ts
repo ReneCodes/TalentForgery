@@ -1,10 +1,10 @@
-
 import { UUID } from "crypto";
 import { registeredUser, loginUser, UserType } from "../types/user";
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
+
 const { checkInvite } = require('./InviteModel');
 const { User } = require('./Schemas');
 
@@ -36,7 +36,16 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   const samePassword = await bcrypt.compare(password, findUser.password);
   if (!samePassword) throw new Error("Wrong credentials");
   else {
-    const { role, first_name, last_name, email, personal_email, phone, department, user_id, } = findUser;
+    const {
+      role,
+      first_name,
+      last_name,
+      email,
+      personal_email,
+      phone,
+      department,
+      user_id,
+    } = findUser;
     return [
       { role, first_name, last_name, email, personal_email, phone, department },
       user_id,
@@ -106,6 +115,7 @@ module.exports = {
   getUserInfo,
   loginTheUser,
   deleteUser,
+  questions_table
   getUsersPending,
   acceptAnUser,
   rejectAnUser
