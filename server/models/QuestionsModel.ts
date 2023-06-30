@@ -73,6 +73,7 @@ async function correctQuestions(answers: string[], question_ids: UUID[]) {
     index++;
   };
 
+  return [everything, totalRight, totalWrong];
 };
 
 module.exports = {

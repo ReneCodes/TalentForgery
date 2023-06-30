@@ -121,26 +121,32 @@ const Stats = sequelize.define("stats", {
   },
   passed: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   failed: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   watched: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   not_watched: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   correct_questions: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   wrong_questions: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
 });
