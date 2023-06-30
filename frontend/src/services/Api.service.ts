@@ -149,7 +149,7 @@ export async function postTutorial(data: any) {
     access_date,
     due_date } = data;
 
-		const res = await axios.post('/api/tutorials', {
+		const res = await axios.post('/api/create_tutorial', {
 			title,
 			video_url,
 			description,
@@ -167,7 +167,7 @@ export async function postTutorial(data: any) {
 
 export async function getTutorials() {
 	try {
-		const res = await axios.get('/api/tutorials');
+		const res = await axios.get('/api//get_all_tutorials');
 
 		return res;
 	} catch (error: any) {
