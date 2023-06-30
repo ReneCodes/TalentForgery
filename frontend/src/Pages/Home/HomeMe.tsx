@@ -52,7 +52,7 @@ export const HomeMe = () => {
 						</Box>
 					))}
 			</Box>
-			<Box sx={styles.noBar}>
+			<Box sx={{}}>
 				<EmployeePendingCard />
 				<EmployeeProfileForm />
 				<Box sx={styles.noBar}>

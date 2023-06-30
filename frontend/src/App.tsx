@@ -18,14 +18,8 @@ const App: React.FC = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
-			{!authenticated && (
-				<BrowserRouter>
-					<AuthRoutes />
-				</BrowserRouter>
-			)}
-
-			{authenticated && (
-				<Box>
+			{authenticated ? (
+				<>
 					<AppHeader />
 					<Box sx={styles.container}>
 						<BrowserRouter>
@@ -37,7 +31,11 @@ const App: React.FC = () => {
 							</Box>
 						</BrowserRouter>
 					</Box>
-				</Box>
+				</>
+			) : (
+				<BrowserRouter>
+					<AuthRoutes />
+				</BrowserRouter>
 			)}
 		</ThemeProvider>
 	);
