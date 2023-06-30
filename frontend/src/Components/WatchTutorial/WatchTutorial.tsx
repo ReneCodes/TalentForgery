@@ -10,8 +10,8 @@ import {TransitionProps} from '@mui/material/transitions';
 import theme from '../../config/theme';
 // icons
 import CloseIcon from '@mui/icons-material/Close';
-import {DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
-import QuizzList from '../Tests/QuizzList';
+import {Box, Card, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import QuizzList from './QuizzList';
 import TotorialVideo from './TotorialVideo';
 import {TutorialVideoDataType} from '../../@types/Types';
 
@@ -35,11 +35,12 @@ interface WatchTutorialProps {
 }
 
 const WatchTutorial: React.FC<WatchTutorialProps> = ({videoData}) => {
-	const {primary, white, red, green} = theme.palette;
+	const {primary, white, red, green, secondary, gray} = theme.palette;
 	const [open, setOpen] = React.useState(false);
 	const [openAlert, setOpenAlert] = React.useState(false);
-	const [videoWatched, setVideoWatched] = React.useState(false);
-	console.log('videoData', videoData);
+	const [videoToWatch, setVideoToWatch] = React.useState(true);
+	const [quizzToDo, setQuizzToDo] = React.useState(false);
+	const [quizzDone, setQuizzDone] = React.useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -138,16 +139,64 @@ const WatchTutorial: React.FC<WatchTutorialProps> = ({videoData}) => {
 						</Dialog>
 					</Toolbar>
 				</AppBar>
-				{videoWatched ? (
-					<QuizzList />
-				) : (
+				{videoToWatch && (
 					<TotorialVideo
 						videoData={videoData}
-						setVideoWatched={setVideoWatched}
+						setVideoToWatch={setVideoToWatch}
+						setQuizzToDo={setQuizzToDo}
 					/>
+				)}
+				{quizzToDo && (
+					<Box sx={{display: 'flex', justifyContent: 'center', mx: 'auto', mt: '100px'}}>
+						<QuizzList
+							setQuizzDone={setQuizzDone}
+							setQuizzToDo={setQuizzToDo}
+						/>
+					</Box>
+				)}
+				{quizzDone && (
+					<Box sx={{display: 'flex', justifyContent: 'center', mx: 'auto', mt: '100px'}}>
+						<Card sx={styles.quizz_done}>
+							<Typography variant="h2">Thank you!</Typography>
+							<Typography variant="overline">Your quizz has been send to get analysed</Typography>
+							<Typography variant="overline">You will get the result in no time.</Typography>
+							<Button
+								variant="contained"
+								sx={{
+									backgroundColor: secondary.main,
+									color: gray[900],
+									py: 1,
+									px: 3,
+									':hover': {
+										backgroundColor: secondary[900],
+									},
+								}}
+								onClick={handleClose}
+								autoFocus>
+								Done
+							</Button>
+						</Card>
+					</Box>
 				)}
 			</Dialog>
 		</div>
 	);
 };
 export default WatchTutorial;
+
+/** @type {import("@mui/material").SxProps} */
+const styles = {
+	quizz_done: {
+		display: 'flex',
+		flexDirection: 'column',
+		gap: 2,
+		justifyContent: 'center',
+		textAlign: 'center',
+		mx: 3,
+		width: {xs: '100%', sm: '500px', md: '600px'},
+		minWidth: '300px',
+		height: '100%',
+		minHeight: '400px',
+		p: 3,
+	},
+};

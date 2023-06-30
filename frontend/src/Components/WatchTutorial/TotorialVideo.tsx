@@ -8,11 +8,17 @@ import {TutorialVideoDataType} from '../../@types/Types';
 
 interface TotorialVideoProps {
 	videoData: TutorialVideoDataType;
-	setVideoWatched: React.Dispatch<React.SetStateAction<boolean>>;
+	setVideoToWatch: React.Dispatch<React.SetStateAction<boolean>>;
+	setQuizzToDo: React.Dispatch<React.SetStateAction<boolean>>;
 }
 
-const TotorialVideo: React.FC<TotorialVideoProps> = ({videoData, setVideoWatched}) => {
+const TotorialVideo: React.FC<TotorialVideoProps> = ({videoData, setVideoToWatch, setQuizzToDo}) => {
 	const {secondary, gray} = theme.palette;
+
+	const handleVideoDone = () => {
+		setVideoToWatch(false);
+		setQuizzToDo(true);
+	};
 
 	return (
 		<Box sx={{maxWidth: '95%', margin: 'auto'}}>
@@ -46,7 +52,7 @@ const TotorialVideo: React.FC<TotorialVideoProps> = ({videoData, setVideoWatched
 								backgroundColor: secondary[900],
 							},
 						}}
-						onClick={() => setVideoWatched(true)}
+						onClick={handleVideoDone}
 						autoFocus>
 						Answer Questions
 					</Button>

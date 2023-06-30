@@ -3,7 +3,7 @@ import Home from '../Pages/Home';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import ErrorPage from '../Pages/Error';
-import TestList from '../Components/Tests/QuizzList';
+import TestList from '../Components/WatchTutorial/QuizzList';
 
 export const AuthRoutes = () => {
 	return (
