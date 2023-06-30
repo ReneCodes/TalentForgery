@@ -6,7 +6,6 @@ const {
   getAllTheTutorials,
 } = require("../models/TutorialModel");
 import { Request, Response } from "express";
-const { createQuestion } = require("../models/QuestionsModel");
 
 // {
 //   "questions": [
@@ -56,7 +55,8 @@ export async function createTutorial(req: Request, res: Response) {
     if ((error as Error).message === "Unauthorized") {
       res.status(403).json("Unauthorized");
     } else {
-      console.log(error);
+      const errorMessage = (error as Error).message;
+      console.log(errorMessage);
       res.status(500).json("Failed to create tutorial.");
     }
   }
