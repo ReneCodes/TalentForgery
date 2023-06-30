@@ -143,7 +143,7 @@ const Create = () => {
 	};
 
 	useEffect(() => {
-		if (data.access_date && data.due_date) {
+		if (data.access_date) {
 			try {
 				createTutorial(data);
 			} catch (error) {
