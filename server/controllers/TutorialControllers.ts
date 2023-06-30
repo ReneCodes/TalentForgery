@@ -6,7 +6,20 @@ const {
 } = require("../models/TutorialModel");
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
 import { Request, Response } from "express";
+const multer = require('multer');
+import { fileInput } from '../types/user';
 
+const storage = multer.diskStorage({
+  destination: (req: Request, file: File, cb: Function) => {
+    cb(null, '../server/videos');
+  },
+  filename: (req: Request, file: fileInput, cb: Function) => {
+    const customFileName = Date.now() + file.originalname;
+    cb(null, Date.now() + customFileName);
+  },
+});
+
+const upload = multer({ storage });
 
 export async function createTutorial(req: Request, res: Response) {
   const sessionToken = req.cookies.session_token;
@@ -50,7 +63,6 @@ export async function createTutorial(req: Request, res: Response) {
       res.status(403).json("Unauthorized");
     } else {
       const errorMessage = (error as Error).message;
-      console.log(errorMessage);
       res.status(500).json("Failed to create tutorial.");
     }
   }
