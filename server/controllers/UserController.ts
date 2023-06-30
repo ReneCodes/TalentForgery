@@ -38,9 +38,12 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
       return res.status(400).json('Not enough information provided');
     } else {
       try {
-        const profile_picture = req.file ? req.file.filename : null;
 
-        const data = await registerNewUser({ first_name, last_name, email, personal_email, password, phone, department, inviteID, profile_picture });
+        const profile_picture = req.file ? req.file.filename : null;
+        const data = await registerNewUser({
+          first_name, last_name, email, personal_email, password, phone,
+          department, inviteID, profile_picture
+        });
         res.status(201).json(data);
       } catch (error) {
         const errorMessage = (error as Error).message;

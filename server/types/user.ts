@@ -34,4 +34,5 @@ export type UserType = {
   department: String,
   profile_picture: String,
   user_id: String,
+  invited_by: String,
 };

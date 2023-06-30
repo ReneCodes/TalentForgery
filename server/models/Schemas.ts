@@ -36,6 +36,10 @@ const User = sequelize.define("user", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  invited_by: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+  },
   profile_picture: {
     type: DataTypes.TEXT,
     allowNull: true,

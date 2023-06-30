@@ -10,7 +10,10 @@ import {TransitionProps} from '@mui/material/transitions';
 import theme from '../../config/theme';
 // icons
 import CloseIcon from '@mui/icons-material/Close';
-import {Box, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import {Box, Card, DialogActions, DialogContent, DialogContentText, DialogTitle} from '@mui/material';
+import QuizzList from './QuizzList';
+import TotorialVideo from './TotorialVideo';
+import {TutorialVideoDataType} from '../../@types/Types';
 
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
@@ -27,21 +30,17 @@ const Transition = React.forwardRef(function Transition(
 	);
 });
 
-const videoData = {
-	title: 'How to peel a Banana',
-	source: '/src/assets/Temp_assets/chemist13s.mp4',
-	thumbnail: '/src/assets/Temp_assets/chemist_thumb.png',
-	description: ` "Hey there! In this quick tutorial, I'll show you how to peel a banana in just a few simple steps. First, hold the banana. Next, gently peel the skin. Keep peeling. And voila! Let's get started!"`,
-	topic: 'science',
-	watched: false,
-	has_form: true,
-	from_done: false,
-};
+interface WatchTutorialProps {
+	videoData: TutorialVideoDataType;
+}
 
-export default function WatchTutorial() {
-	const {primary, secondary, white, red, green, gray} = theme.palette;
+const WatchTutorial: React.FC<WatchTutorialProps> = ({videoData}) => {
+	const {primary, white, red, green, secondary, gray} = theme.palette;
 	const [open, setOpen] = React.useState(false);
 	const [openAlert, setOpenAlert] = React.useState(false);
+	const [videoToWatch, setVideoToWatch] = React.useState(true);
+	const [quizzToDo, setQuizzToDo] = React.useState(false);
+	const [quizzDone, setQuizzDone] = React.useState(false);
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -140,26 +139,27 @@ export default function WatchTutorial() {
 						</Dialog>
 					</Toolbar>
 				</AppBar>
-				<Box sx={{maxWidth: '95%', margin: 'auto'}}>
-					<DialogContent sx={{width: 'fit-content', maxWidth: '1000px', margin: 'auto', textAlign: 'center'}}>
-						<Box sx={{overflow: 'hidden', m: 2}}>
-							<video
-								width="100%"
-								height="auto"
-								muted={false}
-								style={{borderRadius: '10px'}}
-								controls
-								className="watchTutorial_video">
-								<source
-									src={videoData.source}
-									type="video/mp4"></source>
-								Your Browser does not support this video tag
-							</video>
-						</Box>
-						<Box>
-							<Typography variant="overline">{videoData.description}</Typography>
-						</Box>
-						<DialogActions>
+				{videoToWatch && (
+					<TotorialVideo
+						videoData={videoData}
+						setVideoToWatch={setVideoToWatch}
+						setQuizzToDo={setQuizzToDo}
+					/>
+				)}
+				{quizzToDo && (
+					<Box sx={{display: 'flex', justifyContent: 'center', mx: 'auto', mt: '100px'}}>
+						<QuizzList
+							setQuizzDone={setQuizzDone}
+							setQuizzToDo={setQuizzToDo}
+						/>
+					</Box>
+				)}
+				{quizzDone && (
+					<Box sx={{display: 'flex', justifyContent: 'center', mx: 'auto', mt: '100px'}}>
+						<Card sx={styles.quizz_done}>
+							<Typography variant="h2">Thank you!</Typography>
+							<Typography variant="overline">Your quizz has been send to get analysed</Typography>
+							<Typography variant="overline">You will get the result in no time.</Typography>
 							<Button
 								variant="contained"
 								sx={{
@@ -171,14 +171,32 @@ export default function WatchTutorial() {
 										backgroundColor: secondary[900],
 									},
 								}}
-								onClick={() => console.log('get me to the questions')}
+								onClick={handleClose}
 								autoFocus>
-								Answer Questions
+								Done
 							</Button>
-						</DialogActions>
-					</DialogContent>
-				</Box>
+						</Card>
+					</Box>
+				)}
 			</Dialog>
 		</div>
 	);
-}
+};
+export default WatchTutorial;
+
+/** @type {import("@mui/material").SxProps} */
+const styles = {
+	quizz_done: {
+		display: 'flex',
+		flexDirection: 'column',
+		gap: 2,
+		justifyContent: 'center',
+		textAlign: 'center',
+		mx: 3,
+		width: {xs: '100%', sm: '500px', md: '600px'},
+		minWidth: '300px',
+		height: '100%',
+		minHeight: '400px',
+		p: 3,
+	},
+};

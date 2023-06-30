@@ -8,10 +8,9 @@ import { NavigateFunction } from 'react-router-dom';
 export async function authUser(navigate: NavigateFunction, callback?: any) {
 	try {
 		await axios.get('/api/auth_user');
-		if(callback) callback();
+		if (callback) callback();
 	} catch (error: any) {
-		console.log(error);
-		// navigate('/login');
+		navigate('/login');
 	}
 }
 
@@ -98,8 +97,8 @@ export async function rejectUser(email: string, setPeoplePending: any) {
 			},
 		});
 
-		setPeoplePending((currData: person[]) => {
-			const newArr = currData.filter(person => person.email !== email);
+		setPeoplePending((currData: any[]) => {
+			const newArr = currData.filter(person => person.dataValues.email !== email);
 			return newArr;
 		})
 
@@ -118,8 +117,8 @@ export async function acceptUser(email: string, setPeoplePending: any) {
 			},
 		});
 
-		setPeoplePending((currData: person[]) => {
-			const newArr = currData.filter(person => person.email !== email);
+		setPeoplePending((currData: any[]) => {
+			const newArr = currData.filter(person => person.dataValues.email !== email);
 			return newArr;
 		})
 
