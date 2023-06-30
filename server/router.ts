@@ -1,7 +1,9 @@
 const router = require('express').Router();
+
 const UserController = require('./controllers/UserController');
 const InviteController = require('./controllers/InviteController');
 const TutorialController = require("./controllers/TutorialControllers");
+const TestController = require('./controllers/TestController');
 
 const { authUser, authAdminUser, userExists } = require('./middleware/AuthMiddleware');
 
@@ -24,6 +26,9 @@ router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
 router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial);
 router.get('/get_all_questions', authUser, TutorialController.getAllQuestions);
 router.post('/questions', authUser, TutorialController.getQuestions);
+
+// TEST ROUTES
+router.post('/handle_test_done', TestController.handleTest);
 
 // DELETE USER
 router.delete('/user', authUser, UserController.deleteMyAccount);
