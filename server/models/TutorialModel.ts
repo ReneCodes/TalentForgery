@@ -13,14 +13,17 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
     tutorial_id: crypto.randomUUID()
   });
 
-  for (const question of providedInformation.question_ids) {
-    await createQuestion({
-      question: question.question,
-      options: question.options,
-      answer: question.answer,
-      tutorial_id: tutorial.tutorial_id,
-    })
-  }
+  const questionsParsed = JSON.parse(providedInformation.question_ids);
+  console.log(questionsParsed[0]);
+
+  // for (const question of providedInformation.question_ids) {
+  //   await createQuestion({
+  //     question: question.question,
+  //     options: question.options,
+  //     answer: question.answer,
+  //     tutorial_id: tutorial.tutorial_id,
+  //   })
+  // }
 
 }
 

@@ -21,51 +21,31 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-export async function createTutorial(req: Request, res: Response) {
+export async function createTutorial(req: any, res: Response) {
   const sessionToken = req.cookies.session_token;
   const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
-  const {
-    title,
-    video_url,
-    description,
-    question_ids,
-    questions_shown,
-    access_date,
-    due_date,
-  }: createdTutorial = req.body;
 
-  if (
-    !title ||
-    !video_url ||
-    !description ||
-    !question_ids ||
-    !questions_shown ||
-    !access_date ||
-    !due_date
-  ) {
-    return res.status(400).json("All fields are required");
-  }
+  await upload.single('video_url')(req, res, async (err: Error) => {
+    const { title, description, question_ids, questions_shown, access_date, due_date, }: createdTutorial = req.body;
 
-  try {
-    const tutorialData = {
-      title,
-      video_url,
-      description,
-      question_ids,
-      questions_shown,
-      access_date,
-      due_date,
-    };
-    await createTheTutorial(tutorialData, user_id);
-    res.status(201).json("Tutorial created.");
-  } catch (error) {
-    if ((error as Error).message === "Unauthorized") {
-      res.status(403).json("Unauthorized");
-    } else {
-      const errorMessage = (error as Error).message;
+    if (!title || !description || !question_ids || !questions_shown || !access_date || !due_date) {
+      return res.status(400).json("All fields are required");
+    }
+    if (err) return res.status(500).json('Server failed uploading profile picture');
+
+    try {
+      const tutorialData = { title, video_url: '', description, question_ids, questions_shown, access_date, due_date, };
+      const videoFileName = req.file ? req.file.filename : null;
+      tutorialData.video_url = videoFileName;
+      await createTheTutorial(tutorialData, user_id);
+      res.status(201).json("Tutorial created.");
+
+    } catch (error) {
+      console.log((error as Error).message);
       res.status(500).json("Failed to create tutorial.");
     }
-  }
+  })
+
 };
 
 export async function getAllTutorials(req: Request, res: Response) {
