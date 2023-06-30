@@ -1,89 +1,38 @@
 import { UUID } from "crypto";
-import { registeredUser, loginUser } from "../types/user";
+import { registeredUser, loginUser, UserType } from "../types/user";
 const crypto = require("crypto");
 const bcrypt = require("bcrypt");
-const { DataTypes } = require("sequelize");
-const sequelize = require("./connection");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
-const { checkInvite } = require("./InviteModel");
 
-const User = sequelize.define("user", {
-  role: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  first_name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  last_name: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  email: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    isEmail: true,
-  },
-  personal_email: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-    isEmail: true,
-  },
-  password: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  phone: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  department: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  profile_picture: {
-    type: DataTypes.TEXT,
-    allowNull: true,
-  },
-  user_id: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-    unique: true,
-    isUUID: true,
-  },
-});
+const { checkInvite } = require('./InviteModel');
+const { User } = require('./Schemas');
 
-(async () => {
-  await sequelize.sync({ alter: true });
-})();
 
-const registerNewUser = async (providedInformaion: registeredUser) => {
+const registerNewUser = async (providedInformation: registeredUser) => {
   const userList = await User.findOne({ where: {} });
-  const findUser = await User.findOne({
-    where: { email: providedInformaion.email },
-  });
-  const inviteID = await checkInvite(providedInformaion.inviteID);
-  if (findUser) throw new Error("User already exists");
-  else if (!inviteID && userList !== null) throw new Error("Invalid invite");
+  const findUser = await User.findOne({ where: { email: providedInformation.email } });
+  const invite = await checkInvite(providedInformation.inviteID);
+  if (findUser) throw new Error('User already exists');
+  else if (!invite && userList !== null) throw new Error('Invalid invite');
   else {
-    const hash = await hashAsync(providedInformaion.password, 10);
-    providedInformaion.password = hash;
+    const hash = await hashAsync(providedInformation.password, 10);
+    providedInformation.password = hash;
 
-    const role = userList == null ? "admin" : "pending";
-    const userCreated = await User.create({
+    const role = userList == null ? 'admin' : 'pending';
+    await User.create({
       role,
-      ...providedInformaion,
-      user_id: crypto.randomUUID(),
+      ...providedInformation,
+      invited_by: !invite ? 'first' : invite.user_created,
+      user_id: crypto.randomUUID()
     });
-    return role === "admin" ? "Admin User created" : "User created";
+    return role === 'admin' ? "Admin User created" : "User created";
   }
 };
 
 const loginTheUser = async ({ email, password }: loginUser) => {
   const findUser = await User.findOne({ where: { email } });
-  if (!findUser) throw new Error("User dosent exist");
+  if (!findUser) throw new Error("User doesn't exist");
   const samePassword = await bcrypt.compare(password, findUser.password);
   if (!samePassword) throw new Error("Wrong credentials");
   else {
@@ -104,45 +53,70 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   }
 };
 
+const acceptAnUser = async (email: string) => {
+  const findUser = await User.findOne({ where: { email } });
+  if (!findUser) throw new Error("User doesn't exist");
+  findUser.role = 'user';
+  await findUser.save();
+}
+
+const rejectAnUser = async (email: string) => {
+  const findUser = await User.findOne({ where: { email } });
+  if (!findUser) throw new Error("User doesn't exist");
+  return await deleteAnUser(email);
+}
+
 const getUserInfo = async (user_id: UUID) => {
-  const userInfo = await User.findOne({ where: { user_id } });
+  const userInfo = await User.findOne({
+    where: { user_id },
+    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
+  });
   if (!userInfo) throw new Error("user_id is invalid");
   else {
-    const {
-      role,
-      first_name,
-      last_name,
-      email,
-      personal_email,
-      phone,
-      department,
-    } = userInfo;
-    return {
-      role,
-      first_name,
-      last_name,
-      email,
-      personal_email,
-      phone,
-      department,
-    };
+    return userInfo;
   }
 };
+
+const getUsersPending = async (): Promise<UserType[]> => {
+  const usersPending: UserType[] = await User.findAll({
+    where: { role: 'pending' },
+    attributes: ['role', 'first_name', 'last_name', 'email', 'department', 'profile_picture', 'invited_by'],
+  });
+
+  const allPendingUsers: UserType[] = await Promise.all(
+    usersPending.map(async (user) => {
+      const invitedByUser = await User.findOne({
+        where: { user_id: user.invited_by },
+        attributes: ['first_name', 'last_name']
+      });
+
+      return {
+        ...user,
+        invited_by: invitedByUser
+      };
+    })
+  );
+
+  return allPendingUsers;
+}
 
 const deleteUser = async (user_id: UUID) => {
   return await User.destroy({ where: { user_id } });
 };
 
 const deleteAnUser = async (userDeleteEmail: string) => {
-  User.destroy({ where: { email: userDeleteEmail } });
+  await User.destroy({ where: { email: userDeleteEmail } });
   return;
 };
 
 module.exports = {
-  User,
   deleteAnUser,
   registerNewUser,
   getUserInfo,
   loginTheUser,
   deleteUser,
+  questions_table
+  getUsersPending,
+  acceptAnUser,
+  rejectAnUser
 };

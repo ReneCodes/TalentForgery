@@ -5,6 +5,8 @@ const dotenv = require('dotenv').config();
 const bodyParser = require('body-parser');
 const cookieParser = require('cookie-parser');
 const router = require('./router');
+const path = require('path');
+
 const app = express();
 const PORT = process.env.PORT || 8080;
 
@@ -16,6 +18,9 @@ const corsConfig = {
 app.use(cors(corsConfig));
 app.use(bodyParser());
 app.use(cookieParser());
+console.log(path.join(__dirname + '/../', 'images'));
+
+app.use('/images', express.static(path.join(__dirname + '../../', 'images')));
 app.use(router);
 
 const server = app.listen(PORT, () => console.log(`Running at http://localhost:${PORT}/`));

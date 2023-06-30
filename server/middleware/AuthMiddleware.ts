@@ -1,6 +1,6 @@
 import { NextFunction, Request, Response } from 'express';
 const jwt = require('jsonwebtoken');
-const { User } = require('../models/UserModel');
+const { User } = require('../models/Schemas');
 
 const authUser = async (req: Request, res: Response, next: NextFunction) => {
   const session_token = req.cookies.session_token;
@@ -42,4 +42,8 @@ const authAdminUser = async (req: Request, res: Response, next: NextFunction) =>
 
 };
 
-module.exports = { authUser, authAdminUser };
+const userExists = async(req: Request, res: Response) =>{
+  return res.status(200).json('User verified and exists');
+}
+
+module.exports = { authUser, authAdminUser, userExists };

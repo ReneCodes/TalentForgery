@@ -1,7 +1,5 @@
-export {};
-const sequelize = require("./connection");
-const { DataTypes } = require("sequelize");
-const { User } = require("./UserModel");
+export { };
+const { User, Tutorial } =  require('./Schemas');
 import { UUID } from "crypto";
 const crypto = require("crypto");
 import { createdTutorial } from "../types/tutorial";
@@ -10,58 +8,7 @@ console.log("This is question model ", QuestionModel);
 const { Invites } = require("./InviteModel");
 console.log("This should be Invites ", Invites);
 
-const Tutorial = sequelize.define("tutorial", {
-  tutorial_id: {
-    type: DataTypes.STRING,
-    allowNull: false,
-  },
-  creator_id: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  title: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  video_url: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  description: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  question_ids: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
-  },
-  questions_shown: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
-  },
-  tags: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: true,
-  },
-  access_date: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  due_date: {
-    type: DataTypes.TEXT,
-    allowNull: false,
-  },
-});
-
-Tutorial.hasMany(QuestionModel, {
-  foreignKey: "tutorialId",
-  allowNull: false,
-});
-
-QuestionModel.belongsTo(Tutorial, {
-  foreignKey: "tutorialId",
-  allowNull: false,
-});
+const createTheTutorial = async (providedInformaion: createdTutorial, user_id: UUID) => {
 
 const createTheTutorial = async (
   providedInformation: createdTutorial,
@@ -103,4 +50,4 @@ const getAllTheTutorials = async () => {
   }
 };
 
-module.exports = { Tutorial, createTheTutorial, getAllTheTutorials };
+module.exports = { createTheTutorial, getAllTheTutorials };

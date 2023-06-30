@@ -1,15 +1,34 @@
-import {FC, useState} from 'react';
-import {useForm} from 'react-hook-form';
-import {Container, TextField, FormControl, InputLabel, OutlinedInput, InputAdornment, IconButton, Button, Stack, FormHelperText, Box} from '@mui/material';
-import {Visibility, VisibilityOff} from '@mui/icons-material';
+import { FC, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import {
+	Container,
+	Input,
+	Typography,
+	TextField,
+	FormControl,
+	InputLabel,
+	InputAdornment,
+	IconButton,
+	Button,
+	Stack,
+	FormHelperText,
+	Box,
+} from '@mui/material';
+import { Visibility, VisibilityOff } from '@mui/icons-material';
 
-import {loginUser} from '../services/Api.service';
-import {LoginFormValues} from '../@types/Types';
-import {Navigate} from 'react-router';
+import { loginUser } from '../services/Api.service';
+import { LoginFormValues } from '../@types/Types';
+import { NavigateFunction, useNavigate } from 'react-router-dom';
 
-export const Login: FC = () => {
+import theme from '../config/theme';
+import { LoginAndOut } from '../utils/zustand.store';
+
+const Login: FC = () => {
+	const { MinonLogin } = LoginAndOut();
+
 	const [showPassword, setShowPassword] = useState(false);
 	const [loginError, setLoginError] = useState('');
+	const navigate: NavigateFunction = useNavigate();
 
 	const loginForm = useForm<LoginFormValues>({
 		defaultValues: {
@@ -18,42 +37,62 @@ export const Login: FC = () => {
 		},
 	});
 
-	const {register, handleSubmit, formState, reset} = loginForm;
-	const {errors} = formState;
+	const { register, handleSubmit, formState, reset } = loginForm;
+	const { errors } = formState;
 
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
 	async function handleLogin(formData: LoginFormValues) {
-		const requestAnswer = await loginUser(formData);
+		const requestAnswer = await loginUser(formData, navigate);
 
 		if (requestAnswer) setLoginError(requestAnswer);
 		else {
+			MinonLogin();
 			reset({
 				email: '',
 				password: '',
 			});
-			<Navigate to={'/home'} />;
 		}
 	}
 
 	return (
-		<Container
-			maxWidth="xs"
-			sx={{height: '100vh', overflow: 'hidden', mb: 8}}>
+		<Container sx={{ height: '100vh', width: '100%', overflow: 'hidden', py: 2 }}>
+			<Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center' }}>
+				<Typography
+					variant="h5"
+					sx={{ ':hover': { cursor: 'pointer' } }}
+					onClick={() => navigate('/')}>
+					<span style={{ color: '#BFA622' }}> Minon </span>
+					<span style={{ color: '#00407E' }}> Mentor </span>
+				</Typography>
+
+				<Button
+					onClick={() => navigate('/register')}
+					sx={{ width: { xs: '100px', sm: '100px', md: '170px' }, height: '50px', marginLeft: 'auto' }}
+					style={{ backgroundColor: 'rgb(180, 166, 34)', color: 'white' }}>
+					<Typography sx={{ variant: { xs: 'h4', sm: 'h6', md: 'h6' } }}>Register</Typography>
+				</Button>
+			</Box>
 			<Container
 				maxWidth="xs"
-				sx={{backgroundColor: 'inherit'}}>
-				<h1>Minon Mentor</h1>
-			</Container>
-			<Container
-				maxWidth="xs"
-				sx={{pb: 8, pt: 3, boxShadow: 3, borderRadius: 2}}>
-				<h2>Login</h2>
-				{loginError && (
+				sx={{ pb: 8, pt: 3, boxShadow: 10, borderRadius: 5, mt: 4 }}>
+				<Typography variant="h4">
+					<span>
+						<strong>Login</strong>
+					</span>
+				</Typography>
+				{loginError ? (
 					<Box
 						color="red"
 						my={1}>
 						{loginError}
+					</Box>
+				) : (
+					<Box
+						color="red"
+						my={1}
+						visibility={'hidden'}>
+						{'error'}
 					</Box>
 				)}
 				<form
@@ -61,14 +100,14 @@ export const Login: FC = () => {
 					autoCapitalize="off">
 					<Stack
 						spacing={3}
-						width={'90%'}
+						width={'100%'}
 						margin={'auto'}>
 						<TextField
 							error={!!errors.email}
 							helperText={errors.email ? errors.email?.message : ' '}
 							id="email-field"
 							label="email"
-							variant="outlined"
+							variant="standard"
 							fullWidth
 							aria-label="email input-field"
 							aria-invalid={errors.email ? 'true' : 'false'}
@@ -85,21 +124,25 @@ export const Login: FC = () => {
 						/>
 						<FormControl
 							error={!!errors.password}
-							fullWidth
-							variant="outlined">
+							variant="standard">
 							<InputLabel htmlFor="password-field">Password</InputLabel>
 
-							<OutlinedInput
+							<Input
 								id="password-field"
 								type={showPassword ? 'text' : 'password'}
+								minLength={8}
+								placeholder="Password"
 								aria-label="password input-field"
 								aria-invalid={errors.password ? 'true' : 'false'}
-								label="Password"
 								{...register('password', {
 									required: 'Password is required',
 									minLength: {
 										value: 8,
-										message: 'Must be 8 character or more',
+										message: 'Must be 8 characters or more',
+									},
+									pattern: {
+										value: /(?=.*[A-Z])(?=.*[a-z])(?=.*\d)/,
+										message: 'Must contain upper & lowercase letters and numbers',
 									},
 								})}
 								endAdornment={
@@ -113,17 +156,32 @@ export const Login: FC = () => {
 									</InputAdornment>
 								}
 							/>
-							<FormHelperText>{errors.password ? errors.password?.message : ' '}</FormHelperText>
+							<Stack>
+								<FormHelperText>{errors.password ? errors.password?.message : 'Minimun 8 Characters.'}</FormHelperText>
+
+								<FormHelperText>{errors.password ? '' : 'Must contain lower and uppercase letters'}</FormHelperText>
+							</Stack>
 						</FormControl>
 						<Button
 							type="submit"
 							variant="contained"
-							aria-label="login">
+							aria-label="login"
+							sx={{ backgroundColor: 'rgb(0, 64, 126)' }}>
 							Login
 						</Button>
 					</Stack>
 				</form>
 			</Container>
+			<Button
+				type="button"
+				onClick={MinonLogin}
+				variant="contained"
+				aria-label="login"
+				sx={{ backgroundColor: theme.palette.red.main }}>
+				Special Login
+			</Button>
 		</Container>
 	);
 };
+
+export default Login;
