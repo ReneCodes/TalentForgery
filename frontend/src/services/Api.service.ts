@@ -2,6 +2,7 @@ import axios from 'axios';
 
 import { LoginFormValues, RegisterFormValues, person } from '../@types/Types';
 import { NavigateFunction } from 'react-router-dom';
+import fs from "fs";
 
 // const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -140,23 +141,22 @@ export async function getPendingUsers(setPeoplePending: any) {
 
 export async function postTutorial(data: any) {
 	try {
-		const { title,
-    video_url,
-    description,
-    question_ids,
-    questions_shown,
-    access_date,
-    due_date } = data;
 
-		const res = await axios.post('/api/create_tutorial', {
-			title,
-			video_url,
-			description,
-			question_ids,
-			questions_shown,
-			access_date,
-			due_date
+		const formData = new FormData();
+
+		Object.entries(data).forEach(([key, value]: any) => {
+
+			if (value instanceof FormData) {
+				const video = value.get('video');
+				formData.append('video_url', video);
+			} else if(key === 'question_ids'){
+				formData.append(key, JSON.stringify(value));
+			} else{
+				formData.append(key, value);
+			}
 		});
+
+		const res = await axios.post('/api/create_tutorial', formData);
 
 		return res;
 	} catch(error: any) {

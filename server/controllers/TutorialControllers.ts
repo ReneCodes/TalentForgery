@@ -34,8 +34,9 @@ export async function createTutorial(req: any, res: Response) {
     if (err) return res.status(500).json('Server failed uploading profile picture');
 
     try {
-      const tutorialData = { title, video_url: '', description, question_ids, questions_shown, access_date, due_date, };
-      const videoFileName = req.file ? req.file.filename : null;
+      const videoFileName = req.file ? req.file.filename : 'thisisthefile.mp4';
+      const tutorialData = { title, video_url: videoFileName, description, question_ids, questions_shown, access_date, due_date, };
+
       tutorialData.video_url = videoFileName;
       await createTheTutorial(tutorialData, user_id);
       res.status(201).json("Tutorial created.");
