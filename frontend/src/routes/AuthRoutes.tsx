@@ -1,9 +1,9 @@
 import {Route, Routes} from 'react-router-dom';
-import Home from './Pages/Home';
-import Login from './Pages/Login';
-import Register from './Pages/Register';
-import ErrorPage from './Pages/Error';
-import TestList from './Components/Tests/TestList';
+import Home from '../Pages/Home';
+import Login from '../Pages/Login';
+import Register from '../Pages/Register';
+import ErrorPage from '../Pages/Error';
+import TestList from '../Components/WatchTutorial/QuizzList';
 
 export const AuthRoutes = () => {
 	return (
@@ -28,8 +28,8 @@ export const AuthRoutes = () => {
 				path="/**"
 				element={<ErrorPage />}
 			/>
-			<Route 
-				path='/test'
+			<Route
+				path="/test"
 				element={<TestList />}
 			/>
 		</Routes>

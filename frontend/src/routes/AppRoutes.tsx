@@ -1,11 +1,11 @@
 import {Route, Routes} from 'react-router-dom';
-import {HomeMe} from './Pages/Home/HomeMe';
-import PieChartComp from './Components/PieChart/PieChart';
-import EmployeeInfo from './Components/EmployeeInfo/EmployeeInfo';
-import Stats from './Components/Stats/Stats';
-import ContactInfo from './Components/ContactInfo/ContactInfo';
-import Create from './Pages/Create';
-import Dashboard from './Pages/Dashboard';
+import {HomeMe} from '../Pages/Home/HomeMe';
+import PieChartComp from '../Components/PieChart/PieChart';
+import EmployeeInfo from '../Components/EmployeeInfo/EmployeeInfo';
+import Stats from '../Components/Stats/Stats';
+import ContactInfo from '../Components/ContactInfo/ContactInfo';
+import Create from '../Pages/Create';
+import Dashboard from '../Pages/Dashboard';
 
 const info = {
 	firstName: 'jon',
