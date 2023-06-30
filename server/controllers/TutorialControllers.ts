@@ -1,6 +1,7 @@
 import { createdTutorial } from "../types/tutorial";
 const jwt = require("jsonwebtoken");
 const {
+  Tutorial,
   createTheTutorial,
   getAllTheTutorials,
 } = require("../models/TutorialModel");
@@ -21,7 +22,6 @@ export async function createTutorial(req: Request, res: Response) {
     title,
     video_url,
     description,
-    questions,
     question_ids,
     questions_shown,
     access_date,
@@ -32,7 +32,6 @@ export async function createTutorial(req: Request, res: Response) {
     !title ||
     !video_url ||
     !description ||
-    !questions ||
     !question_ids ||
     !questions_shown ||
     !access_date ||
@@ -46,7 +45,6 @@ export async function createTutorial(req: Request, res: Response) {
       title,
       video_url,
       description,
-      questions,
       question_ids,
       questions_shown,
       access_date,

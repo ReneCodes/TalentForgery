@@ -1,7 +1,10 @@
-const sequelize = require('./connection');
-const { DataTypes } = require('sequelize');
+const sequelize = require("./connection");
+const { DataTypes } = require("sequelize");
 import { UUID } from "crypto";
-const crypto = require('crypto');
+const crypto = require("crypto");
+const { Tutorial } = require("./TutorialModel");
+
+console.log("This is tutorial in InviteModel", Tutorial);
 
 const Invites = sequelize.define("invite", {
   inviteID: {
@@ -19,10 +22,10 @@ const getUserInvite = async (user_id: UUID) => {
   if (invite) return invite.inviteID;
   else {
     const randomBytes = crypto.randomBytes(16);
-    const inviteID = randomBytes.toString('hex');
-    const newInvite = await Invites.create({ inviteID, user_created: user_id })
+    const inviteID = randomBytes.toString("hex");
+    const newInvite = await Invites.create({ inviteID, user_created: user_id });
     return newInvite.inviteID;
-  };
+  }
 };
 
 const checkInvite = async (inviteID: string) => {
@@ -33,5 +36,5 @@ const checkInvite = async (inviteID: string) => {
 module.exports = {
   Invites,
   getUserInvite,
-  checkInvite
-}
+  checkInvite,
+};

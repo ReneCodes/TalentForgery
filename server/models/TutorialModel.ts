@@ -3,14 +3,17 @@ const sequelize = require("./connection");
 const { DataTypes } = require("sequelize");
 const { User } = require("./UserModel");
 import { UUID } from "crypto";
+const crypto = require("crypto");
 import { createdTutorial } from "../types/tutorial";
 const { QuestionModel, createQuestion } = require("./QuestionsModel");
+console.log("This is question model ", QuestionModel);
+const { Invites } = require("./InviteModel");
+console.log("This should be Invites ", Invites);
 
 const Tutorial = sequelize.define("tutorial", {
-  tutorialId: {
-    type: DataTypes.UUID,
+  tutorial_id: {
+    type: DataTypes.STRING,
     allowNull: false,
-    primaryKey: true,
   },
   creator_id: {
     type: DataTypes.TEXT,
@@ -26,10 +29,6 @@ const Tutorial = sequelize.define("tutorial", {
   },
   description: {
     type: DataTypes.TEXT,
-    allowNull: false,
-  },
-  questions: {
-    type: DataTypes.ARRAY(DataTypes.JSONB),
     allowNull: false,
   },
   question_ids: {
@@ -55,20 +54,17 @@ const Tutorial = sequelize.define("tutorial", {
 });
 
 Tutorial.hasMany(QuestionModel, {
-  foreignKey: {
-    name: "tutorialId",
-    allowNull: false,
-  },
+  foreignKey: "tutorialId",
+  allowNull: false,
 });
+
 QuestionModel.belongsTo(Tutorial, {
-  foreignKey: {
-    name: "tutorialId",
-    allowNull: false,
-  },
+  foreignKey: "tutorialId",
+  allowNull: false,
 });
 
 const createTheTutorial = async (
-  providedInformaion: createdTutorial,
+  providedInformation: createdTutorial,
   user_id: UUID
 ) => {
   const creator = await User.findOne({ where: { user_id } });
@@ -77,14 +73,20 @@ const createTheTutorial = async (
     throw new Error("Unauthorized");
   } else {
     const tutorial = await Tutorial.create({
-      ...providedInformaion,
+      ...providedInformation,
       creator_id: user_id,
     });
     const questionIds = [];
-    for (const questionData of providedInformaion.questions) {
-      const question = await QuestionModel.create(questionData);
-      await tutorial.addQuestion(question);
-      questionIds.push(question.id);
+    for (const questionData of providedInformation.question_ids) {
+      const question_id = crypto.randomUUID();
+
+      const question = await createQuestion({
+        ...questionData,
+        question_id,
+        tutorialId: tutorial.tutorial_id, // Assign the tutorialId to the question
+      });
+
+      questionIds.push(question_id);
 
       // Update the tutorial with question_ids
       await tutorial.update({ question_ids: questionIds });
