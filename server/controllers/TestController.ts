@@ -14,19 +14,17 @@ const handleTest = async (req: Request, res: Response) => {
     if (!tutorial_id || !answers || !question_ids) { return res.status(400).json('Not enough information provided'); }
 
     const [testCorrection, totalRight, totalWrong] = await correctQuestions(answers, question_ids);
-    await updateUserStats(user_id, totalRight, totalWrong);
 
-    // await sendEmail(testCorrection);
+    await updateUserStats(user_id, totalRight, totalWrong);
+    await sendEmail(testCorrection, totalRight, totalWrong);
 
     return res.status(200).json('Check your email');
   } catch (error) {
-    console.log(error);
-
     res.status(500).json('Server Failed');
   }
 };
 
-const sendEmail = async (testCorrection: TestCorrectionType) => {
+const sendEmail = async (testCorrection: TestCorrectionType, totalRight: number, totalWrong: number) => {
   // LOGIC TO SEND THE EMAIL OR TO BUILD THE EMAIL SCHEMA
 };
 
