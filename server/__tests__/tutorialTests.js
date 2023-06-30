@@ -37,14 +37,41 @@ const user2_info = {
 };
 
 const tutorialInfo = {
-  title: "Onboarding",
-  video_url: "https://example.com/onboarding",
-  description: "Short video about onboarding",
-  question_ids: ["51", "17", "21"],
-  questions_shown: ["question03", "question07", "question55"],
-  tags: ["new stuff", "fresh start", "Some nice security"],
-  access_date: "2023-06-21T10:30:00Z",
-  due_date: "2023-07-25T23:59:59Z",
+  title: "hi how are you",
+  video_url: "hello.mp4",
+  description: "beesx",
+  question_ids: [
+    {
+      question: "This is the Question",
+      options: [
+        "this is an option",
+        "when its green its the answer",
+        "press delete to remove the tutorial"
+      ],
+      answer: "when its green its the answer"
+    },
+    {
+      question: "hi",
+      options: [
+        "1",
+        "2",
+        "3"
+      ],
+      answer: "3"
+    },
+    {
+      question: "Where is steve?",
+      options: [
+        "Detroit",
+        "Michigan",
+        "Orlando"
+      ],
+      "answer": "Detroit"
+    }
+  ],
+  questions_shown: 2,
+  access_date: "Wed, 21 Jun 2023 23:00:00 GMT",
+  due_date: "Thu, 29 Jun 2023 23:00:00 GMT"
 };
 
 describe("Tutorials shouldn't be seen or created if the user is logged out", () => {
