@@ -8,7 +8,7 @@ export type createdTutorial = {
     options: string[];
     answer: string;
   }[];
-  question_ids: String[];
+  question_ids: any[];
   questions_shown: String[];
   tags?: String[];
   access_date: Date;

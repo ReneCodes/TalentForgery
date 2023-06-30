@@ -1,19 +1,12 @@
 import { createdTutorial } from "../types/tutorial";
 const jwt = require("jsonwebtoken");
 const {
-  Tutorial,
   createTheTutorial,
   getAllTheTutorials,
 } = require("../models/TutorialModel");
+const { getTutorialQuestions } = require('../models/QuestionsModel');
 import { Request, Response } from "express";
-const { createQuestion } = require("../models/QuestionsModel");
 
-// {
-//   "questions": [
-//     { "question": "Question 1", "options": ["Option 1", "Option 2"], "actual_answer": "Option 1", "correct_answer": "Option 1" },
-//     { "question": "Question 2", "options": ["Option 1", "Option 2"], "actual_answer": "Option 2", "correct_answer": "Option 2" }
-//   ]
-// }
 
 export async function createTutorial(req: Request, res: Response) {
   const sessionToken = req.cookies.session_token;
@@ -56,11 +49,12 @@ export async function createTutorial(req: Request, res: Response) {
     if ((error as Error).message === "Unauthorized") {
       res.status(403).json("Unauthorized");
     } else {
-      console.log(error);
+      const errorMessage = (error as Error).message;
+      console.log(errorMessage);
       res.status(500).json("Failed to create tutorial.");
     }
   }
-}
+};
 
 export async function getAllTutorials(req: Request, res: Response) {
   try {
@@ -70,6 +64,24 @@ export async function getAllTutorials(req: Request, res: Response) {
   } catch (error) {
     res.status(500).json("Failed to retrieve tutorial");
   }
-}
+};
 
-module.exports = { createTutorial, getAllTutorials };
+export async function getQuestions(req: Request, res: Response) {
+
+  const { tutorial_id } = req.body;
+  if (!tutorial_id) res.status(400).json("Not enough information provided");
+
+  try {
+    const questions = await getTutorialQuestions(tutorial_id);
+
+    res.status(200).json(questions);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+    if (errorMessage === "Invalid tutorial id") { res.status(404).json(errorMessage); }
+    else res.status(500).json('Server failed');
+  }
+
+
+};
+
+module.exports = { createTutorial, getAllTutorials, getQuestions };

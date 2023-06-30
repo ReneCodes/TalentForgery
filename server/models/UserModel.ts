@@ -115,7 +115,6 @@ module.exports = {
   getUserInfo,
   loginTheUser,
   deleteUser,
-  questions_table
   getUsersPending,
   acceptAnUser,
   rejectAnUser

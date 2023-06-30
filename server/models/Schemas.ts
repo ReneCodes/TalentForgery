@@ -38,7 +38,7 @@ const User = sequelize.define("user", {
   },
   invited_by: {
     type: DataTypes.TEXT,
-    allowNull: false,
+    allowNull: true,
   },
   profile_picture: {
     type: DataTypes.TEXT,
@@ -70,6 +70,12 @@ const Tutorial = sequelize.define("tutorial", {
   creator_id: {
     type: DataTypes.TEXT,
     allowNull: false,
+    // unique: true,
+    isUUID: true,
+  },
+  tutorial_id: {
+    type: DataTypes.TEXT,
+    allowNull: false,
     unique: true,
     isUUID: true,
   },
@@ -85,13 +91,9 @@ const Tutorial = sequelize.define("tutorial", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
-  question_ids: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
-  },
   questions_shown: {
-    type: DataTypes.ARRAY(DataTypes.STRING),
-    allowNull: false,
+    type: DataTypes.INTEGER,
+    allowNull: true,
   },
   tags: {
     type: DataTypes.ARRAY(DataTypes.STRING),
@@ -140,18 +142,42 @@ const Stats = sequelize.define("stats", {
   },
 });
 
+const Question = sequelize.define("question", {
+  question: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  options: {
+    type: DataTypes.ARRAY(DataTypes.STRING),
+    allowNull: false,
+  },
+  answer: {
+    type: DataTypes.STRING,
+    allowNull: false,
+  },
+  tutorial_id: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    isUUID: true,
+  },
+});
+
 if (process.env.ENV !== 'Test') {
   // SETTING UP THE FOREIGN KEY OF THE INVITES TABLE
   User.hasOne(Invites, { foreignKey: 'user_created', sourceKey: 'user_id' });
   Invites.belongsTo(User, { foreignKey: 'user_created', targetKey: 'user_id' });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
-  User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
-  Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
+  // User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
+  // Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
   User.hasOne(Stats, { foreignKey: 'user_id', sourceKey: 'user_id' });
   Stats.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+
+  // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
+  Tutorial.hasMany(Question, { foreignKey: 'tutorial_id', sourceKey: 'tutorial_id' });
+  Question.belongsTo(Tutorial, { foreignKey: 'tutorial_id', targetKey: 'tutorial_id' });
 }
 
 (async () => {
@@ -159,4 +185,4 @@ if (process.env.ENV !== 'Test') {
 })();
 
 
-module.exports = { User, Tutorial, Invites, Stats, }
+module.exports = { User, Tutorial, Invites, Stats, Question }

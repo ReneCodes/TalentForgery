@@ -232,7 +232,7 @@ describe('Gets all of the pending users', () => {
       const data = res.body;
       expect(data).to.eql([expectedPendingUsers, expectedPendingUsers]);
     } catch (error) {
-      await transaction.rollback();
+      // await transaction.rollback();
     }
 
   });

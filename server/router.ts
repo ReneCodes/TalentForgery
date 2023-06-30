@@ -18,6 +18,7 @@ router.post("/reject_user", authAdminUser, UserController.rejectUser);
 router.get('/invite', authAdminUser, InviteController.getInvite);
 router.get('/user', authUser, UserController.getUserInformation);
 router.get('/pending_users', authAdminUser, UserController.getPendingUsers);
+router.post('/questions', authUser, TutorialController.getQuestions);
 
 // TUTORIAL ROUTES
 router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
