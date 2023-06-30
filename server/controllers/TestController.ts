@@ -18,7 +18,8 @@ const handleTest = async (req: Request, res: Response) => {
     const [testCorrection, userPassed, totalRight, totalWrong] = await correctQuestions(answers, question_ids);
 
     await updateUserStats(user_id, userPassed, totalRight, totalWrong);
-    // await sendEmail(testCorrection, userPassed, totalRight, totalWrong);
+    const [questionsString, userPassedText] = await handleEmailData(testCorrection, userPassed);
+    await sendEmail(userPassedText, totalRight, totalWrong, questionsString);
 
     return res.status(200).json('Check your email');
   } catch (error) {
@@ -26,9 +27,40 @@ const handleTest = async (req: Request, res: Response) => {
   }
 };
 
-const hanleEmailData = async
+const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed: boolean) => {
 
-const sendEmail = async (testCorrection: TestCorrectionType, userPassed: boolean, totalRight: number, totalWrong: number) => {
+  let questionsString = '';
+  let userPassedText = '';
+
+  userPassedText = userPassed ?
+    '<h2 style="height: max-content;margin-left:20px; color: green;"> Passed </h2>' :
+    '<h2 style="height: max-content;margin-left:20px; color: red;"> Failed </h2>';
+
+  testCorrection.forEach((question) => {
+
+    questionsString += `<tr><div><h2>${question.question}</h2><ul style="flex-wrap: wrap; display: flex; flex-direction: row; gap: 40px;">`;
+
+    question.options.forEach((option) => {
+      if (question.failed && question.userAnswer === option) {
+        questionsString += `<li style="color: red; margin-right:10px;"> ${option} </li>`;
+      } else if (option === question.rightAnswer) {
+        questionsString += `<li style="color: green; margin-right:10px;"> ${option} </li>`;
+      } else {
+        questionsString += `<li style=" margin-right:10px;">${option}</li>`;
+      }
+    })
+    questionsString += `</ul></div></tr>`;
+  });
+
+  return [questionsString, userPassedText];
+};
+
+const sendEmail = async (
+  userPassed: string, totalRight: number,
+  totalWrong: number,
+  questionsString: string
+) => {
+
   const html = `<!DOCTYPE html>
   <html lang="en">
 
@@ -41,58 +73,20 @@ const sendEmail = async (testCorrection: TestCorrectionType, userPassed: boolean
   <body style="width: 100%; height: 100%; box-sizing: border-box;">
     <div style="width: max-content; height: max-content;">
       <table>
+      <div>
         <tr>
-          <h1>This are your latest results</h1>
+          <h1>These are your latest results</h1>
         </tr>
+      </div>
 
-        <div
-          style="max-width: 500px; flex-wrap: wrap;text-align: start; display: flex; flex-direction: column; gap: 20px;">
+        <div style="max-width: 500px; flex-wrap: wrap;text-align: start; display: flex; flex-direction: column; gap: 20px;">
           <tr>
-            <div
-              style="flex-wrap: wrap; height: max-content;  width: max-content;display: flex; flex-direction: column; align-items: start; justify-content: start;">
-              <h2 style="height: max-content;">Total: 8 / 10</h2>
-              <h2 style="height: max-content;"> Failed </h2>
+            <div style="flex-wrap: wrap; height: max-content; width: max-content;display: flex; flex-direction: column; align-items: start; justify-content: start;">
+              <h2 style="height: max-content;">Total: ${totalRight} / ${totalRight + totalWrong} </h2>
+              ${userPassed}
             </div>
           </tr>
-
-          <tr>
-            <div>
-              <table>
-                <tr>
-                  <div>
-                    <h2>This is the Question: </h2>
-                    <ul style="flex-wrap: wrap; display: flex; flex-direction: row; gap: 40px;">
-                      <li>this is an option</li>
-                      <li style="color: green;">when its green its the answer</li>
-                      <li style="color: red;">press delete to remove the tutorial</li>
-                    </ul>
-                  </div>
-                </tr>
-                <tr>
-                  <div>
-                    <h2>hi: </h2>
-                    <ul style="flex-wrap: wrap; display: flex; flex-direction: row; gap: 40px;">
-                      <li>1</li>
-                      <li>2</li>
-                      <li style="color: green;">3</li>
-                    </ul>
-                  </div>
-                </tr>
-                <tr>
-                  <div>
-                    <h2>Where is steve?: </h2>
-                    <ul style="flex-wrap: wrap; display: flex; flex-direction: row; gap: 40px;">
-                      <li style="color: green;">Detroit</li>
-                      <li style="color: red;">Michigan</li>
-                      <li>Orlando</li>
-                    </ul>
-                  </div>
-                </tr>
-
-              </table>
-            </div>
-          </tr>
-
+          ${questionsString}
         </div>
       </table>
     </div>
@@ -117,9 +111,6 @@ const sendEmail = async (testCorrection: TestCorrectionType, userPassed: boolean
 
   transporter.sendMail(mailOptions, function (error: Error, info: any) {
     if (error) console.log(error);
-    else {
-      console.log("Email sent: " + info.response);
-    }
   });
 
 };

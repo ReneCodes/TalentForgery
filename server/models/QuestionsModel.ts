@@ -73,7 +73,7 @@ async function correctQuestions(answers: string[], question_ids: UUID[]) {
     index++;
   };
 
-  const userPassed = totalRight >= Math.floor((totalRight + totalWrong) / 2) ? true : false;
+  const userPassed = totalRight >= Math.round((totalRight + totalWrong) / 2) ? true : false;
 
   return [everything, userPassed, totalRight, totalWrong];
 };
