@@ -16,6 +16,7 @@ import { fileInput } from '../types/user';
 const { validateRegisterData, validateLoginData, validateUserDelete } = require('../middleware/Validation');
 const { checkInvite } = require('../models/InviteModel');
 const { getUserByEmail } = require('../models/UserModel');
+const fs = require('fs');
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: File, cb: Function) => {
@@ -31,23 +32,34 @@ const upload = multer({ storage });
 
 // REGISTERS THE USER
 // req: Request -> req.file will complain if you leave with type
+
 const registerUser = async (req: any, res: Response, next: NextFunction) => {
 
   await upload.single('profile_image')(req, res, async (err: Error) => {
 
     const informationIsRight = await validateRegisterData(req, res);
-    if (!informationIsRight) return res.status(400).json("Not enough information provided");
     if (err) return res.status(500).json('Server failed uploading profile picture');
+
+    if (!informationIsRight) {
+      await fs.unlinkSync(req.file.path);
+      return res.status(400).json("Not enough information provided");
+    }
 
     const { first_name, last_name, email, personal_email,
       password, phone, department, inviteID
     } = req.body;
 
     const invite = await checkInvite(inviteID);
-    if (!invite) { return res.status(409).json('Invalid invite') };
+    if (!invite) {
+      await fs.unlinkSync(req.file.path);
+      return res.status(409).json('Invalid invite')
+    };
 
     const userExists = await getUserByEmail(email);
-    if (userExists) { return res.status(409).json('User already exists') };
+    if (userExists) {
+      await fs.unlinkSync(req.file.path);
+      return res.status(409).json('User already exists');
+    };
 
     try {
       const profile_picture = req.file ? req.file.filename : null;
