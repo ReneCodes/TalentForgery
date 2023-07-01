@@ -7,7 +7,7 @@ const hashAsync = promisify(bcrypt.hash);
 const { User, Stats } = require('./Schemas');
 
 const getUserByEmail = async (email: string) => {
-  const userExists = User.findOne({ where: { email } });
+  const userExists = await User.findOne({ where: { email } });
   return userExists !== null ? true : false;
 };
 
