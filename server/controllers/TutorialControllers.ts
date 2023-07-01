@@ -38,11 +38,10 @@ export async function createTutorial(req: any, res: Response) {
       const tutorialData = { title, video_url: videoFileName, description, question_ids, questions_shown, access_date, due_date, };
 
       tutorialData.video_url = videoFileName;
-      await createTheTutorial(tutorialData, user_id);
-      res.status(201).json("Tutorial created.");
+      const [tutorial_id, questions_id] = await createTheTutorial(tutorialData, user_id);
+      res.status(201).json({message: "Tutorial created.", tutorial_id, questions_id});
 
     } catch (error) {
-      console.log((error as Error).message);
       res.status(500).json("Failed to create tutorial.");
     }
   })
