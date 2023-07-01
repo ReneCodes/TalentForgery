@@ -176,27 +176,32 @@ const Question = sequelize.define("question", {
   },
 });
 
-if (process.env.ENV !== 'Test') {
+if (process.env.ENV !== "Test") {
   // SETTING UP THE FOREIGN KEY OF THE INVITES TABLE
-  User.hasOne(Invites, { foreignKey: 'user_created', sourceKey: 'user_id' });
-  Invites.belongsTo(User, { foreignKey: 'user_created', targetKey: 'user_id' });
+  User.hasOne(Invites, { foreignKey: "user_created", sourceKey: "user_id" });
+  Invites.belongsTo(User, { foreignKey: "user_created", targetKey: "user_id" });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
   User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
   Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
-  User.hasOne(Stats, { foreignKey: 'user_id', sourceKey: 'user_id' });
-  Stats.belongsTo(User, { foreignKey: 'user_id', targetKey: 'user_id' });
+  User.hasOne(Stats, { foreignKey: "user_id", sourceKey: "user_id" });
+  Stats.belongsTo(User, { foreignKey: "user_id", targetKey: "user_id" });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
-  Tutorial.hasMany(Question, { foreignKey: 'tutorial_id', sourceKey: 'tutorial_id' });
-  Question.belongsTo(Tutorial, { foreignKey: 'tutorial_id', targetKey: 'tutorial_id' });
+  Tutorial.hasMany(Question, {
+    foreignKey: "tutorial_id",
+    sourceKey: "tutorial_id",
+  });
+  Question.belongsTo(Tutorial, {
+    foreignKey: "tutorial_id",
+    targetKey: "tutorial_id",
+  });
 }
 
 (async () => {
   await sequelize.sync({ alter: true });
 })();
 
-
-module.exports = { User, Tutorial, Invites, Stats, Question }
+module.exports = { User, Tutorial, Invites, Stats, Question };
