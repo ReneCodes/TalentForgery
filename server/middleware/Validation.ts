@@ -54,8 +54,6 @@ const validateTutorialData = async (req: Request, res: Response) => {
   await Promise.all(validateUserData.map(validator => validator.run(req))).then(() => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
-      console.log(errors.array());
-
       allRight = false;
     }
   });
