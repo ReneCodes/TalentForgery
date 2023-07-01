@@ -1,8 +1,7 @@
 import axios from 'axios';
 
-import { LoginFormValues, RegisterFormValues, person } from '../@types/Types';
+import { LoginFormValues, RegisterFormValues } from '../@types/Types';
 import { NavigateFunction } from 'react-router-dom';
-import fs from "fs";
 
 // const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -148,7 +147,7 @@ export async function postTutorial(data: any) {
 
 			if (value instanceof FormData) {
 				const video = value.get('video');
-				formData.append('video_url', video);
+				if(video) formData.append('video_url', video);
 			} else if(key === 'question_ids'){
 				formData.append(key, JSON.stringify(value));
 			} else{
