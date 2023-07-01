@@ -15,8 +15,10 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
   const [length, setLength] = useState('');
 
   const handleAdd = () => {
-    setTags((res) => [...res, tag]);
-    setTag('');
+    if(tag) {
+      setTags((res) => [...res, tag]);
+      setTag('');
+    }
   }
 
   useEffect(() => {

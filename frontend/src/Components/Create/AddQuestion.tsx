@@ -12,8 +12,10 @@ const AddQuestion:FC<{onData: any}> = ({onData}) => {
 
   const handleAdd = (e: MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
-    setOptions((res) => [...res, option]);
-    setOption('');
+    if(option) {
+      setOptions((res) => [...res, option]);
+      setOption('');
+    }
   }
 
   const handleSelect = (thing: string) => {
