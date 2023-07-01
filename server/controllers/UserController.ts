@@ -14,6 +14,8 @@ const multer = require('multer');
 import { NextFunction, Request, Response } from 'express';
 import { fileInput } from '../types/user';
 const { validateRegisterData, validateLoginData, validateUserDelete } = require('../middleware/Validation');
+const { checkInvite } = require('../models/InviteModel');
+const { getUserByEmail } = require('../models/UserModel');
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: File, cb: Function) => {
@@ -41,18 +43,23 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
       password, phone, department, inviteID
     } = req.body;
 
+    const invite = await checkInvite(inviteID);
+    if (!invite) { return res.status(409).json('Invalid invite') };
+
+    const userExists = await getUserByEmail(email);
+    if (userExists) { return res.status(409).json('User already exists') };
+
     try {
       const profile_picture = req.file ? req.file.filename : null;
       const data = await registerNewUser({
         first_name, last_name, email, personal_email, password,
-        phone, department, inviteID, profile_picture
+        phone, department, invite, profile_picture
       });
       return res.status(201).json(data);
     } catch (error) {
-      const errorMessage = (error as Error).message;
-      if (errorMessage === 'User already exists' || errorMessage === 'Invalid invite') { res.status(409).json(errorMessage) }
-      else { res.status(500).json('Server Failed'); }
+      res.status(500).json('Server Failed');
     };
+
   });
 
 };
