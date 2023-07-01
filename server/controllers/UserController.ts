@@ -77,6 +77,7 @@ const loginUser = async (req: Request, res: Response) => {
   }
 };
 
+// ACCEPTS PENDING USER
 const acceptUser = async (req: Request, res: Response) => {
   const { email } = req.body;
 
@@ -91,6 +92,7 @@ const acceptUser = async (req: Request, res: Response) => {
   }
 };
 
+// REJECTS PENDING USER
 const rejectUser = async (req: Request, res: Response) => {
   const { email } = req.body;
 

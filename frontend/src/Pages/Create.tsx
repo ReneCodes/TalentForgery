@@ -8,6 +8,7 @@ import {QuestionType} from '../utils/types';
 import Button from '@mui/material/Button';
 import Schedule from '../Components/Create/Schedule';
 import {/*getQuestions,*/ postTutorial} from '../services/Api.service';
+import VideoPreview from '../Components/Create/VideoPreview';
 
 const mockQuestions = [
 	{
@@ -63,6 +64,7 @@ const Create = () => {
 		length: '',
 	});
 	const [questionsForm, setQuestionsForm] = useState<QuestionType[]>([]);
+	const [videoSubmit, setVideoSubmit] = useState(false);
 	const [data, setData] = useState<DataType>({
 		title: '',
 		video_url: {} as File,
@@ -105,6 +107,9 @@ const Create = () => {
 			} else if (questionsShown > questionsForm.length) {
 				alert('must have more or equal questions to the length');
 				setGetData(false);
+			} else if (!videoSubmit) {
+				alert('video is needed');
+				setGetData(false);
 			} else {
 				setData((prevState: DataType) => {
 					return {
@@ -143,7 +148,7 @@ const Create = () => {
 	};
 
 	useEffect(() => {
-		if (data.access_date && data.due_date) {
+		if (data.access_date) {
 			try {
 				createTutorial(data);
 			} catch (error) {
@@ -158,16 +163,25 @@ const Create = () => {
 
 	const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
-
+		
 		if (file) {
-			const formatedFile = new FormData();
-			formatedFile.append('video', file);
-			setData((prevState: DataType) => {
-				return {
-					...prevState,
-					video_url: formatedFile,
-				};
-			});
+			const fileSize = file.size / (1024 * 1024);
+			if (fileSize > 50) {
+				alert('file is to large, the limit is 50mb');
+				setVideoSubmit(false);
+			} else {
+				setVideoSubmit(true);
+				const formatedFile = new FormData();
+				formatedFile.append('video', file);
+				setData((prevState: DataType) => {
+					return {
+						...prevState,
+						video_url: formatedFile,
+					};
+				});
+			}
+		} else {
+			setVideoSubmit(false);
 		}
 	};
 
@@ -186,6 +200,7 @@ const Create = () => {
 						onChange={handleFileUpload}
 						className="video_upload"
 					/>
+					<VideoPreview showPreview={videoSubmit} videoData={data.video_url} />
 					<InputLabel
 						className="import_label"
 						id="label">

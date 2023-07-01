@@ -4,6 +4,7 @@ import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import ErrorPage from '../Pages/Error';
 
+
 export const AuthRoutes = () => {
 	return (
 		<Routes>

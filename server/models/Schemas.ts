@@ -70,7 +70,6 @@ const Tutorial = sequelize.define("tutorial", {
   creator_id: {
     type: DataTypes.TEXT,
     allowNull: false,
-    // unique: true,
     isUUID: true,
   },
   tutorial_id: {
@@ -85,6 +84,10 @@ const Tutorial = sequelize.define("tutorial", {
   },
   video_url: {
     type: DataTypes.TEXT,
+    allowNull: false,
+  },
+  questions_id: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
     allowNull: false,
   },
   description: {
@@ -118,26 +121,32 @@ const Stats = sequelize.define("stats", {
   },
   passed: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   failed: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   watched: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   not_watched: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   correct_questions: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
   wrong_questions: {
     type: DataTypes.INTEGER,
+    defaultValue: 0,
     allowNull: false,
   },
 });
@@ -155,6 +164,11 @@ const Question = sequelize.define("question", {
     type: DataTypes.STRING,
     allowNull: false,
   },
+  question_id: {
+    type: DataTypes.TEXT,
+    allowNull: false,
+    unique: true,
+  },
   tutorial_id: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -168,8 +182,8 @@ if (process.env.ENV !== 'Test') {
   Invites.belongsTo(User, { foreignKey: 'user_created', targetKey: 'user_id' });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
-  // User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
-  // Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
+  User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
+  Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE
   User.hasOne(Stats, { foreignKey: 'user_id', sourceKey: 'user_id' });

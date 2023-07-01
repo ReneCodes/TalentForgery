@@ -6,7 +6,7 @@ const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
 
 const { checkInvite } = require('./InviteModel');
-const { User } = require('./Schemas');
+const { User, Stats } = require('./Schemas');
 
 
 const registerNewUser = async (providedInformation: registeredUser) => {
@@ -20,12 +20,19 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     providedInformation.password = hash;
 
     const role = userList == null ? 'admin' : 'pending';
+    const user_id = crypto.randomUUID();
+
     await User.create({
       role,
       ...providedInformation,
       invited_by: !invite ? 'first' : invite.user_created,
-      user_id: crypto.randomUUID()
+      user_id,
     });
+
+    await Stats.create({
+      user_id,
+    })
+
     return role === 'admin' ? "Admin User created" : "User created";
   }
 };

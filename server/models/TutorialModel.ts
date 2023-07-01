@@ -7,24 +7,34 @@ const crypto = require("crypto");
 
 const createTheTutorial = async (providedInformation: createdTutorial, user_id: UUID) => {
 
-  const tutorial = await Tutorial.create({
-    ...providedInformation,
-    creator_id: user_id,
-    tutorial_id: crypto.randomUUID()
-  });
+  const tutorial_id = crypto.randomUUID();
+  const questions_id: string[] = [];
 
   const questionsParsed = JSON.parse(providedInformation.question_ids);
 
+  const tutorial = await Tutorial.create({
+    ...providedInformation,
+    creator_id: user_id,
+    tutorial_id,
+    questions_id,
+  });
+
   for (const question of questionsParsed) {
+    const currQuestionId = crypto.randomUUID();
+    questions_id.push(currQuestionId);
     await createQuestion({
       question: question.question,
       options: question.options,
       answer: question.answer,
-      tutorial_id: tutorial.tutorial_id,
-    })
-  }
+      tutorial_id,
+      question_id: currQuestionId,
+    });
+  };
 
-}
+  tutorial.questions_id = [...questions_id];
+  await tutorial.save();
+  return [tutorial.tutorial_id, questions_id];
+};
 
 const getAllTheTutorials = async () => {
   try {
