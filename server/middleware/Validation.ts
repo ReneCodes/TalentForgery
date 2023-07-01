@@ -4,12 +4,12 @@ import { body, validationResult } from 'express-validator';
 
 const validateRegisterData = async (req: Request, res: Response) => {
   const validateUserData = [
-    body('first_name').notEmpty().withMessage('First name is required'),
-    body('last_name').notEmpty().withMessage('Last name is required'),
-    body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email'),
-    body('password').notEmpty().withMessage('Password is required'),
-    body('department').notEmpty().withMessage('Department is required'),
-    body('inviteID').notEmpty().withMessage('Invite ID is required'),
+    body('first_name').notEmpty(),
+    body('last_name').notEmpty(),
+    body('email').notEmpty(),
+    body('password').notEmpty(),
+    body('department').notEmpty(),
+    body('inviteID').notEmpty(),
   ];
 
   let allRight = true;
@@ -25,8 +25,8 @@ const validateRegisterData = async (req: Request, res: Response) => {
 
 const validateLoginData = async (req: Request, res: Response) => {
   const validateUserData = [
-    body('email').notEmpty().withMessage('Email is required').isEmail().withMessage('Invalid email'),
-    body('password').notEmpty().withMessage('Password is required'),
+    body('email').notEmpty(),
+    body('password').notEmpty(),
   ];
 
   let allRight = true;
@@ -40,4 +40,33 @@ const validateLoginData = async (req: Request, res: Response) => {
   return allRight;
 };
 
-module.exports = { validateRegisterData, validateLoginData };
+const validateTutorialData = async (req: Request, res: Response) => {
+  const validateUserData = [
+    body('title').notEmpty(),
+    body('description').notEmpty(),
+    body('question_ids').notEmpty(),
+    body('questions_shown').notEmpty(),
+    body('access_date').notEmpty(),
+    body('due_date').notEmpty(),
+  ];
+
+  let allRight = true;
+  await Promise.all(validateUserData.map(validator => validator.run(req))).then(() => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      console.log(errors.array());
+
+      allRight = false;
+    }
+  });
+
+  return allRight;
+};
+
+
+
+module.exports = {
+  validateRegisterData,
+  validateLoginData,
+  validateTutorialData,
+};
