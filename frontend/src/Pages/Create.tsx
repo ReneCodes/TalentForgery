@@ -8,6 +8,7 @@ import {QuestionType} from '../utils/types';
 import Button from '@mui/material/Button';
 import Schedule from '../Components/Create/Schedule';
 import {/*getQuestions,*/ postTutorial} from '../services/Api.service';
+import VideoPreview from '../Components/Create/VideoPreview';
 
 const mockQuestions = [
 	{
@@ -165,7 +166,7 @@ const Create = () => {
 		
 		if (file) {
 			const fileSize = file.size / (1024 * 1024);
-			if (fileSize > 5) {
+			if (fileSize > 50) {
 				alert('file is to large, the limit is 50mb');
 				setVideoSubmit(false);
 			} else {
@@ -199,6 +200,7 @@ const Create = () => {
 						onChange={handleFileUpload}
 						className="video_upload"
 					/>
+					<VideoPreview showPreview={videoSubmit} videoData={data.video_url} />
 					<InputLabel
 						className="import_label"
 						id="label">

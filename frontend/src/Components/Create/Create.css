@@ -183,3 +183,8 @@ ul {
 .question_submit_btn {
   width: 100%;
 }
+
+.video_player {
+  width: 70%;
+  max-width: 500px;
+}
