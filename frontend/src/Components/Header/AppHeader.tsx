@@ -1,14 +1,17 @@
 // @ts-ignore
 import React from 'react';
-import {AppBar, Box, IconButton, Toolbar} from '@mui/material';
+import {AppBar, Box, IconButton, Toolbar, Typography} from '@mui/material';
 import WindowIcon from '@mui/icons-material/Window';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {LoginAndOut, NavbarStore} from '../../utils/zustand.store';
+import theme from '../../config/theme';
 
 export const AppHeader = () => {
 	const {collapsed, toggled, breakpoint, isCollapsed, isToggled} = NavbarStore();
+
 	const {MinonLogout} = LoginAndOut();
+	const {secondary, primary} = theme.palette;
 
 	function handleNavbar() {
 		if (breakpoint) {
@@ -38,11 +41,8 @@ export const AppHeader = () => {
 						color="secondary">
 						<WindowIcon />
 					</IconButton>
-					<Box
-						component="img"
-						sx={styles.appLogo}
-						src="/src/assets/vite.svg"
-					/>
+					<Box sx={{color: secondary.main}} />
+					<Typography variant="overline">Minon Mentor</Typography>
 				</Box>
 				<Box sx={styles.infoIcons}>
 					<IconButton
