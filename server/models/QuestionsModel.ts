@@ -9,8 +9,6 @@ async function createQuestion(questionData: QuestionType) {
     });
     return newQuestion;
   } catch (error) {
-    console.log((error as Error).message);
-
     throw new Error("Failed to create question");
   }
 };
