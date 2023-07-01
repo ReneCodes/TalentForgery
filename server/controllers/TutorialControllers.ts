@@ -7,6 +7,7 @@ const {
 
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
 const { validateTutorialData, validateTutorialId } = require('../middleware/Validation');
+const fs = require('fs');
 
 import { Request, Response } from "express";
 import { fileInput } from '../types/user';
@@ -32,7 +33,10 @@ export async function createTutorial(req: any, res: Response) {
   await upload.single('video_url')(req, res, async (err: Error) => {
 
     const informationIsRight = await validateTutorialData(req, res);
-    if (!informationIsRight) return res.status(400).json("Not enough information provided");
+    if (!informationIsRight) {
+      await fs.unlinkSync(req.file.path);
+      return res.status(400).json("Not enough information provided");
+    }
 
     const { title, description, question_ids, questions_shown, access_date, due_date, }: createdTutorial = req.body;
     if (err) return res.status(500).json('Server failed uploading profile picture');
