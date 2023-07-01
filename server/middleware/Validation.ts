@@ -63,10 +63,62 @@ const validateTutorialData = async (req: Request, res: Response) => {
   return allRight;
 };
 
+const validateUserDelete = async (req: Request, res: Response) => {
+  const validateUserData = [
+    body('user_delete').notEmpty(),
+  ];
+
+  let allRight = true;
+  await Promise.all(validateUserData.map(validator => validator.run(req))).then(() => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      allRight = false;
+    }
+  });
+
+  return allRight;
+};
+
+const validateTutorialId = async (req: Request, res: Response) => {
+  const validateUserData = [
+    body('tutorial_id').notEmpty(),
+  ];
+
+  let allRight = true;
+  await Promise.all(validateUserData.map(validator => validator.run(req))).then(() => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      allRight = false;
+    }
+  });
+
+  return allRight;
+};
+
+const validateTestDone = async (req: Request, res: Response) => {
+  const validateUserData = [
+    body('tutorial_id').notEmpty(),
+    body('answers').notEmpty(),
+    body('question_ids').notEmpty(),
+  ];
+
+  let allRight = true;
+  await Promise.all(validateUserData.map(validator => validator.run(req))).then(() => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      allRight = false;
+    }
+  });
+
+  return allRight;
+};
 
 
 module.exports = {
   validateRegisterData,
   validateLoginData,
   validateTutorialData,
+  validateUserDelete,
+  validateTutorialId,
+  validateTestDone,
 };

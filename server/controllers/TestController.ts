@@ -4,18 +4,21 @@ const { correctQuestions } = require("../models/QuestionsModel");
 const { updateUserStats } = require('../models/StatsModel');
 const { getUserInfo } = require('../models/UserModel');
 const nodemailer = require('nodemailer');
+const { validateTestDone } = require('../middleware/Validation');
 
 
 import { TestCorrectionType } from '../types/questions';
 
 const handleTest = async (req: Request, res: Response) => {
 
-  const { tutorial_id, answers, question_ids } = req.body;
-  const session_token = req.cookies.session_token;
+  const informationIsRight = await validateTestDone(req, res);
+  if (!informationIsRight) return res.status(400).json("Not enough information provided");
 
   try {
+
+    const session_token = req.cookies.session_token;
     const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
-    if (!tutorial_id || !answers || !question_ids) { return res.status(400).json('Not enough information provided'); }
+    const { tutorial_id, answers, question_ids } = req.body;
 
     const [testCorrection, userPassed, totalRight, totalWrong] = await correctQuestions(answers, question_ids);
 

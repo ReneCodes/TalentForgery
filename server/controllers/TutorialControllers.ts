@@ -6,7 +6,7 @@ const {
 } = require("../models/TutorialModel");
 
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
-const { validateTutorialData } = require('../middleware/Validation');
+const { validateTutorialData, validateTutorialId } = require('../middleware/Validation');
 
 import { Request, Response } from "express";
 import { fileInput } from '../types/user';
@@ -64,12 +64,12 @@ export async function getAllTutorials(req: Request, res: Response) {
 
 export async function getQuestions(req: Request, res: Response) {
 
-  const { tutorial_id } = req.body;
-  if (!tutorial_id) res.status(400).json("Not enough information provided");
+  const informationIsRight = await validateTutorialId(req, res);
+  if (!informationIsRight) return res.status(400).json("Not enough information provided");
 
   try {
+    const { tutorial_id } = req.body;
     const questions = await getTutorialQuestions(tutorial_id);
-
     res.status(200).json(questions);
   } catch (error) {
     const errorMessage = (error as Error).message;

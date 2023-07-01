@@ -13,7 +13,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 import { NextFunction, Request, Response } from 'express';
 import { fileInput } from '../types/user';
-const { validateRegisterData, validateLoginData } = require('../middleware/Validation');
+const { validateRegisterData, validateLoginData, validateUserDelete } = require('../middleware/Validation');
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: File, cb: Function) => {
@@ -146,14 +146,18 @@ const deleteMyAccount = async (req: Request, res: Response) => {
 
 //  DELETES A USER -> ONLY ADMIN
 const deleteUserAccount = async (req: Request, res: Response) => {
-  const { user_delete } = req.body;
-  if (!user_delete) return res.status(400).json('Not enough information provided');
+
+  const informationIsRight = await validateUserDelete(req, res);
+  if (!informationIsRight) return res.status(400).json("Not enough information provided");
+
   try {
+    const { user_delete } = req.body;
     await deleteAnUser(user_delete);
     res.status(200).json('User deleted');
   } catch (error) {
     res.status(500).json('Server failed');
-  }
+  };
+
 };
 
 module.exports = {
