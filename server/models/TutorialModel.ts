@@ -33,6 +33,7 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
 
   tutorial.questions_id = [...questions_id];
   await tutorial.save();
+  return [tutorial.tutorial_id, questions_id];
 };
 
 const getAllTheTutorials = async () => {
