@@ -162,17 +162,23 @@ const Create = () => {
 
 	const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
-
+		
 		if (file) {
-			setVideoSubmit(true);
-			const formatedFile = new FormData();
-			formatedFile.append('video', file);
-			setData((prevState: DataType) => {
-				return {
-					...prevState,
-					video_url: formatedFile,
-				};
-			});
+			const fileSize = file.size / (1024 * 1024);
+			if (fileSize > 5) {
+				alert('file is to large, the limit is 50mb');
+				setVideoSubmit(false);
+			} else {
+				setVideoSubmit(true);
+				const formatedFile = new FormData();
+				formatedFile.append('video', file);
+				setData((prevState: DataType) => {
+					return {
+						...prevState,
+						video_url: formatedFile,
+					};
+				});
+			}
 		} else {
 			setVideoSubmit(false);
 		}
