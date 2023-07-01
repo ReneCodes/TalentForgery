@@ -10,7 +10,7 @@ interface TestQuestionComp {
 	question: string;
 	options: string[];
 	answer: string;
-	choice?: string;
+	choice: string;
 }
 
 const mockQuestions: TestQuestionComp[] = [
@@ -19,18 +19,21 @@ const mockQuestions: TestQuestionComp[] = [
 		question: 'At which location can we be sure that they have plenty bananas?',
 		options: ['Detroit', 'Michigan', 'Orlando'],
 		answer: 'Detroit',
+		choice: '',
 	},
 	{
 		id: 4,
 		question: 'Ham or Cheese?',
 		options: ['Ham', 'Cheese'],
 		answer: 'Cheese',
+		choice: '',
 	},
 	{
 		id: 5,
 		question: 'Whats the best drink?',
 		options: ['Vodka', 'Beer', 'Cider'],
 		answer: 'Cider',
+		choice: '',
 	},
 ];
 
@@ -39,41 +42,50 @@ const mockQuestions: TestQuestionComp[] = [
 // 	setQuizzToDo: React.Dispatch<React.SetStateAction<boolean>>;
 // }
 
+type QuizzAnswer = {
+	tutorial_id: string;
+	user_id: string;
+	answer: string[];
+	question_ids: number[];
+};
+
 const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo}) => {
 	const [index, setIndex] = useState(0);
 	const [questions, setQuestions] = useState<TestQuestionComp[]>([]);
 
+	// TODO: Load questions once the Tutorial is started into the Zustand Store
 	useEffect(() => {
 		setQuestions(mockQuestions);
 	}, []);
 
 	const handleAnswer = (e: SyntheticEvent<Element, Event>) => {
 		const target = e.target as HTMLInputElement;
-		questions[index].choice = target.value as string;
+		questions[index].choice += target.value as string;
 	};
 
-	useEffect(() => {
-		if (index === questions.length && questions.length !== 0) {
-			const ids = [];
-			const choices = [];
-			for (const question of questions) {
-				ids.push(question.id);
-				choices.push(question.choice);
-			}
-			console.log(ids, choices);
-		}
-	}, [index]);
+	const nextQuestion = () => {
+		if (questions[index].choice) setIndex(index + 1);
+	};
 
 	const handleQuizzDone = () => {
-		// setIndex(index + 1);
-		if (index === questions.length - 1 && questions.length !== 0) {
-			const ids = [];
-			const choices = [];
+		if (index === questions.length - 1 && questions.length !== 0 && questions[index].choice) {
+			const quizzAnswers: QuizzAnswer = {
+				tutorial_id: '3456789098',
+				user_id: '234567890987',
+				answer: [],
+				question_ids: [],
+			};
+
+			const ids = [] as number[];
+			const choices = [] as string[];
 			for (const question of questions) {
 				ids.push(question.id);
 				choices.push(question.choice);
 			}
-			console.log(ids, choices);
+			quizzAnswers.answer = choices;
+			quizzAnswers.question_ids = ids;
+
+			console.log(quizzAnswers);
 
 			setQuizzToDo(false);
 			setQuizzDone(true);
@@ -109,7 +121,7 @@ const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo}) => {
 				<Button
 					sx={styles.btn_next}
 					variant="contained"
-					onClick={() => setIndex(index + 1)}
+					onClick={nextQuestion}
 					endIcon={<ArrowForwardIosIcon />}>
 					Next
 				</Button>

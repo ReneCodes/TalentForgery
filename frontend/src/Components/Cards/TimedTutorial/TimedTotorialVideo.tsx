@@ -12,7 +12,7 @@ const TimedTotorialVideo: React.FC<any> = ({videoData, setVideoToWatch, setQuizz
 		setVideoToWatch(false);
 		setQuizzToDo(true);
 	};
-	console.log('TimedTotorialVideo', videoData);
+	// console.log('TimedTotorialVideo', videoData);
 	return (
 		<Box sx={{maxWidth: '95%', margin: 'auto'}}>
 			<DialogContent sx={{width: 'fit-content', maxWidth: '1000px', margin: 'auto', textAlign: 'center'}}>
