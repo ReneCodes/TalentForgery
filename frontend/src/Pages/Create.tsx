@@ -63,6 +63,7 @@ const Create = () => {
 		length: '',
 	});
 	const [questionsForm, setQuestionsForm] = useState<QuestionType[]>([]);
+	const [videoSubmit, setVideoSubmit] = useState(false);
 	const [data, setData] = useState<DataType>({
 		title: '',
 		video_url: {} as File,
@@ -104,6 +105,9 @@ const Create = () => {
 				setGetData(false);
 			} else if (questionsShown > questionsForm.length) {
 				alert('must have more or equal questions to the length');
+				setGetData(false);
+			} else if (!videoSubmit) {
+				alert('video is needed');
 				setGetData(false);
 			} else {
 				setData((prevState: DataType) => {
@@ -160,6 +164,7 @@ const Create = () => {
 		const file = event.target.files?.[0];
 
 		if (file) {
+			setVideoSubmit(true);
 			const formatedFile = new FormData();
 			formatedFile.append('video', file);
 			setData((prevState: DataType) => {
@@ -168,6 +173,8 @@ const Create = () => {
 					video_url: formatedFile,
 				};
 			});
+		} else {
+			setVideoSubmit(false);
 		}
 	};
 
