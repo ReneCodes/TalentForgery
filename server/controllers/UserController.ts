@@ -13,6 +13,7 @@ const jwt = require('jsonwebtoken');
 const multer = require('multer');
 import { NextFunction, Request, Response } from 'express';
 import { fileInput } from '../types/user';
+const { validateRegisterData, validateLoginData } = require('../middleware/Validation');
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: File, cb: Function) => {
@@ -32,49 +33,51 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
 
   await upload.single('profile_image')(req, res, async (err: Error) => {
 
+    const informationIsRight = await validateRegisterData(req, res);
+    if (!informationIsRight) return res.status(400).json("Not enough information provided");
     if (err) return res.status(500).json('Server failed uploading profile picture');
-    const { first_name, last_name, email, personal_email, password, phone, department, inviteID } = req.body;
-    if (!first_name || !last_name || !email || !password || !department || !inviteID) {
-      return res.status(400).json('Not enough information provided');
-    } else {
-      try {
 
-        const profile_picture = req.file ? req.file.filename : null;
-        const data = await registerNewUser({
-          first_name, last_name, email, personal_email, password, phone,
-          department, inviteID, profile_picture
-        });
-        res.status(201).json(data);
-      } catch (error) {
-        const errorMessage = (error as Error).message;
-        if (errorMessage === 'User already exists' || errorMessage === 'Invalid invite') res.status(409).json(errorMessage);
-        else res.status(500).json('Server Failed');
-      }
-    }
+    const { first_name, last_name, email, personal_email,
+      password, phone, department, inviteID
+    } = req.body;
+
+    try {
+      const profile_picture = req.file ? req.file.filename : null;
+      const data = await registerNewUser({
+        first_name, last_name, email, personal_email, password,
+        phone, department, inviteID, profile_picture
+      });
+      return res.status(201).json(data);
+    } catch (error) {
+      const errorMessage = (error as Error).message;
+      if (errorMessage === 'User already exists' || errorMessage === 'Invalid invite') { res.status(409).json(errorMessage) }
+      else { res.status(500).json('Server Failed'); }
+    };
   });
 
 };
 
 // LOGINS THE USER AND SETS A TOKEN WITH THE USER ID AND THE EXPIRITY OF 1 MONTH IN THE COOKIES
 const loginUser = async (req: Request, res: Response) => {
-  const { email, password } = req.body;
-  if (!email || !password)
-    res.status(400).json("Not enough information provided");
-  else {
-    try {
-      const [user_info, user_id] = await loginTheUser({ email, password });
-      const token = jwt.sign({ user_id }, process.env.SECRET, {
-        expiresIn: process.env.EXPIRITY_IN_HOURS,
-      });
-      res.setHeader("Set-Cookie", `session_token=${token}; path=/; SameSite=None; Secure`);
-      res.status(200).json(user_info);
-    } catch (error) {
-      const errorMessage = (error as Error).message;
-      if (errorMessage === "User doesn't exist") { res.status(404).json(errorMessage); }
-      else if (errorMessage === 'Wrong credentials') { res.status(422).json(errorMessage); }
-      else { res.status(500).json('Server Failed'); }
-    }
+
+  const informationIsRight = await validateLoginData(req, res);
+  if (!informationIsRight) return res.status(400).json("Not enough information provided");
+
+  try {
+    const { email, password } = req.body;
+    const [user_info, user_id] = await loginTheUser({ email, password });
+    const token = jwt.sign({ user_id }, process.env.SECRET, {
+      expiresIn: process.env.EXPIRITY_IN_HOURS,
+    });
+    res.setHeader("Set-Cookie", `session_token=${token}; path=/; SameSite=None; Secure`);
+    res.status(200).json(user_info);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+    if (errorMessage === "User doesn't exist") { res.status(404).json(errorMessage); }
+    else if (errorMessage === 'Wrong credentials') { res.status(422).json(errorMessage); }
+    else { res.status(500).json('Server Failed'); }
   }
+
 };
 
 // ACCEPTS PENDING USER
