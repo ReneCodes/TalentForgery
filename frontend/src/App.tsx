@@ -34,7 +34,11 @@ const App: React.FC = () => {
 				</>
 			) : (
 				<BrowserRouter>
-					<AuthRoutes />
+					<Box
+						component={'main'}
+						sx={styles.mainSection}>
+						<AuthRoutes />
+					</Box>
 				</BrowserRouter>
 			)}
 		</ThemeProvider>
@@ -51,7 +55,7 @@ const styles = {
 		height: 'calc(100% - 64px)',
 	},
 	mainSection: {
-		p: 4,
+		p: 2,
 		width: '100%',
 		height: '100%',
 		overflow: 'auto',

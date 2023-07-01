@@ -3,7 +3,7 @@ import Home from '../Pages/Home';
 import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import ErrorPage from '../Pages/Error';
-import Create from '../pages/Create';
+
 
 export const AuthRoutes = () => {
 	return (
@@ -27,10 +27,6 @@ export const AuthRoutes = () => {
 			<Route
 				path="/**"
 				element={<ErrorPage />}
-			/>
-			<Route
-				path="/test"
-				element={<Create />}
 			/>
 		</Routes>
 	);

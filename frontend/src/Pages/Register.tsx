@@ -6,7 +6,6 @@ import TextField from '@mui/material/TextField';
 import {useForm} from 'react-hook-form';
 import {
 	Box,
-	Input,
 	Container,
 	Typography,
 	FormControl,
@@ -16,15 +15,15 @@ import {
 	InputLabel,
 	Stack,
 	ImageListItem,
+	OutlinedInput,
 } from '@mui/material';
 import {Visibility, VisibilityOff} from '@mui/icons-material';
 import FaceIcon from '@mui/icons-material/Face';
 
-import { Navigate } from 'react-router';
-import { registerUser } from '../services/Api.service';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
-import { LoginAndOut } from '../utils/zustand.store';
-
+import {Navigate} from 'react-router';
+import {registerUser} from '../services/Api.service';
+import {NavigateFunction, useNavigate} from 'react-router-dom';
+import {LoginAndOut} from '../utils/zustand.store';
 
 // import './register.css';
 
@@ -41,12 +40,12 @@ type RegisterFormValues = {
 };
 
 const Register = () => {
-	const {white, secondary, gray, primary} = theme.palette;
+	const {red, secondary, gray, primary} = theme.palette;
 	const [showPassword, setShowPassword] = useState(false);
 	const [registerError, setRegisterError] = useState('');
 	const [file, setFile] = useState<File>({} as File);
 	const navigate: NavigateFunction = useNavigate();
-	const { MinonLogin } = LoginAndOut();
+	const {MinonLogin} = LoginAndOut();
 
 	const registerForm = useForm<RegisterFormValues>({
 		defaultValues: {
@@ -113,9 +112,18 @@ const Register = () => {
 	};
 
 	return (
-		<Container sx={{height: {xs: 'max-content', sm: 'max-content', md: '100vh'}, py: 2}}>
-			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
+		<Container
+			maxWidth="md"
+			sx={{height: '100%'}}>
+			<Box
+				sx={{
+					display: 'flex',
+					flexDirection: {xs: 'column', sm: 'row'},
+					justifyContent: {xs: 'space-between', sm: 'space-between'},
+					alignItems: 'center',
+				}}>
 				<Button
+					aria-label="go to Minon Mentor homepage"
 					variant="text"
 					sx={{
 						':hover': {
@@ -126,7 +134,9 @@ const Register = () => {
 					{
 						<Box
 							display="flex"
-							gap={1}>
+							gap={1}
+							sx={{':hover': {cursor: 'pointer'}}}
+							onClick={() => navigate('/')}>
 							<Typography
 								sx={{color: secondary.main, fontSize: '24px'}}
 								variant="overline">
@@ -142,47 +152,39 @@ const Register = () => {
 				</Button>
 
 				<Button
+					aria-label="login"
 					onClick={() => navigate('/login')}
 					sx={{
-						width: {xs: '100px', sm: '100px', md: '170px'},
-						height: '50px',
-						marginLeft: 'auto',
+						p: 1,
+						px: 2,
 						backgroundColor: secondary.main,
 						color: gray[900],
 						':hover': {
 							backgroundColor: secondary[900],
 						},
 					}}>
-					<Typography sx={{variant: {xs: 'h4', sm: 'h6', md: 'h6'}}}>Login</Typography>
+					Login
 				</Button>
 			</Box>
 
-			<Container sx={{my: 3, py: 3, boxShadow: 10, borderRadius: 5}}>
-				<Typography
-					variant="h4"
-					sx={{fontWeight: 'bold'}}>
-					Register
-				</Typography>
-
-				<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center'}}>
-					<Typography variant="h5">
-						<span style={{color: 'red'}}>
-							{registerError ? (
-								<Box
-									color="red"
-									my={1}>
-									{registerError}
-								</Box>
-							) : (
-								<Box
-									color="red"
-									my={1}
-									visibility={'hidden'}>
-									{'error'}
-								</Box>
-							)}
-						</span>
+			<Container
+				maxWidth="md"
+				sx={{my: 2, py: 2, boxShadow: 3, borderRadius: 2, minWidth: 'fit-content'}}>
+				<Box sx={{display: 'flex', flexDirection: 'column', justifyContent: 'center', alignItems: 'center'}}>
+					<Typography
+						variant="h4"
+						sx={{fontWeight: 'bold'}}>
+						Register
 					</Typography>
+					{registerError ? (
+						<Typography color={red.main}>{registerError}</Typography>
+					) : (
+						<Typography
+							color={red.main}
+							visibility={'hidden'}>
+							{'error'}
+						</Typography>
+					)}
 				</Box>
 
 				<form
@@ -191,102 +193,111 @@ const Register = () => {
 					<Stack
 						spacing={1}
 						width={'100%'}
-						margin={'auto'}>
+						margin={'auto'}
+						maxWidth={'800px'}
+						minWidth={'250px'}>
 						<Box
 							sx={{
 								display: 'flex',
-								flexDirection: {xs: 'column', sm: 'column', md: 'row'},
+								flexDirection: 'column',
 								justifyContent: 'center',
-								alignItems: {xs: 'start', sm: 'center', md: 'center'},
+								width: '100%',
+								alignItems: 'center',
 							}}>
-							<TextField
-								error={!!errors.first_name}
-								helperText={errors.first_name ? errors.first_name?.message : ' '}
-								sx={{
-									width: {xs: '300px', sm: '300px', md: '500px'},
-									m: {xs: 'auto', sm: 'auto', md: '20px 40px'},
-									order: {xs: '2', sm: '2', md: '2'},
-								}}
-								label="First Name"
-								variant="standard"
-								aria-label="name input-field"
-								aria-invalid={errors.first_name ? 'true' : 'false'}
-								{...register('first_name', {
-									required: 'Your first name is required',
-								})}
-							/>
-
-							<Box
-								display="flex"
-								sx={{m: {xs: 'auto', sm: 'auto', md: '-10px'}, order: {xs: '1', sm: '1', md: '2'}}}>
+							{/* Profile Image */}
+							<Box display="flex">
 								<label htmlFor="profile_image">
 									<ImageListItem sx={{width: 100, height: 100, borderRadius: 999}}>
 										{file.name ? (
 											<img
-												style={{width: '100px', height: '100px', borderRadius: '999px'}}
+												style={{width: '80px', height: '80px', borderRadius: '999px'}}
 												src={URL.createObjectURL(file)}
 												alt=""
 												loading="lazy"
 											/>
 										) : (
-											<FaceIcon sx={{width: 90, height: 90}} />
+											<FaceIcon sx={{width: 80, height: 80}} />
 										)}
 									</ImageListItem>
 								</label>
 
 								<TextField
 									type="file"
+									variant="standard"
 									error={!!errors.profile_image}
 									helperText={errors.profile_image ? errors.profile_image?.message : 'Profile picture optional'}
-									variant="standard"
 									aria-label="profile picture input-field"
 									aria-invalid={errors.profile_image ? 'true' : 'false'}
 									{...register('profile_image', {
 										onChange: (e) => handleFileInput(e),
 									})}
 									id="profile_image"
-									sx={{width: '100%', height: 100, px: 1, py: 2, display: 'none'}}
+									sx={{width: '100%', maxWidth: '250px', height: 100, px: 1, py: 2}}
 								/>
 							</Box>
-
-							<TextField
-								error={!!errors.last_name}
-								helperText={errors.last_name ? errors.last_name?.message : ' '}
+							{/*  */}
+							<Box
 								sx={{
-									width: {xs: '300px', sm: '300px', md: '470px'},
-									m: {xs: 'auto', sm: 'auto', md: '20px 40px'},
-									order: {xs: '3', sm: '3', md: '3'},
-								}}
-								label="Last Name"
-								variant="standard"
-								aria-label="name input-field"
-								aria-invalid={errors.last_name ? 'true' : 'false'}
-								{...register('last_name', {
-									required: 'Your last name is required',
-								})}
-							/>
+									display: 'flex',
+									flexDirection: {xs: 'column', md: 'row'},
+									gap: {md: 3},
+									justifyContent: 'center',
+									alignItems: 'center',
+									width: '100%',
+									m: 'auto',
+								}}>
+								<TextField
+									fullWidth
+									variant="outlined"
+									label="First Name"
+									type="text"
+									aria-label="name input-field"
+									aria-invalid={errors.first_name ? 'true' : 'false'}
+									helperText={errors.first_name ? errors.first_name?.message : ' '}
+									error={!!errors.first_name}
+									sx={{maxWidth: '400px'}}
+									{...register('first_name', {
+										required: 'Your first name is required',
+									})}
+								/>
+
+								<TextField
+									fullWidth
+									variant="outlined"
+									label="Last Name"
+									type="text"
+									aria-label="name input-field"
+									aria-invalid={errors.last_name ? 'true' : 'false'}
+									helperText={errors.last_name ? errors.last_name?.message : ' '}
+									error={!!errors.last_name}
+									sx={{maxWidth: '400px'}}
+									{...register('last_name', {
+										required: 'Your last name is required',
+									})}
+								/>
+							</Box>
 						</Box>
 
 						<Box
 							sx={{
 								display: 'flex',
-								flexDirection: {xs: 'column', sm: 'column', md: 'row'},
-								justifyContent: 'start',
+								flexDirection: {xs: 'column', md: 'row'},
+								gap: {md: 3},
+								justifyContent: 'center',
 								alignItems: 'center',
-								gap: {xs: '10px', sm: '10px', md: '110px'},
+								width: '100%',
+								m: 'auto',
 							}}>
 							<TextField
-								error={!!errors.email}
-								helperText={errors.email ? errors.email?.message : ' '}
-								sx={{
-									width: {xs: '300px', sm: '300px', md: '470px'},
-									m: {xs: 'auto', sm: 'auto', md: 'auto 0 auto 40px'},
-								}}
+								fullWidth
+								variant="outlined"
 								label="Email"
 								type="email"
-								variant="standard"
+								helperText={errors.email ? errors.email?.message : ' '}
 								aria-label="name input-field"
 								aria-invalid={errors.email ? 'true' : 'false'}
+								error={!!errors.email}
+								sx={{maxWidth: '400px'}}
 								{...register('email', {
 									pattern: {
 										value: /^[a-zA-Z0-9._%+-]+@+[a-zA-Z0-9]+\.+([a-z.]+){2,}$/,
@@ -299,16 +310,15 @@ const Register = () => {
 								})}
 							/>
 							<TextField
-								error={!!errors.department}
-								helperText={errors.department ? errors.department?.message : ' '}
-								sx={{
-									width: {xs: '300px', sm: '300px', md: '470px'},
-									m: {xs: 'auto', sm: 'auto', md: 'auto 20px auto 0'},
-								}}
+								fullWidth
+								variant="outlined"
+								type="text"
 								label="Department"
-								variant="standard"
 								aria-label="department input-field"
 								aria-invalid={errors.department ? 'true' : 'false'}
+								helperText={errors.department ? errors.department?.message : ' '}
+								error={!!errors.department}
+								sx={{maxWidth: '400px'}}
 								{...register('department', {
 									required: {
 										value: true,
@@ -321,25 +331,25 @@ const Register = () => {
 						<Box
 							sx={{
 								display: 'flex',
-								flexDirection: {xs: 'column', sm: 'column', md: 'row'},
+								flexDirection: {xs: 'column', md: 'row'},
+								gap: {md: 3},
 								justifyContent: 'center',
-								alignItems: 'center',
-								gap: {xs: '10px', sm: '10px', md: '110px'},
+								alignItems: {xs: 'center', sm: 'center', md: 'flex-start'},
+								width: '100%',
+								m: 'auto',
 							}}>
 							<FormControl
+								fullWidth
+								variant="outlined"
 								error={!!errors.password}
-								sx={{
-									width: {xs: '300px', sm: '300px', md: '470px'},
-									m: {xs: 'auto', sm: 'auto', md: 'auto 0 auto 40px'},
-								}}
-								variant="standard">
+								sx={{maxWidth: '400px'}}>
 								<InputLabel htmlFor="password-field">Password</InputLabel>
 
-								<Input
+								<OutlinedInput
+									label="Password"
 									id="password-field"
 									type={showPassword ? 'text' : 'password'}
 									minLength={8}
-									placeholder="Password"
 									aria-label="password input-field"
 									aria-invalid={errors.password ? 'true' : 'false'}
 									{...register('password', {
@@ -374,15 +384,16 @@ const Register = () => {
 							</FormControl>
 
 							<TextField
-								sx={{width: {xs: '300px', sm: '300px', md: '470px'}, m: {xs: 'auto', sm: 'auto', md: '0 20px auto 0'}}}
-								error={!!errors.confirmPassword}
-								helperText={errors.confirmPassword ? errors.confirmPassword?.message : ' '}
+								fullWidth
+								variant="outlined"
 								label="Confirm Password"
-								variant="standard"
-								type={showPassword ? 'text' : 'password'}
 								minLength={8}
+								type={showPassword ? 'text' : 'password'}
 								aria-label="confirmPassword input-field"
 								aria-invalid={errors.confirmPassword ? 'true' : 'false'}
+								helperText={errors.confirmPassword ? errors.confirmPassword?.message : ' '}
+								error={!!errors.confirmPassword}
+								sx={{maxWidth: '400px'}}
 								{...register('confirmPassword', {
 									required: 'Password does not match',
 								})}
@@ -391,24 +402,24 @@ const Register = () => {
 
 						<Box
 							sx={{
-								gap: {xs: '10px', sm: '10px', md: '110px'},
 								display: 'flex',
-								flexDirection: {xs: 'column', sm: 'column', md: 'row'},
-								justifyContent: 'start',
+								flexDirection: {xs: 'column', md: 'row'},
+								gap: {md: 3},
+								justifyContent: 'center',
 								alignItems: 'center',
+								width: '100%',
+								m: 'auto',
 							}}>
 							<TextField
-								error={!!errors.personal_email}
-								helperText={errors.personal_email ? errors.personal_email?.message : ' '}
-								sx={{
-									width: {xs: '300px', sm: '300px', md: '470px'},
-									m: {xs: 'auto', sm: 'auto', md: 'auto 0 auto 40px'},
-								}}
-								label="Secondary Email - Optional"
+								fullWidth
 								type="email"
-								variant="standard"
+								variant="outlined"
+								helperText={errors.personal_email ? errors.personal_email?.message : ' '}
+								label="Secondary Email - Optional"
 								aria-label="second email optional"
 								aria-invalid={errors.personal_email ? 'true' : 'false'}
+								error={!!errors.personal_email}
+								sx={{maxWidth: '400px'}}
 								{...register('personal_email', {
 									pattern: {
 										value: /^[a-zA-Z0-9._%+-]+@+[a-zA-Z0-9]+\.+([a-z.]+){2,}$/,
@@ -417,16 +428,14 @@ const Register = () => {
 								})}
 							/>
 							<TextField
-								error={!!errors.phone}
-								helperText={errors.phone ? errors.phone?.message : ' '}
+								fullWidth
+								variant="outlined"
 								label="Phone Number - Optional"
-								sx={{
-									width: {xs: '300px', sm: '300px', md: '470px'},
-									m: {xs: 'auto', sm: 'auto', md: 'auto 20px auto 0'},
-								}}
-								variant="standard"
+								helperText={errors.phone ? errors.phone?.message : ' '}
+								error={!!errors.phone}
 								aria-label="phone number optional"
 								aria-invalid={errors.phone ? 'true' : 'false'}
+								sx={{maxWidth: '400px'}}
 								{...register('phone', {
 									pattern: {
 										value: /^[\+]?[(]?[0-9]{3}[)]?[-\s\.]?[0-9]{3}[-\s\.]?[0-9]{4,6}$/,
@@ -439,24 +448,34 @@ const Register = () => {
 						<Box
 							sx={{
 								display: 'flex',
-								flexDirection: {xs: 'column', sm: 'column', md: 'row'},
-								justifyContent: 'start',
+								flexDirection: 'column',
+								justifyContent: 'center',
 								alignItems: 'center',
 							}}>
 							<Button
 								type="submit"
-								sx={{
-									width: '200px',
-									height: '50px',
-									margin: 'auto',
-									backgroundColor: primary.main,
-									color: white.main,
-									fontWeight: 'bold',
-								}}
 								variant="contained"
-								aria-label="register now">
+								aria-label="register now"
+								sx={{
+									backgroundColor: primary.main,
+									p: 1,
+									px: 3,
+									fontWeight: 'bold',
+									':hover': {
+										backgroundColor: primary[800],
+									},
+								}}>
 								Register Now
 							</Button>
+							{registerError ? (
+								<Typography color={red.main}>{registerError}</Typography>
+							) : (
+								<Typography
+									color={red.main}
+									visibility={'hidden'}>
+									{'error'}
+								</Typography>
+							)}
 						</Box>
 					</Stack>
 				</form>

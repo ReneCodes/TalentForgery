@@ -16,10 +16,13 @@
 html,
 body,
 #root {
+	min-height: fit-content;
 	height: 100%;
+	overflow: hidden;
 	/* max-width: 1400px; */
 	margin: auto;
 	box-shadow: 0 0 10px rgba(0, 0, 0, 0.08);
+	color: #212121;
 }
 
 @media (prefers-color-scheme: light) {
