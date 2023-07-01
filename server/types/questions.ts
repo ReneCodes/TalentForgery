@@ -9,5 +9,5 @@ export type TestCorrectionType = {
   question: string;
   options: string[];
   userAnswer: string;
-  rightAnswer: string,
+  rightAnswer?: string;
 };
