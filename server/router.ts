@@ -12,9 +12,10 @@ router.post("/register", UserController.registerUser);
 router.post("/login", UserController.loginUser);
 router.get("/auth_user", authUser, userExists);
 
-// ACCEPT / REJECT USERS
+// ACCEPT / REJECT / UPDATE USERS
 router.post("/accept_user", authAdminUser, UserController.acceptUser);
 router.post("/reject_user", authAdminUser, UserController.rejectUser);
+router.post("/update_user", authAdminUser, UserController.updateUser);
 
 // INFORMATION ROUTES
 router.get('/invite', authAdminUser, InviteController.getInvite);
