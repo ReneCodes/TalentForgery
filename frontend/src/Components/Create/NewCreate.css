@@ -1,0 +1,14 @@
+.filter_line {
+  display: flex;
+  margin-top: 21px;
+}
+
+.filter_label {
+  margin-right: 10px;
+  margin-top: 3px;
+}
+
+.tutorial_list_line {
+  display: flex;
+  justify-content: space-between;
+}
