@@ -1,6 +1,6 @@
 import axios, {AxiosResponse} from 'axios';
 
-import {LoginFormValues, RegisterFormValues, updateUserProfile} from '../@types/Types';
+import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
 import {NavigateFunction} from 'react-router-dom';
 
 // const baseURL = import.meta.env.VITE_BE_BASE_URL;
@@ -39,12 +39,12 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		if (value instanceof FileList) {
 			formData.append(key, value[0]);
 		} else {
-			formData.append(key, value);
+			formData.append(key, String(value));
 		}
 	});
 
 	const urlParts = window.location.pathname.split('/');
-	const inviteID = urlParts[urlParts.length - 1];
+	const inviteID = urlParts[urlParts.length - 1]; //TODO: needs to match to BE variable => invite
 	formData.append('inviteID', inviteID);
 
 	try {
@@ -137,10 +137,10 @@ export async function postTutorial(data: any) {
 
 		Object.entries(data).forEach(([key, value]: any) => {
 			if (value instanceof FormData) {
-				const video = value.get('video');
+				const video = value.get('video') as File;
 				formData.append('video_url', video);
 			} else if (key === 'question_ids') {
-				formData.append(key, JSON.stringify(value));
+				formData.append(key, JSON.stringify(value)); // stringify Array
 			} else {
 				formData.append(key, value);
 			}
@@ -184,21 +184,35 @@ export async function getQuestionsByIds(idArr: any[]) {
 	}
 }
 
-export async function updateProfileData(profileData: updateUserProfile) {
+export async function updateProfileData(profileData: UpdateProfile) {
+	const formData = new FormData();
+
+	Object.entries(profileData).forEach(([key, value]) => {
+		if (value instanceof FileList) {
+			formData.append(key, value[0]);
+		} else if (typeof value === 'string' || typeof value === 'number') {
+			formData.append(key, String(value));
+		}
+	});
+	formData.forEach((entry) => console.log('From Form', entry));
+
 	try {
-		const res = await axios.post(`/api/update_user`, profileData);
+		const res = await axios.post(`/api/update_user`, formData, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+			},
+		});
 		console.log('API-updateProfileData', res);
 		return res;
 	} catch (error: any) {
-		console.log('Error updating Profile', error);
-		alert(error.response.data);
+		console.log('Error updating Profile', error.toJSON());
+		return error;
 	}
 }
 
-export async function getSingleUserProfileData(): Promise<AxiosResponse<updateUserProfile>> {
+export async function getSingleUserProfileData(): Promise<AxiosResponse<UpdateProfile>> {
 	try {
-		const res = await axios.get<updateUserProfile>(`/api/user`);
-		console.log(res);
+		const res = await axios.get<UpdateProfile>(`/api/user`);
 		return res;
 	} catch (error: any) {
 		alert(error.response.data);

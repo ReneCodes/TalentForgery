@@ -1,5 +1,5 @@
 import {create} from 'zustand';
-import {updateUserProfile} from '../@types/Types';
+import {UpdateProfile} from '../@types/Types';
 
 interface MinonState {
 	minon: number;
@@ -45,12 +45,12 @@ export const LoginAndOut = create<LoginAndOut>()((set) => ({
 
 // USER PROFILE STORE
 interface ProfileInfo {
-	userProfile: updateUserProfile;
-	UpdateProfileInfo: (profileData: Partial<updateUserProfile>) => void;
+	localProfileInfo: UpdateProfile;
+	UpdateProfileInfo: (profileData: Partial<UpdateProfile>) => void;
 }
 
 export const userProfileStore = create<ProfileInfo>()((set) => ({
-	userProfile: {
+	localProfileInfo: {
 		role: '',
 		first_name: '',
 		last_name: '',
@@ -64,6 +64,6 @@ export const userProfileStore = create<ProfileInfo>()((set) => ({
 
 	UpdateProfileInfo: (profileData) =>
 		set((state) => ({
-			userProfile: {...state.userProfile, ...profileData},
+			localProfileInfo: {...state.localProfileInfo, ...profileData},
 		})),
 }));
