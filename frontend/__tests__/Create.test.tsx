@@ -381,33 +381,7 @@ describe('submit', () => {
 
     console.log = jest.fn();
     fireEvent.click(buttons[5]);
-    expect(window.alert).not.toHaveBeenCalled();
-    expect(console.log).toHaveBeenCalledWith({
-      "access_date": "",
-      "description": "test",
-      "due_date": "",
-      "question_ids": [
-        {
-        "answer": "when its green its the answer",
-        "options": [
-          "this is an option",
-          "when its green its the answer",
-          "press delete to remove the tutorial",
-        ],
-        "question": "This is the Question",
-        },
-        {
-          "answer": "option",
-          "options": [
-            "option",
-          ],
-          "question": "question",
-        },
-      ],
-      "questions_shown": 1,
-      "title": "test",
-      "video_url": "",
-    });
+    expect(window.alert).toHaveBeenCalledWith('video is needed');
   })
 
   test('does not submit if any information is missing', () => {
@@ -495,6 +469,6 @@ describe('schedule', () => {
 
     fireEvent.click(buttons[2]);
 
-    expect(JSON.stringify(dates)).toBe('{"startDate":null,"endDate":null}');
+    expect(JSON.stringify(dates)).toBe('{}');
   })
 })

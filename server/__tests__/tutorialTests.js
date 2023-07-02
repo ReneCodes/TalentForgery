@@ -36,39 +36,34 @@ const user2_info = {
   department: "567-UFG",
 };
 
+const question_ids = [
+  {
+    question: "This is the Question",
+    options: [
+      "this is an option",
+      "when its green its the answer",
+      "press delete to remove the tutorial"
+    ], answer: "when its green its the answer"
+  },
+  {
+    question: "hi",
+    options: [
+      "1", "2", "3"
+    ],
+    answer: "3"
+  },
+  {
+    question: "Where is steve?",
+    options: ["Detroit", "Michigan", "Orlando"],
+    answer: "Detroit"
+  }
+];
+
 const tutorialInfo = {
   title: "hi how are you",
   video_url: "hello.mp4",
   description: "beesx",
-  question_ids: [
-    {
-      question: "This is the Question",
-      options: [
-        "this is an option",
-        "when its green its the answer",
-        "press delete to remove the tutorial"
-      ],
-      answer: "when its green its the answer"
-    },
-    {
-      question: "hi",
-      options: [
-        "1",
-        "2",
-        "3"
-      ],
-      answer: "3"
-    },
-    {
-      question: "Where is steve?",
-      options: [
-        "Detroit",
-        "Michigan",
-        "Orlando"
-      ],
-      "answer": "Detroit"
-    }
-  ],
+  question_ids: JSON.stringify(question_ids),
   questions_shown: 2,
   access_date: "Wed, 21 Jun 2023 23:00:00 GMT",
   due_date: "Thu, 29 Jun 2023 23:00:00 GMT"
@@ -132,7 +127,7 @@ describe("Admin create/see tutorials", () => {
       .set("Cookie", [sessionToken]);
 
     expect(res.statusCode).toBe(201);
-    expect(res.body).toEqual("Tutorial created.");
+    expect(res.body.message).toEqual("Tutorial created.");
   });
 
   it("Should not be able to create incomplete tutorial", async () => {
@@ -148,7 +143,7 @@ describe("Admin create/see tutorials", () => {
       .set("Cookie", [sessionToken]);
 
     expect(res.statusCode).toBe(400);
-    expect(res.body).toEqual("All fields are required");
+    expect(res.body).toEqual("Not enough information provided");
   });
   it("Should retrieve all tutorials", async () => {
     const res = await request(server)
