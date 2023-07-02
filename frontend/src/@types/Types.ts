@@ -20,8 +20,8 @@ export type UpdateProfile = {
 	first_name: string;
 	last_name: string;
 	email: string;
-	personal_email: string;
-	phone: string;
+	personal_email?: string;
+	phone?: string;
 	department: string;
 	profile_picture?: File | string;
 	user_id: string | number;
