@@ -1,8 +1,7 @@
-import axios from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
-import { LoginFormValues, RegisterFormValues, person } from '../@types/Types';
-import { NavigateFunction } from 'react-router-dom';
-import fs from "fs";
+import {LoginFormValues, RegisterFormValues, updateUserProfile} from '../@types/Types';
+import {NavigateFunction} from 'react-router-dom';
 
 // const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -29,7 +28,7 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 		});
 
 	return errorMessage;
-};
+}
 
 export async function registerUser(userData: RegisterFormValues, navigate: NavigateFunction) {
 	let errorMessage: string = '';
@@ -56,42 +55,40 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({ email, password }, navigate);
+		loginUser({email, password}, navigate);
 	} catch (error: any) {
 		errorMessage = error.response.data;
 	}
 
 	return errorMessage;
-};
+}
 
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: { data: string } = await axios.get('/api/invite');
+		const invite: {data: string} = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
 		const pageURL = window.location.href.slice(0, -'dashboard'.length);
 
-		navigator.clipboard.writeText(`${pageURL}register/${inviteID}`)
-
+		navigator.clipboard
+			.writeText(`${pageURL}register/${inviteID}`)
 
 			.then(() => {
-				setLinkText('Copied')
+				setLinkText('Copied');
 				setTimeout(() => {
-					setLinkText('Copied')
-				}, 3000)
+					setLinkText('Copied');
+				}, 3000);
 			})
-			.catch(() => setLinkText('Failed'))
-
+			.catch(() => setLinkText('Failed'));
 	} catch (error: any) {
-		alert(error.response.data)
+		alert(error.response.data);
 	}
-};
+}
 
 export async function rejectUser(email: string, setPeoplePending: any) {
 	try {
-
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -99,19 +96,17 @@ export async function rejectUser(email: string, setPeoplePending: any) {
 		});
 
 		setPeoplePending((currData: any[]) => {
-			const newArr = currData.filter(person => person.dataValues.email !== email);
+			const newArr = currData.filter((person) => person.dataValues.email !== email);
 			return newArr;
-		})
-
+		});
 	} catch (error: any) {
-		alert(error.response.data)
+		alert(error.response.data);
 	}
-};
+}
 
 export async function acceptUser(email: string, setPeoplePending: any) {
 	try {
-
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		await axios.post('/api/accept_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -119,39 +114,34 @@ export async function acceptUser(email: string, setPeoplePending: any) {
 		});
 
 		setPeoplePending((currData: any[]) => {
-			const newArr = currData.filter(person => person.dataValues.email !== email);
+			const newArr = currData.filter((person) => person.dataValues.email !== email);
 			return newArr;
-		})
-
+		});
 	} catch (error: any) {
-		alert(error.response.data)
+		alert(error.response.data);
 	}
-};
+}
 
 export async function getPendingUsers(setPeoplePending: any) {
 	try {
-
 		const res = await axios.get('/api/pending_users');
 		setPeoplePending(res.data);
-
 	} catch (error: any) {
-		alert(error.response.data)
+		alert(error.response.data);
 	}
-};
+}
 
 export async function postTutorial(data: any) {
 	try {
-
 		const formData = new FormData();
 
 		Object.entries(data).forEach(([key, value]: any) => {
-
 			if (value instanceof FormData) {
 				const video = value.get('video');
 				formData.append('video_url', video);
-			} else if(key === 'question_ids'){
+			} else if (key === 'question_ids') {
 				formData.append(key, JSON.stringify(value));
-			} else{
+			} else {
 				formData.append(key, value);
 			}
 		});
@@ -159,7 +149,7 @@ export async function postTutorial(data: any) {
 		const res = await axios.post('/api/create_tutorial', formData);
 
 		return res;
-	} catch(error: any) {
+	} catch (error: any) {
 		alert(error.response.data);
 	}
 }
@@ -191,5 +181,27 @@ export async function getQuestionsByIds(idArr: any[]) {
 		return res;
 	} catch (error: any) {
 		alert(error.response.data);
+	}
+}
+
+export async function updateProfileData(profileData: updateUserProfile) {
+	try {
+		const res = await axios.post(`/api/update_user`, profileData);
+		console.log('API-updateProfileData', res);
+		return res;
+	} catch (error: any) {
+		console.log('Error updating Profile', error);
+		alert(error.response.data);
+	}
+}
+
+export async function getSingleUserProfileData(): Promise<AxiosResponse<updateUserProfile>> {
+	try {
+		const res = await axios.get<updateUserProfile>(`/api/user`);
+		console.log(res);
+		return res;
+	} catch (error: any) {
+		alert(error.response.data);
+		throw error;
 	}
 }

@@ -6,7 +6,7 @@ export type LoginFormValues = {
 export type RegisterFormValues = {
 	email: string;
 	password: string;
-	profile_image: File | any;
+	profile_picture: File | string;
 	first_name: string;
 	last_name: string;
 	department: string;
@@ -16,7 +16,7 @@ export type RegisterFormValues = {
 };
 
 export type UpdateProfile = {
-	profile_image: File | any;
+	profile_picture: File | string;
 	user_id: string | number;
 	first_name: string;
 	last_name: string;
@@ -26,11 +26,19 @@ export type UpdateProfile = {
 	phone: string;
 };
 
-export interface UserProfile extends File {
-	url: string;
+export interface updateUserProfile {
+	role: string;
+	first_name: string;
+	last_name: string;
+	email: string;
+	personal_email: string;
+	phone: string;
+	department: string;
+	profile_picture: string;
+	user_id: string;
 }
 
-export type person = {
+export type User = {
 	first_name: string;
 	last_name: string;
 	email: string;
