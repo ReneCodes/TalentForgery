@@ -1,3 +1,4 @@
+const fs = require('fs');
 import { UUID } from "crypto";
 import { registeredUser, loginUser, UserType } from "../types/user";
 const crypto = require("crypto");
@@ -8,33 +9,32 @@ const hashAsync = promisify(bcrypt.hash);
 const { checkInvite } = require('./InviteModel');
 const { User, Stats } = require('./Schemas');
 
-
 const registerNewUser = async (providedInformation: registeredUser) => {
   const userList = await User.findOne({ where: {} });
   const findUser = await User.findOne({ where: { email: providedInformation.email } });
-  const invite = await checkInvite(providedInformation.inviteID);
-  if (findUser) throw new Error('User already exists');
-  else if (!invite && userList !== null) throw new Error('Invalid invite');
-  else {
-    const hash = await hashAsync(providedInformation.password, 10);
-    providedInformation.password = hash;
+	const invite = await checkInvite(providedInformation.inviteID);
+	if (findUser) throw new Error('User already exists');
+	else if (!invite && userList !== null) throw new Error('Invalid invite');
+	else {
+		const hash = await hashAsync(providedInformation.password, 10);
+		providedInformation.password = hash;
 
-    const role = userList == null ? 'admin' : 'pending';
-    const user_id = crypto.randomUUID();
+		const role = userList == null ? 'admin' : 'pending';
+		const user_id = crypto.randomUUID();
 
-    await User.create({
-      role,
-      ...providedInformation,
-      invited_by: !invite ? 'first' : invite.user_created,
-      user_id,
-    });
+		await User.create({
+			role,
+			...providedInformation,
+			invited_by: !invite ? 'first' : invite.user_created,
+			user_id,
+		});
 
-    await Stats.create({
-      user_id,
-    })
+		await Stats.create({
+			user_id,
+		})
 
     return role === 'admin' ? "Admin User created" : "User created";
-  }
+	}
 };
 
 const loginTheUser = async ({ email, password }: loginUser) => {
@@ -116,13 +116,50 @@ const deleteAnUser = async (userDeleteEmail: string) => {
   return;
 };
 
+const updateUserInfo = async (user_id: UUID, body: any, profile_picture: string) => {
+	const {first_name, last_name, email, personal_email, phone, department} = body;
+	const updatedUserInfo = await User.update(
+		{
+			first_name,
+			last_name,
+			email,
+			personal_email,
+			phone,
+			department,
+			profile_picture,
+		},
+		{
+			where: {
+				user_id,
+			},
+		}
+	);
+	if (!updatedUserInfo) throw new Error('user_id is invalid');
+	else {
+		return updatedUserInfo;
+	}
+};
+
+const deleteOldProfilePicture = async (file: any, oldProfilePicture: string) => {
+	try {
+		const filePath = file.path.split('/').slice(0, -1);
+		filePath.push(oldProfilePicture);
+		const oldPicturePath = filePath.join('/');
+		await fs.unlinkSync(oldPicturePath);
+	} catch (error) {
+		console.log({msg: 'No Old Profile Image found'});
+	}
+};
+
 module.exports = {
-  deleteAnUser,
-  registerNewUser,
-  getUserInfo,
-  loginTheUser,
-  deleteUser,
-  getUsersPending,
-  acceptAnUser,
-  rejectAnUser
+	deleteAnUser,
+	registerNewUser,
+	getUserInfo,
+	loginTheUser,
+	deleteUser,
+	getUsersPending,
+	acceptAnUser,
+	rejectAnUser,
+	updateUserInfo,
+	deleteOldProfilePicture,
 };

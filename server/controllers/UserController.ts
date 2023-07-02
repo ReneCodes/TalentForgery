@@ -1,12 +1,14 @@
 const {
-  registerNewUser,
-  loginTheUser,
-  getUserInfo,
-  deleteUser,
-  deleteAnUser,
-  getUsersPending,
-  acceptAnUser,
-  rejectAnUser,
+	registerNewUser,
+	loginTheUser,
+	getUserInfo,
+	deleteUser,
+	deleteAnUser,
+	getUsersPending,
+	acceptAnUser,
+	rejectAnUser,
+	updateUserInfo,
+	deleteOldProfilePicture,
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -15,13 +17,13 @@ import { NextFunction, Request, Response } from 'express';
 import { fileInput } from '../types/user';
 
 const storage = multer.diskStorage({
-  destination: (req: Request, file: File, cb: Function) => {
-    cb(null, '../server/images/profile_pictures');
-  },
-  filename: (req: Request, file: fileInput, cb: Function) => {
-    const customFileName = Date.now() + file.originalname;
-    cb(null, Date.now() + customFileName);
-  },
+	destination: (req: Request, file: File, cb: Function) => {
+		cb(null, '../server/images/profile_pictures');
+	},
+	filename: (req: Request, file: fileInput, cb: Function) => {
+		const customFileName = Date.now() + file.originalname;
+		cb(null, Date.now() + customFileName);
+	},
 });
 
 const upload = multer({ storage });
@@ -109,57 +111,85 @@ const rejectUser = async (req: Request, res: Response) => {
 
 // GETS ALL THE INFORMATION FROM A CERTAIN USER
 const getUserInformation = async (req: Request, res: Response) => {
-  const session_token = req.cookies.session_token;
-  try {
-    const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
-    const data = await getUserInfo(user_id);
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json('Server failed');
-  }
+	const session_token = req.cookies.session_token;
+	try {
+		const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
+		const data = await getUserInfo(user_id);
+		res.status(200).json(data);
+	} catch (error) {
+		res.status(500).json('Server failed');
+	}
 };
 
 // GETS THE USERS THAT HAVE THE ROLE SET TO PENDING
 const getPendingUsers = async (req: Request, res: Response) => {
-  try {
-    const data = await getUsersPending();
-    res.status(200).json(data);
-  } catch (error) {
-    res.status(500).json('Server failed');
-  }
-}
+	try {
+		const data = await getUsersPending();
+		res.status(200).json(data);
+	} catch (error) {
+		res.status(500).json('Server failed');
+	}
+};
 
 // DELETES AN ACCOUNT
 const deleteMyAccount = async (req: Request, res: Response) => {
-  const session_token = req.cookies.session_token;
-  try {
-    const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
-    const data = await deleteUser(user_id);
-    res.status(200).json('Account Deleted');
-  } catch (error) {
-    res.status(500).json('Server failed');
-  }
+	const session_token = req.cookies.session_token;
+	try {
+		const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
+		const data = await deleteUser(user_id);
+		res.status(200).json('Account Deleted');
+	} catch (error) {
+		res.status(500).json('Server failed');
+	}
 };
 
 //  DELETES A USER -> ONLY ADMIN
 const deleteUserAccount = async (req: Request, res: Response) => {
   const { user_delete } = req.body;
-  if (!user_delete) return res.status(400).json('Not enough information provided');
-  try {
-    await deleteAnUser(user_delete);
-    res.status(200).json('User deleted');
-  } catch (error) {
-    res.status(500).json('Server failed');
-  }
+	if (!user_delete) return res.status(400).json('Not enough information provided');
+	try {
+		await deleteAnUser(user_delete);
+		res.status(200).json('User deleted');
+	} catch (error) {
+		res.status(500).json('Server failed');
+	}
 };
 
+// UPDATE ALL THE INFORMATION FROM A CERTAIN USER
+const updateUser = async (req: any, res: Response, next: NextFunction) => {
+	await upload.single('profile_picture')(req, res, async (err: Error) => {
+		const session_token = req.cookies.session_token;
+
+		try {
+			const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
+
+			let currentUserInfo = await getUserInfo(user_id);
+			const oldProfilePicture = currentUserInfo.profile_picture;
+			// Delete old profile picture if user updates to a new one
+			if (req.file && oldProfilePicture) {
+				deleteOldProfilePicture(req.file, oldProfilePicture);
+			}
+			// new path or old path
+			const profile_picture = req.file ? req.file.filename : oldProfilePicture;
+
+			const data = await updateUserInfo(user_id, req.body, profile_picture);
+			return res.status(201).json(data);
+		} catch (error) {
+			console.log(error);
+			res.status(500).json({msg: 'Server Failed', error});
+		}
+	});
+};
+
+
 module.exports = {
-  deleteMyAccount,
-  registerUser,
-  rejectUser,
-  acceptUser,
-  getUserInformation,
-  loginUser,
-  deleteUserAccount,
-  getPendingUsers
+	deleteMyAccount,
+	registerUser,
+	rejectUser,
+	acceptUser,
+	getUserInformation,
+	loginUser,
+	deleteUserAccount,
+	getPendingUsers,
+	updateUser,
 };
