@@ -12,3 +12,31 @@
   display: flex;
   justify-content: space-between;
 }
+
+.form {
+  display: flex;
+  flex-direction: column;
+  margin: 20px;
+  width: 80%;
+}
+
+.video_player {
+  width: 94%;
+  max-width: 500px;
+}
+
+.video_upload {
+  margin-left: 21px;
+  width: 60%;
+  border: 2px solid #ccc;
+  border-radius: 4px;
+  padding: 6px 12px;
+  background-color: #f7f7f7;
+  color: #333;
+  font-weight: bold;
+  font-size: 16px;
+}
+
+.create_tutorial {
+  display: flex;
+}
