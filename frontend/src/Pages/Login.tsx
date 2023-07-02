@@ -195,7 +195,10 @@ const Login: FC = () => {
 			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', my: 4}}>
 				<Button
 					type="button"
-					onClick={MinonLogin}
+					onClick={() => {
+						MinonLogin();
+						navigate('/');
+					}}
 					variant="contained"
 					aria-label="login"
 					sx={{backgroundColor: red.main}}>

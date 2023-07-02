@@ -6,52 +6,66 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import {useForm} from 'react-hook-form';
-import {UpdateProfile, updateUserProfile} from '../../@types/Types';
-import {ImageListItem, TextField, Box, Stack, Avatar} from '@mui/material';
+import {UpdateProfile} from '../../@types/Types';
+import {ImageListItem, TextField, Box, Stack, Avatar, Typography} from '@mui/material';
 import {getSingleUserProfileData, updateProfileData} from '../../services/Api.service';
 // Icons
 import theme from '../../config/theme';
 import {userProfileStore} from '../../utils/zustand.store';
 
 export default function EmployeeProfileForm() {
-	const {userProfile, UpdateProfileInfo} = userProfileStore();
+	const {localProfileInfo, UpdateProfileInfo} = userProfileStore();
 	let avatarPath = `http://localhost:3001/images/profile_pictures/`;
+	// Local States
 	const [open, setOpen] = React.useState(false);
 	const [readOnly, setReadOnly] = React.useState(true);
+	const [file, setFile] = React.useState<File>({} as File);
+	const [updateError, setUpdateError] = React.useState('');
+	// Collor Theme
 	const {secondary, gray, white, red, green} = theme.palette;
 
-	const [file, setFile] = React.useState<File>({} as File);
+	React.useEffect(() => {
+		// console.log('local userProfile', userProfile);
+	}, [localProfileInfo]);
 
 	// React hook Form
 	const updateProfile = useForm<UpdateProfile>({
 		defaultValues: async () => {
 			try {
 				const response = await getSingleUserProfileData();
-				const profileData: updateUserProfile = response.data;
-				console.log('fetched profileData', profileData);
+				const profileData: UpdateProfile = response.data;
+				// console.log('fetched profileData', profileData);
 				storeUserProfileData(profileData);
 				return profileData;
 			} catch (error: any) {
 				alert('No Profile data found on Server');
-				return userProfile;
+				return localProfileInfo;
 			}
 		},
 	});
 
-	function storeUserProfileData(profileData: updateUserProfile) {
+	function storeUserProfileData(profileData: UpdateProfile) {
 		UpdateProfileInfo(profileData);
 	}
 
-	const {register, handleSubmit, formState} = updateProfile;
+	const {reset, register, handleSubmit, formState} = updateProfile;
 	const {errors} = formState;
 
-	const handleUpdate = (formData: UpdateProfile) => {
-		console.log('Update Profile Banana', formData);
-		// TODO: API Update Profile
-		// updateProfileData
-		// Wait for return Okay or Error
-		if (readOnly) setReadOnly(false);
-		else setReadOnly(true);
+	const handleUpdate = async (formData: UpdateProfile) => {
+		const updateUserAnswer = await updateProfileData(formData);
+		storeUserProfileData(formData);
+
+		// handle error
+		if (updateUserAnswer.response) {
+			if (updateUserAnswer.response.status >= 300) {
+				const errorMsg: string = updateUserAnswer.response.data;
+				setUpdateError(errorMsg);
+			}
+			reset(localProfileInfo);
+		} else {
+			if (readOnly) setReadOnly(false);
+			else setReadOnly(true);
+		}
 	};
 
 	const handleFileInput = (e: React.ChangeEvent<HTMLInputElement>) => {
@@ -72,6 +86,8 @@ export default function EmployeeProfileForm() {
 
 	const handleClickOpen = () => {
 		setOpen(true);
+		if (readOnly) setReadOnly(false);
+		else setReadOnly(true);
 	};
 
 	const handleClose = () => {
@@ -97,7 +113,7 @@ export default function EmployeeProfileForm() {
 							<Box
 								display="flex"
 								mb={1}>
-								<ImageListItem sx={{width: 100, height: 100, borderRadius: 999}}>
+								<ImageListItem sx={{maxWidth: 100, maxHeight: 100, width: 100, height: 100, p: 1, borderRadius: 999}}>
 									{file.name ? (
 										<Avatar
 											sx={styles.avatar}
@@ -108,8 +124,8 @@ export default function EmployeeProfileForm() {
 											sx={styles.avatar}
 											alt="profile image"
 											src={
-												userProfile.profile_picture
-													? (avatarPath += userProfile.profile_picture)
+												localProfileInfo.profile_picture
+													? (avatarPath += localProfileInfo.profile_picture)
 													: 'src/assets/default_user.png'
 											}></Avatar>
 									)}
@@ -125,7 +141,7 @@ export default function EmployeeProfileForm() {
 									{...register('profile_picture', {
 										onChange: (e) => handleFileInput(e),
 									})}
-									sx={{width: '70%', height: 100, px: 1, py: 2}}
+									sx={{width: '100%', maxWidth: '250px', height: 100, px: 1, py: 2}}
 								/>
 							</Box>
 
@@ -175,22 +191,6 @@ export default function EmployeeProfileForm() {
 							/>
 							<TextField
 								disabled={readOnly}
-								error={!!errors.department}
-								helperText={errors.department ? errors.department?.message : ' '}
-								label="Department"
-								variant="outlined"
-								aria-label="department input-field"
-								aria-invalid={errors.department ? 'true' : 'false'}
-								{...register('department', {
-									required: {
-										value: true,
-										message: 'A department is required',
-									},
-								})}
-							/>
-
-							<TextField
-								disabled={readOnly}
 								error={!!errors.personal_email}
 								helperText={errors.personal_email ? errors.personal_email?.message : ' '}
 								label="Personal Email - Optional"
@@ -221,6 +221,16 @@ export default function EmployeeProfileForm() {
 									},
 								})}
 							/>
+							{updateError ? (
+								<Typography
+									textAlign={'right'}
+									px={1}
+									color={red.main}>
+									{updateError}
+								</Typography>
+							) : (
+								<Typography visibility={'hidden'}>{'no error'}</Typography>
+							)}
 						</Stack>
 
 						<DialogActions>
@@ -301,10 +311,12 @@ const styles = {
 		my: 5,
 	},
 	avatar: {
-		width: '40%',
-		height: 'auto',
+		width: '100%',
+		height: '100%',
+		objectFit: 'cover',
 		border: 3,
-		borderColor: 'primary.main',
+		borderColor: 'gray.900',
+		backgrondColor: 'red.main',
 	},
 	department: {
 		mt: 1,
