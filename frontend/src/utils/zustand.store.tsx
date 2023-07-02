@@ -1,4 +1,6 @@
 import {create} from 'zustand';
+import {persist, createJSONStorage} from 'zustand/middleware';
+
 import {UpdateProfile} from '../@types/Types';
 
 interface MinonState {
@@ -37,19 +39,30 @@ interface LoginAndOut {
 	MinonLogout: () => void;
 }
 
-export const LoginAndOut = create<LoginAndOut>()((set) => ({
-	logedIn: false,
-	MinonLogin: () => set(() => ({logedIn: true})),
-	MinonLogout: () => set(() => ({logedIn: false})),
-}));
+export const LoginAndOut = create<LoginAndOut>()(
+	persist(
+		// @ts-ignore
+		(set, get) => ({
+			logedIn: false,
+			MinonLogin: () => set({logedIn: true}),
+			MinonLogout: () => set(() => ({logedIn: false})),
+		}),
+		{
+			name: 'minon-logged-in', // unique storage name
+			storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+		}
+	)
+);
 
 // USER PROFILE STORE
 interface ProfileInfo {
+	avatar_url_path: string;
 	localProfileInfo: UpdateProfile;
 	UpdateProfileInfo: (profileData: Partial<UpdateProfile>) => void;
 }
 
 export const userProfileStore = create<ProfileInfo>()((set) => ({
+	avatar_url_path: `http://localhost:3001/images/profile_pictures/`,
 	localProfileInfo: {
 		role: '',
 		first_name: '',

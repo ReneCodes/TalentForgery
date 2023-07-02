@@ -6,6 +6,7 @@ import Stats from '../Components/Stats/Stats';
 import ContactInfo from '../Components/ContactInfo/ContactInfo';
 import Create from '../Pages/Create';
 import Dashboard from '../Pages/Dashboard';
+import ErrorPage from '../Pages/ErrorPage';
 
 const info = {
 	firstName: 'jon',
@@ -21,7 +22,7 @@ export const AppRoutes = () => {
 	return (
 		<Routes>
 			<Route
-				path="/"
+				path="/*"
 				element={<HomeMe />}
 			/>
 			<Route
@@ -30,7 +31,7 @@ export const AppRoutes = () => {
 			/>
 			<Route
 				path="/profile"
-				element={<ContactInfo info={info} />}
+				element={<ContactInfo />}
 			/>
 			<Route
 				path="/stats"
