@@ -14,8 +14,8 @@ import theme from '../../config/theme';
 import {userProfileStore} from '../../utils/zustand.store';
 
 export default function EmployeeProfileForm() {
-	const {localProfileInfo, UpdateProfileInfo} = userProfileStore();
-	let avatarPath = `http://localhost:3001/images/profile_pictures/`;
+	const {avatar_url_path, localProfileInfo, UpdateProfileInfo} = userProfileStore();
+	let avatarPath = avatar_url_path;
 	// Local States
 	const [open, setOpen] = React.useState(false);
 	const [readOnly, setReadOnly] = React.useState(true);
