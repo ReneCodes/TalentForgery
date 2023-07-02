@@ -105,7 +105,7 @@ const QuizzList: React.FC<QuizzListProps> = ({setQuizzDone, setQuizzToDo}) => {
 							key={option}
 							value={option}
 							label={option}
-							control={<Radio />}
+							control={<Radio className='checkbox' />}
 							name="optionGroup"
 							onChange={handleAnswer}
 						/>
