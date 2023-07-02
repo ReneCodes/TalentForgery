@@ -1,7 +1,7 @@
 const request = require("supertest");
 const server = require("../dist/index");
 const crypto = require("crypto");
-const { Tutorial, User } = require("../dist/models/Schemas");
+const { Tutorial, User, Question } = require("../dist/models/Schemas");
 
 afterAll((done) => {
   server.close(async () => {
@@ -46,32 +46,24 @@ const tutorialInfo = {
       options: [
         "this is an option",
         "when its green its the answer",
-        "press delete to remove the tutorial"
+        "press delete to remove the tutorial",
       ],
-      answer: "when its green its the answer"
+      answer: "when its green its the answer",
     },
     {
       question: "hi",
-      options: [
-        "1",
-        "2",
-        "3"
-      ],
-      answer: "3"
+      options: ["1", "2", "3"],
+      answer: "3",
     },
     {
       question: "Where is steve?",
-      options: [
-        "Detroit",
-        "Michigan",
-        "Orlando"
-      ],
-      "answer": "Detroit"
-    }
+      options: ["Detroit", "Michigan", "Orlando"],
+      answer: "Detroit",
+    },
   ],
   questions_shown: 2,
   access_date: "Wed, 21 Jun 2023 23:00:00 GMT",
-  due_date: "Thu, 29 Jun 2023 23:00:00 GMT"
+  due_date: "Thu, 29 Jun 2023 23:00:00 GMT",
 };
 
 describe("Tutorials shouldn't be seen or created if the user is logged out", () => {
@@ -214,5 +206,78 @@ describe("User create/see tutorials", () => {
 
     expect(res.statusCode).toBe(200);
     expect(Array.isArray(res.body)).toBe(true);
+  });
+});
+
+describe("User should see all questions/questions related to tutorial", () => {
+  let sessionToken;
+
+  beforeAll(async () => {
+    // Create a new user
+    await User.create({
+      role: "user",
+      ...user1_info,
+      user_id: crypto.randomUUID(),
+    });
+
+    const loginResponse = await request(`http://localhost:${process.env.PORT}`)
+      .post("/login")
+      .send({
+        email: user1_info.email,
+        password: "123",
+      })
+      .set("Content-Type", "application/json");
+
+    const userId = loginResponse.body.user_id;
+    sessionToken = loginResponse.headers["set-cookie"][0];
+
+    expect(loginResponse.statusCode).toBe(200);
+  });
+  afterAll(async () => {
+    // Clean up the user records
+    await User.destroy({ where: {} });
+    await Question.destroy({ where: {} });
+  });
+
+  it("Should retrieve all questions from questions table", async () => {
+    // Create the tutorial
+    await Question.create({
+      question: "This is the Question",
+      options: [
+        "this is an option",
+        "when its green its the answer",
+        "press delete to remove the tutorial",
+      ],
+      answer: "when its green its the answer",
+      tutorial_id: "122233eaddasdarrg-asdaf213dadgg",
+    });
+
+    await Question.create({
+      question: "hi",
+      options: ["1", "2", "3"],
+      answer: "3",
+      tutorial_id: "122233eaddasdarrg-asdaf213dadgg",
+    });
+
+    // Retrieve all questions
+    const getQuestionsResponse = await request(server)
+      .get("/get_all_questions")
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken]);
+
+    expect(getQuestionsResponse.statusCode).toBe(200);
+    expect(getQuestionsResponse.body.length).toBe(2);
+  });
+  it("Should return an empty array when the questions table is empty", async () => {
+    // Clear existing questions
+    await Question.destroy({ where: {} });
+
+    const getQuestionsResponse = await request(server)
+      .get("/get_all_questions")
+      .set("Content-Type", "application/json")
+      .set("Cookie", [sessionToken]);
+
+    expect(getQuestionsResponse.statusCode).toBe(200);
+    expect(getQuestionsResponse.body).toEqual([]);
   });
 });
