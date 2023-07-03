@@ -203,6 +203,7 @@ const updateUser = async (req: any, res: Response, next: NextFunction) => {
 			res.status(500).json({msg: 'Server Failed', error});
 		}
 	});
+}
 
 
 module.exports = {
