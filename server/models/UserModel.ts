@@ -36,7 +36,7 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     })
 
     return role === 'admin' ? "Admin User created" : "User created";
-	}
+  }
 };
 
 const loginTheUser = async ({ email, password }: loginUser) => {
@@ -53,10 +53,11 @@ const loginTheUser = async ({ email, password }: loginUser) => {
       personal_email,
       phone,
       department,
+      profile_picture,
       user_id,
     } = findUser;
     return [
-      { role, first_name, last_name, email, personal_email, phone, department },
+      { role, first_name, last_name, email, personal_email, phone, department, profile_picture },
       user_id,
     ];
   }
@@ -81,7 +82,7 @@ const rejectAnUser = async (email: string) => {
 const getUserInfo = async (user_id: UUID) => {
   const userInfo = await User.findOne({
     where: { user_id },
-    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
+    attributes: ['role', 'tags', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
   });
   if (!userInfo) throw new Error("user_id is invalid");
   else {
@@ -113,60 +114,86 @@ const getUsersPending = async (): Promise<UserType[]> => {
 }
 
 const deleteUser = async (user_id: UUID) => {
+
+  const user = await User.findOne({ where: { user_id } });
+  const filePath = user.profile_picture;
+  filePath && await deleteProfilePicture(filePath);
+
   await User.destroy({ where: { user_id } });
   return 'Account deleted';
 };
 
 const deleteAnUser = async (userDeleteEmail: string) => {
+
+  const user = await User.findOne({ where: { email: userDeleteEmail } });
+  const filePath = user.profile_picture;
+
+  filePath && await deleteProfilePicture(filePath);
   await User.destroy({ where: { email: userDeleteEmail } });
+
   return 'User deleted';
 };
 
 const updateUserInfo = async (user_id: UUID, body: any, profile_picture: string) => {
-	const {first_name, last_name, email, personal_email, phone, department} = body;
-	const updatedUserInfo = await User.update(
-		{
-			first_name,
-			last_name,
-			email,
-			personal_email,
-			phone,
-			department,
-			profile_picture,
-		},
-		{
-			where: {
-				user_id,
-			},
-		}
-	);
-	if (!updatedUserInfo) throw new Error('user_id is invalid');
-	else {
-		return updatedUserInfo;
-	}
+  const { first_name, last_name, email, personal_email, phone, department } = body;
+  const updatedUserInfo = await User.update(
+    {
+      first_name,
+      last_name,
+      email,
+      personal_email,
+      phone,
+      department,
+      profile_picture,
+    },
+    {
+      where: {
+        user_id,
+      },
+    }
+  );
+
+  const latestUserData = await getUserInfo(user_id);
+  if (!updatedUserInfo) throw new Error('user_id is invalid');
+  else {
+    return latestUserData;
+  }
 };
 
 const deleteOldProfilePicture = async (file: any, oldProfilePicture: string) => {
-	try {
-		const filePath = file.path.split('/').slice(0, -1);
-		filePath.push(oldProfilePicture);
-		const oldPicturePath = filePath.join('/');
-		await fs.unlinkSync(oldPicturePath);
-	} catch (error) {
-		console.log({msg: 'No Old Profile Image found'});
-	}
+  try {
+    const filePath = file.path.split('/').slice(0, -1);
+    filePath.push(oldProfilePicture);
+    const oldPicturePath = filePath.join('/');
+    await deleteProfilePicture(oldProfilePicture)
+  } catch (error) {
+    console.log({ msg: 'No Old Profile Image found' });
+  }
+};
+
+const getAllOfTheUsers = async () => {
+  const allUsers = await User.findAll({
+    where: { role: 'user' },
+    attributes: ['role', 'tags', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
+  });
+  return allUsers;
+};
+
+const deleteProfilePicture = async (fileName: string) => {
+  await fs.unlinkSync(`./images/profile_pictures/${fileName}`);
 };
 
 module.exports = {
-	deleteAnUser,
-	registerNewUser,
-	getUserInfo,
-	loginTheUser,
-	deleteUser,
-	getUsersPending,
-	acceptAnUser,
-	rejectAnUser,
+  deleteAnUser,
+  registerNewUser,
+  getUserInfo,
+  loginTheUser,
+  deleteUser,
+  getUsersPending,
+  acceptAnUser,
+  rejectAnUser,
   getUserByEmail,
-	updateUserInfo,
-	deleteOldProfilePicture,
+  updateUserInfo,
+  deleteOldProfilePicture,
+  getAllOfTheUsers
 };

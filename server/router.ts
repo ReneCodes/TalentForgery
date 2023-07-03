@@ -12,10 +12,11 @@ router.post("/register", UserController.registerUser);
 router.post("/login", UserController.loginUser);
 router.get("/auth_user", authUser, userExists);
 
-// ACCEPT / REJECT / UPDATE USERS
+// ACCEPT / REJECT / UPDATE /GETALL USERS
 router.post("/accept_user", authAdminUser, UserController.acceptUser);
 router.post("/reject_user", authAdminUser, UserController.rejectUser);
 router.post("/update_user", authUser, UserController.updateUser);
+router.get("/users", authAdminUser, UserController.getAllUsers);
 
 // INFORMATION ROUTES
 router.get('/invite', authAdminUser, InviteController.getInvite);
@@ -37,5 +38,7 @@ router.post('/handle_test_done', authUser, TestController.handleTest);
 router.delete('/user', authUser, UserController.deleteMyAccount);
 router.delete('/an_user', authAdminUser, UserController.deleteUserAccount);
 
+// LOGOUT
+router.delete('/logout', authUser, UserController.logUserOut);
 
 module.exports = router;
