@@ -106,7 +106,9 @@ const CreateWithQuiz = () => {
 	};
 
   const handleDataFromQuestions = (childData: QuestionType) => {
-    setQuestions((res) => [...res, childData]);
+    if (childData.question && childData.answer && childData.options.length !== 0) {
+      setQuestions((res) => [...res, childData]);
+    }
   }
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {

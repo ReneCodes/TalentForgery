@@ -20,11 +20,15 @@ const Question: FC<QuestionComp> = ({getData, onData}) => {
 
   const handleDelete = () => {
     setShow(false);
+    setQuestion('');
+    setAnswer('');
   }
 
   const handleAdd = () => {
-    setOptions((res) => [...res, option]);
-    setOption('');
+    if(option) {
+      setOptions((res) => [...res, option]);
+      setOption('');
+    }
   }
 
   useEffect(() => {
