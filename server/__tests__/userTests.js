@@ -130,7 +130,7 @@ describe("Register Tests", () => {
   it("should not allow to register when sending the same email", async () => {
     const test = await request(`http://localhost:${process.env.PORT}`)
       .post("/register")
-      .send(JSON.stringify(user_info))
+      .send(JSON.stringify(second_user))
       .set("Content-Type", "application/json")
       .expect("Content-Type", "application/json; charset=utf-8");
 

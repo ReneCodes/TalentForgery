@@ -35,7 +35,7 @@ async function createTutorial(req: any, res: Response) {
 
     const informationIsRight = await validateTutorialData(req, res);
     if (!informationIsRight) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(400).json("Not enough information provided");
     }
 
