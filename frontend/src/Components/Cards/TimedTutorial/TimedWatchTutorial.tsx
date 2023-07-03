@@ -69,7 +69,7 @@ const TimedWatchTutorial: React.FC<any> = ({videoData}) => {
 					},
 				}}
 				onClick={handleClickOpen}>
-				Satrt Tutorial
+				Start Tutorial
 			</Button>
 			<Dialog
 				fullScreen

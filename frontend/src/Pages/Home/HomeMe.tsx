@@ -7,6 +7,8 @@ import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
 import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
 import {TutorialVideoDataType} from '../../@types/Types';
 import TimedTutorialCard from '../../Components/Cards/TimedTutorial/TimedTutorialCard';
+import {PendingUserStore} from '../../utils/zustand.store';
+import TagsList from '../../Components/Create/TagsList';
 
 const mockVideoArray = [
 	{
@@ -42,6 +44,7 @@ const mockVideoArray = [
 ];
 
 export const HomeMe = () => {
+	const {pendingPerson} = PendingUserStore();
 	return (
 		<Box>
 			<h1>Home</h1>
@@ -54,16 +57,22 @@ export const HomeMe = () => {
 					))}
 			</Box>
 			<Box sx={{}}>
-				<EmployeePendingCard />
+				{pendingPerson &&
+					pendingPerson.map((user) => (
+						<Box key={user.dataValues.profile_picture}>
+							<EmployeePendingCard user={user} />
+						</Box>
+					))}
 
-				<Box sx={styles.noBar}>
+				{/* <Box sx={styles.noBar}>
 					{mockVideoArray.length > 0 &&
 						mockVideoArray.map((videoData: TutorialVideoDataType) => (
 							<Box key={Math.floor(Math.random() * 99999)}>
 								<WatchTutorial videoData={videoData} />
 							</Box>
 						))}
-				</Box>
+				</Box> */}
+
 				<TimedTutorialCard />
 			</Box>
 		</Box>

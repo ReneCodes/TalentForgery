@@ -1,5 +1,5 @@
 // @ts-ignore
-import React from 'react';
+import React, {useEffect} from 'react';
 import {Avatar, Box, Typography, useMediaQuery, useTheme} from '@mui/material';
 import {CSSObject, Menu, MenuItem, MenuItemStylesParams, Sidebar, menuClasses} from 'react-pro-sidebar';
 // Icons
@@ -24,11 +24,16 @@ interface MenuItemStyles {
 type ElementStyles = CSSObject | ((params: MenuItemStylesParams) => CSSObject | undefined);
 
 export const SideNav = () => {
+	// ZUSTAND STORE
 	const {avatar_url_path, localProfileInfo} = userProfileStore();
 	// TODO: show Links depending on User Role
-	const {profile_picture, department, first_name, role} = localProfileInfo;
-	const localProfileAvatar = `${avatar_url_path}/${profile_picture}`;
+	const {profile_picture, department, first_name} = localProfileInfo;
+	const localProfileAvatar = `${avatar_url_path}${profile_picture}`;
 	const {collapsed, toggled, breakpoint, isToggled, reachedBreakpoint} = NavbarStore();
+
+	// useEffect(() => {
+	// 	console.log('localProfileInfo', localProfileInfo);
+	// }, [localProfileInfo]);
 
 	const theme = useTheme();
 	const location = useLocation();
@@ -179,6 +184,7 @@ const styles = {
 	avatar: {
 		width: '45%',
 		height: 'auto',
+		maxHeight: '112px',
 		border: 3,
 		borderColor: 'primary.main',
 	},

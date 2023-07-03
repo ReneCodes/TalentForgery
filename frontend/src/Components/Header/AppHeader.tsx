@@ -1,14 +1,32 @@
 // @ts-ignore
-import React from 'react';
+import React, {useEffect} from 'react';
 import {AppBar, Box, IconButton, Toolbar, Typography} from '@mui/material';
 import WindowIcon from '@mui/icons-material/Window';
-import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {LoginAndOut, NavbarStore} from '../../utils/zustand.store';
+import {LoginAndOut, NavbarStore, PendingUserStore, userProfileStore} from '../../utils/zustand.store';
 import {YellowTooltip} from '../Tooltips/CustomTooltips';
+import {getPendingUsers, getSingleUserProfileData} from '../../services/Api.service';
 
 export const AppHeader = () => {
+	const {localProfileInfo, UpdateProfileInfo} = userProfileStore();
+	const {pendingPerson, storePendingPeople} = PendingUserStore();
+	// console.log('APP HEADER pendingPerson', pendingPerson);
 	const {collapsed, toggled, breakpoint, isCollapsed, isToggled} = NavbarStore();
+
+	useEffect(() => {
+		initalLoad();
+	}, []);
+	useEffect(() => {
+		console.log('APP HEADER pendingPerson', pendingPerson);
+		console.log('APP HEADER localProfileInfo', localProfileInfo);
+	}, [localProfileInfo, pendingPerson]);
+
+	async function initalLoad() {
+		console.log('INITIAL LOAD');
+
+		await getSingleUserProfileData(UpdateProfileInfo);
+		await getPendingUsers(storePendingPeople);
+	}
 
 	const {MinonLogout} = LoginAndOut();
 
