@@ -424,6 +424,7 @@ describe("Admin accepts/rejects users", () => {
   afterAll(async () => {
     await User.destroy({ where: {} });
   });
+
   it("should not accept email if it's not in DB", async () => {
     const loginResponse = await request(`http://localhost:${process.env.PORT}`)
       .post("/login")
@@ -435,7 +436,6 @@ describe("Admin accepts/rejects users", () => {
 
     const userId = loginResponse.body.user_id;
     sessionToken = loginResponse.headers["set-cookie"][0];
-
     expect(loginResponse.statusCode).to.eql(200);
     // Admins login
 
@@ -444,7 +444,7 @@ describe("Admin accepts/rejects users", () => {
       .post("/accept_user")
       .set("Content-Type", "application/json")
       .set("Cookie", [sessionToken])
-      .send(JSON.stringify({ email: emailToAccept }));
+      .send(JSON.stringify({ email: emailToAccept, tags: ["hello", "world"] }));
 
     expect(acceptUserRes.status).to.eql(404);
     expect(acceptUserRes.text).to.equal(JSON.stringify("User doesn't exist"));
@@ -470,7 +470,7 @@ describe("Admin accepts/rejects users", () => {
       .post("/accept_user")
       .set("Content-Type", "application/json")
       .set("Cookie", [sessionToken])
-      .send(JSON.stringify({ email: emailToAccept }));
+      .send(JSON.stringify({ email: emailToAccept, tags: ["hello", "world"] }));
 
     const acceptedUser = await User.findOne({
       where: { email: emailToAccept },
@@ -504,6 +504,7 @@ describe("Admin accepts/rejects users", () => {
     expect(rejectUserRes.status).to.eql(404);
     expect(rejectUserRes.text).to.equal(JSON.stringify("User doesn't exist"));
   });
+
   it("should delete user if it's in DB", async () => {
     const loginResponse = await request(`http://localhost:${process.env.PORT}`)
       .post("/login")
