@@ -141,9 +141,11 @@ const updateUserInfo = async (user_id: UUID, body: any, profile_picture: string)
 			},
 		}
 	);
+
+  const latestUserData = await getUserInfo(user_id);
 	if (!updatedUserInfo) throw new Error('user_id is invalid');
 	else {
-		return updatedUserInfo;
+		return latestUserData;
 	}
 };
 
@@ -152,8 +154,12 @@ const deleteOldProfilePicture = async (file: any, oldProfilePicture: string) => 
 		const filePath = file.path.split('/').slice(0, -1);
 		filePath.push(oldProfilePicture);
 		const oldPicturePath = filePath.join('/');
-		await fs.unlinkSync(oldPicturePath);
+    console.log(oldPicturePath);
+
+		await fs.unlinkSync(`./images/profile_pictures/${oldPicturePath}`);
 	} catch (error) {
+    console.log(error);
+
 		console.log({msg: 'No Old Profile Image found'});
 	}
 };
