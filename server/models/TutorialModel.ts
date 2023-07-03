@@ -43,7 +43,7 @@ const getUserTutorials = async (user_id: UUID) => {
   const user = await User.findOne({ where: { user_id } });
   const allVideos = [];
 
-  const normal_videos = await Tutorial.findOne(
+  const normal_videos = await Tutorial.findAll(
     {
       where: { tags: null },
       attributes: ['tutorial_id', 'title', 'video_url',
