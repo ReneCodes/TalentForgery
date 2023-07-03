@@ -1,9 +1,10 @@
 export { };
-const { Tutorial } = require('./Schemas');
+const { Tutorial, User } = require('./Schemas');
 import { UUID } from "crypto";
 import { createdTutorial } from "../types/tutorial";
 const { createQuestion } = require("./QuestionsModel");
 const crypto = require("crypto");
+const { Op } = require('sequelize');
 
 const createTheTutorial = async (providedInformation: createdTutorial, user_id: UUID) => {
 
@@ -39,11 +40,26 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
 };
 
 const getUserTutorials = async (user_id: UUID) => {
-  const user_tags = await User.findOne({ where: { user_id } }).user_tags;
+  const user = await User.findOne({ where: { user_id } });
   const allVideos = [];
 
-  const normal_videos = await Tutorial.findOne({where: {tags: null}})
-  const tagged_videos = await Tutorial.findOne({where: user_tags});
+  const normal_videos = await Tutorial.findOne(
+    {
+      where: { tags: null },
+      attributes: ['tutorial_id', 'title', 'video_url',
+        'questions_id', 'description', 'questions_shown', 'access_date', 'tags', 'due_date'],
+    });
+
+  // FINDS EVERY TUTORIAL THAT HAS AT LEAST ONE OF THE USER TAGS
+  const tagged_videos = await Tutorial.findAll({
+    where: {
+      tags: {
+        [Op.overlap]: user.tags,
+      },
+    },
+    attributes: ['tutorial_id', 'title', 'video_url', 'questions_id', 'description',
+      'questions_shown', 'access_date', 'tags', 'due_date'],
+  });
 
   allVideos.push(normal_videos);
   allVideos.push(tagged_videos);

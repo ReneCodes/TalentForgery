@@ -78,8 +78,7 @@ async function getTutorials(req: Request, res: Response) {
     const tutorials = await getUserTutorials(user_id);
     res.status(200).json(tutorials);
   } catch (error) {
-    console.log(error);
-
+    console.log((error as Error).message);
     res.status(500).json("Failed to retrieve tutorial");
   }
 }
