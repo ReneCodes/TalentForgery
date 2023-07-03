@@ -20,8 +20,8 @@ const checkInvite = async (inviteID: string) => {
   });
 
   if (!inviteFound) {
-    const isFirstUser = User.findOne({ where: {} });
-    if (isFirstUser) return 'isFirstUser';
+    const isFirstUser = await User.findOne({ where: {} });
+    if (isFirstUser == null) return 'isFirstUser';
     return false;
   } else {
     return inviteFound;

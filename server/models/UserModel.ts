@@ -28,6 +28,7 @@ const registerNewUser = async (providedInformation: registeredUser) => {
       ...providedInformation,
       invited_by: providedInformation.invite,
       user_id,
+      tags: [],
     });
 
     await Stats.create({
@@ -61,17 +62,20 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   }
 };
 
-const acceptAnUser = async (email: string) => {
+const acceptAnUser = async (email: string, tags: string[]) => {
   const findUser = await User.findOne({ where: { email } });
   if (!findUser) throw new Error("User doesn't exist");
   findUser.role = 'user';
+  findUser.tags = [...tags];
   await findUser.save();
+  return 'User accepted';
 }
 
 const rejectAnUser = async (email: string) => {
   const findUser = await User.findOne({ where: { email } });
   if (!findUser) throw new Error("User doesn't exist");
-  return await deleteAnUser(email);
+  await deleteAnUser(email);
+  return 'User rejected';
 }
 
 const getUserInfo = async (user_id: UUID) => {
@@ -109,12 +113,13 @@ const getUsersPending = async (): Promise<UserType[]> => {
 }
 
 const deleteUser = async (user_id: UUID) => {
-  return await User.destroy({ where: { user_id } });
+  await User.destroy({ where: { user_id } });
+  return 'Account deleted';
 };
 
 const deleteAnUser = async (userDeleteEmail: string) => {
   await User.destroy({ where: { email: userDeleteEmail } });
-  return;
+  return 'User deleted';
 };
 
 const updateUserInfo = async (user_id: UUID, body: any, profile_picture: string) => {

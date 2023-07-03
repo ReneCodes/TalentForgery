@@ -6,6 +6,10 @@ const User = sequelize.define("user", {
     type: DataTypes.TEXT,
     allowNull: false,
   },
+  tags: {
+    type: DataTypes.ARRAY(DataTypes.TEXT),
+    allowNull: true,
+  },
   first_name: {
     type: DataTypes.TEXT,
     allowNull: false,
@@ -177,7 +181,7 @@ if (process.env.ENV !== "Test") {
   Invites.belongsTo(User, { foreignKey: "user_created", targetKey: "user_id" });
 
   // SETTING UP THE FOREIGN KEY OF THE TUTORIAL TABLE
-  User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id'});
+  User.hasMany(Tutorial, { foreignKey: 'creator_id', sourceKey: 'user_id' });
   Tutorial.belongsTo(User, { foreignKey: 'creator_id', targetKey: 'user_id' });
 
   // SETTING UP THE FOREIGN KEY OF THE STATS TABLE

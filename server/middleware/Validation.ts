@@ -48,6 +48,7 @@ const validateTutorialData = async (req: Request, res: Response) => {
     body('questions_shown').notEmpty(),
     body('access_date').notEmpty(),
     body('due_date').notEmpty(),
+    body('tags').notEmpty(),
   ];
 
   let allRight = true;

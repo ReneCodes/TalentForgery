@@ -19,6 +19,7 @@ const user1_info = {
   first_name: "Test1",
   last_name: "Test1",
   email: "test@gmail.com",
+  tags: ['hello', 'world'],
   personal_email: "test12@gmail.com",
   password: "$2b$10$2D3duqAFVODAacQmGgjMtuQxzefQ48ovZmnZzMycCIo4OE5l.G/Xm",
   phone: "123456789",
@@ -59,11 +60,17 @@ const question_ids = [
   }
 ];
 
+const tags = [
+  "hello",
+  "world",
+]
+
 const tutorialInfo = {
   title: "hi how are you",
   video_url: "hello.mp4",
   description: "beesx",
   question_ids: JSON.stringify(question_ids),
+  tags: JSON.stringify(tags),
   questions_shown: 2,
   access_date: "Wed, 21 Jun 2023 23:00:00 GMT",
   due_date: "Thu, 29 Jun 2023 23:00:00 GMT"
@@ -113,9 +120,7 @@ describe("Admin create/see tutorials", () => {
       })
       .set("Content-Type", "application/json");
 
-    const userId = loginResponse.body.user_id;
     sessionToken = loginResponse.headers["set-cookie"][0];
-
     expect(loginResponse.statusCode).toBe(200);
   });
 
@@ -145,6 +150,7 @@ describe("Admin create/see tutorials", () => {
     expect(res.statusCode).toBe(400);
     expect(res.body).toEqual("Not enough information provided");
   });
+
   it("Should retrieve all tutorials", async () => {
     const res = await request(server)
       .get("/get_all_tutorials")
@@ -201,9 +207,9 @@ describe("User create/see tutorials", () => {
     expect(res.body).toEqual("Unauthorized");
   });
 
-  it("Should retrieve all tutorials", async () => {
+  it("Should retrieve all user tutorials", async () => {
     const res = await request(server)
-      .get("/get_all_tutorials")
+      .get("/get_tutorials")
       .set("Content-Type", "application/json")
       .set("Cookie", [sessionToken]);
 
