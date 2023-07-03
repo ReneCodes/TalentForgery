@@ -1,5 +1,5 @@
-import {Route, Routes} from 'react-router-dom';
-import {HomeMe} from '../Pages/Home/HomeMe';
+import { Route, Routes } from 'react-router-dom';
+import { HomeMe } from '../Pages/Home/HomeMe';
 import PieChartComp from '../Components/PieChart/PieChart';
 import EmployeeInfo from '../Components/EmployeeInfo/EmployeeInfo';
 import Stats from '../Components/Stats/Stats';
@@ -7,6 +7,7 @@ import ContactInfo from '../Components/ContactInfo/ContactInfo';
 import Create from '../Pages/Create';
 import Dashboard from '../Pages/Dashboard';
 import ErrorPage from '../Pages/ErrorPage';
+import AllUserStats from '../Pages/AllUserStats';
 
 const info = {
 	first_name: 'jon',
@@ -45,6 +46,10 @@ export const AppRoutes = () => {
 						taskArr={['fire', 'water', 'earth', 'air']}
 					/>
 				}
+			/>
+			<Route
+				path="/users_stats"
+				element={<AllUserStats />}
 			/>
 			<Route
 				path="/piechart"
