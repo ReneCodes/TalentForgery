@@ -15,7 +15,7 @@ router.get("/auth_user", authUser, userExists);
 // ACCEPT / REJECT / UPDATE USERS
 router.post("/accept_user", authAdminUser, UserController.acceptUser);
 router.post("/reject_user", authAdminUser, UserController.rejectUser);
-router.post("/update_user", authAdminUser, UserController.updateUser);
+router.post("/update_user", authUser, UserController.updateUser);
 
 // INFORMATION ROUTES
 router.get('/invite', authAdminUser, InviteController.getInvite);

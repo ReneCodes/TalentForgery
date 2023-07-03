@@ -9,9 +9,9 @@ import Dashboard from '../Pages/Dashboard';
 import ErrorPage from '../Pages/ErrorPage';
 
 const info = {
-	firstName: 'jon',
-	lastName: 'deen',
-	id: 33,
+	first_name: 'jon',
+	last_name: 'deen',
+	user_id: 33,
 	department: 'finance',
 	email: 'jon@gmail.com',
 	secondEmail: 'jonson@gmail.com',
