@@ -331,4 +331,14 @@ describe("User should see all questions/questions related to tutorial", () => {
       { question: "hi", options: ["1", "2", "3"], answer: "3" },
     ]);
   });
+  it("should return a 404 error if tutorial ID is invalid", async () => {
+    const invalidTutorialId = "invalid-tutorial-id";
+
+    const response = await request(server)
+      .get(`/questions/${invalidTutorialId}`)
+      .set("Cookie", [sessionToken]);
+
+    expect(response.statusCode).toBe(404);
+    expect(response.body).not.toHaveProperty("tutorial");
+  });
 });
