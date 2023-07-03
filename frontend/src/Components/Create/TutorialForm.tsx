@@ -12,7 +12,6 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
   const [description, setDesciption] = useState('');
   const [tag, setTag] = useState('');
   const [tags, setTags] = useState<string[]>([]);
-  const [length, setLength] = useState('');
 
   const handleAdd = () => {
     if(tag) {
@@ -22,7 +21,7 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
   }
 
   useEffect(() => {
-    if(getData) onData({title, description, tags, length})
+    if(getData) onData({title, description, tags})
   }, [getData])
 
   return <div className='form'>
@@ -58,13 +57,6 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
         </li>
       ))}
     </ul>
-    <TextField 
-      id="standard-basic" 
-      label="Test Length" 
-      variant="standard" 
-      value={length}
-      onChange={(e) => setLength(e.target.value)}
-    />
   </div>
 }
 

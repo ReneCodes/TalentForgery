@@ -1,27 +1,48 @@
-import { ChangeEvent, useState } from 'react';
+import { ChangeEvent, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import Question from './NewQuestion';
+import { QuestionType } from '../../utils/types';
+import { TextField } from '@mui/material';
 
 interface FormInfo {
 	title: string;
 	description: string;
 	tags: string[];
-	length: string;
+}
+
+interface DataType {
+	title: string;
+	video_url: any;
+	description: string;
+	question_ids: QuestionType[];
+	questions_shown: number;
+	access_date: string;
+	due_date: string;
 }
 
 const CreateWithQuiz = () => {
   const [open, setOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
 	const [data, setData] = useState(new FormData());
-  const [formInfo, setFormInfo] = useState<FormInfo>({
-		title: '',
+  const [questionNumber, setQuestionNumber] = useState(1);
+  const [getData, setGetData] = useState(false);
+  const [questions, setQuestions] = useState<QuestionType[]>([])
+  const [length, setLength] = useState('');
+  const [formInfo, setFormInfo] = useState<DataType>({
+    title: '',
+		video_url: {} as File,
 		description: '',
-		tags: [],
-		length: '',
+		question_ids: [],
+		questions_shown: 0,
+		access_date: '',
+		due_date: '',
 	});
+
+  useEffect(() => console.log(formInfo), [formInfo]);
+  useEffect(() => console.log(questions), [questions]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -32,9 +53,21 @@ const CreateWithQuiz = () => {
   };
 
   const handleDataFromForm = (childData: FormInfo) => {
-		setFormInfo(childData);
+		setFormInfo((res) => {
+      return {
+        ...res,
+        title: childData.title,
+        description: childData.description,
+        tags: childData.tags,
+        length,
+      }
+    });
     console.log(formInfo)
 	};
+
+  const handleDataFromQuestions = (childData: QuestionType) => {
+    setQuestions((res) => [...res, childData]);
+  }
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
@@ -55,6 +88,14 @@ const CreateWithQuiz = () => {
 		}
 	};
 
+  const handleAddQuestion = () => {
+    setQuestionNumber((res) => res+1)
+  }
+
+  const handleSubmit = () => {
+    setGetData(true);
+  }
+
   return (
     <div>
         <div className='filter_label'>
@@ -65,7 +106,7 @@ const CreateWithQuiz = () => {
       <Dialog onClose={handleClose} open={open}>
         <h2 className='dialog'>Tutorial with Quiz</h2>
         <div className='create_tutorial'>
-          <TutorialForm getData={false} onData={handleDataFromForm} />
+          <TutorialForm getData={getData} onData={handleDataFromForm} />
           <div>
             <input
               type="file"
@@ -77,7 +118,23 @@ const CreateWithQuiz = () => {
           </div>
         </div>
         <div className='divider'></div>
-        <Question />
+        {[...Array(questionNumber)].map((_, index) => (
+          <div className='question_card' key={index}><Question getData={getData} onData={handleDataFromQuestions} /></div>
+        ))}
+        <div>
+          <TextField 
+            label='quiz length'
+            value={length}
+            type='number'
+            onChange={(e) => setLength(e.target.value)}
+          ></TextField>
+          <Button onClick={handleAddQuestion}>Add Question</Button>
+        </div>
+        <div className='divider'></div>
+        <div>
+          <Button>Cancel</Button>
+          <Button onClick={handleSubmit}>Schedule</Button>
+        </div>
       </Dialog>
     </div>
   );
