@@ -37,5 +37,7 @@ router.post('/handle_test_done', authUser, TestController.handleTest);
 router.delete('/user', authUser, UserController.deleteMyAccount);
 router.delete('/an_user', authAdminUser, UserController.deleteUserAccount);
 
+// LOGOUT
+router.delete('/logout', authUser, UserController.logUserOut);
 
 module.exports = router;

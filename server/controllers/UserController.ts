@@ -133,8 +133,8 @@ const rejectUser = async (req: Request, res: Response) => {
 
 // GETS ALL THE INFORMATION FROM A CERTAIN USER
 const getUserInformation = async (req: Request, res: Response) => {
-	const session_token = req.cookies.session_token;
-	try {
+  try {
+    const session_token = req.cookies.session_token;
 		const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
 		const data = await getUserInfo(user_id);
 		res.status(200).json(data);
@@ -205,6 +205,17 @@ const updateUser = async (req: any, res: Response, next: NextFunction) => {
 	});
 }
 
+// UPDATE ALL THE INFORMATION FROM A CERTAIN USER
+const logUserOut = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const session_token = req.cookies.session_token;
+    res.clearCookie('session_token');
+		res.status(200).json('User logged out');
+	} catch (error) {
+		res.status(500).json('Server failed');
+	}
+};
+
 
 module.exports = {
 	deleteMyAccount,
@@ -216,4 +227,5 @@ module.exports = {
 	deleteUserAccount,
 	getPendingUsers,
 	updateUser,
+  logUserOut
 };

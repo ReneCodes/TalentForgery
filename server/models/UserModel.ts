@@ -53,10 +53,11 @@ const loginTheUser = async ({ email, password }: loginUser) => {
       personal_email,
       phone,
       department,
+      profile_picture,
       user_id,
     } = findUser;
     return [
-      { role, first_name, last_name, email, personal_email, phone, department },
+      { role, first_name, last_name, email, personal_email, phone, department, profile_picture },
       user_id,
     ];
   }
