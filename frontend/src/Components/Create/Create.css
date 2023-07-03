@@ -109,13 +109,6 @@ ul {
   margin-top: 3px;
 }
 
-.form {
-  display: flex;
-  flex-direction: column;
-  margin: 20px;
-  width: 60%;
-}
-
 .form_add {
   margin-top: 5px;
 }
@@ -161,19 +154,6 @@ ul {
   margin-left: 22px;
 }
 
-.video_upload {
-  margin-left: 21px;
-  margin-bottom: 20px;
-  width: 60%;
-  border: 2px solid #ccc;
-  border-radius: 4px;
-  padding: 6px 12px;
-  background-color: #f7f7f7;
-  color: #333;
-  font-weight: bold;
-  font-size: 16px;
-}
-
 .question_submit {
   margin-left: 30%;
   margin-top: 20px;
@@ -182,9 +162,4 @@ ul {
 
 .question_submit_btn {
   width: 100%;
-}
-
-.video_player {
-  width: 70%;
-  max-width: 500px;
 }
