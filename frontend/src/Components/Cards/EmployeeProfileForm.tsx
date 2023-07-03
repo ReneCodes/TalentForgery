@@ -27,10 +27,10 @@ export default function EmployeeProfileForm() {
 	const updateProfile = useForm<UpdateProfile>({
 		defaultValues: async () => {
 			try {
-				const response = await getSingleUserProfileData();
+				const response = await getSingleUserProfileData(storeUserProfileData);
 				const profileData: UpdateProfile = response.data;
 				// console.log('fetched profileData', profileData);
-				storeUserProfileData(profileData);
+				// storeUserProfileData(profileData);
 				return profileData;
 			} catch (error: any) {
 				alert('No Profile data found on Server');

@@ -10,7 +10,7 @@ const ContactInfo: FC = () => {
 	const {avatar_url_path, localProfileInfo} = userProfileStore();
 	// Profile Info
 	const {first_name, last_name, email, personal_email, phone, department, profile_picture} = localProfileInfo;
-	const localProfileAvatar = `${avatar_url_path}/${profile_picture}`;
+	const localProfileAvatar = `${avatar_url_path}${profile_picture}`;
 	// Theme
 	const {gray} = theme.palette;
 
