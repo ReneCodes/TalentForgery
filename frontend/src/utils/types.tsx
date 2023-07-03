@@ -38,3 +38,14 @@ export interface VideoDialogI {
 	setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
 	metaData: VideoDataT;
 }
+
+export interface DataType {
+	title: string;
+	video_url: any;
+  image_url: any;
+	description: string;
+	question_ids: QuestionType[];
+	questions_shown: number;
+	access_date: string;
+	due_date: string;
+}

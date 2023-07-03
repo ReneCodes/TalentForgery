@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
@@ -25,7 +25,7 @@ interface DataType {
 	due_date: string;
 }
 
-const CreateTutorial = () => {
+const CreateTutorial: FC<{onData: any}> = ({onData}) => {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
@@ -44,7 +44,11 @@ const CreateTutorial = () => {
 		due_date: '',
 	});
 
-  useEffect(() => console.log(formInfo), [formInfo]);
+  useEffect(() => {
+    if(formInfo.access_date) {
+      onData(formInfo)
+    }
+  }, [formInfo]);
 
   const handleClickOpen = () => {
     setOpen(true);
