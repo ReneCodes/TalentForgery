@@ -7,6 +7,9 @@ const {
   getUsersPending,
   acceptAnUser,
   rejectAnUser,
+  updateUserInfo,
+  deleteOldProfilePicture,
+  getAllOfTheUsers,
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -32,7 +35,6 @@ const upload = multer({ storage });
 
 // REGISTERS THE USER
 // req: Request -> req.file will complain if you leave with type
-
 const registerUser = async (req: any, res: Response, next: NextFunction) => {
 
   await upload.single('profile_image')(req, res, async (err: Error) => {
@@ -41,7 +43,7 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     if (err) return res.status(500).json('Server failed uploading profile picture');
 
     if (!informationIsRight) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(400).json("Not enough information provided");
     }
 
@@ -50,14 +52,15 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     } = req.body;
 
     const invite = await checkInvite(inviteID);
+
     if (!invite) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(409).json('Invalid invite')
     };
 
     const userExists = await getUserByEmail(email);
     if (userExists) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(409).json('User already exists');
     };
 
@@ -65,7 +68,7 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
       const profile_picture = req.file ? req.file.filename : null;
       const data = await registerNewUser({
         first_name, last_name, email, personal_email, password,
-        phone, department, invite, profile_picture
+        phone, department, invite: invite.user_created, profile_picture
       });
       return res.status(201).json(data);
     } catch (error) {
@@ -101,11 +104,11 @@ const loginUser = async (req: Request, res: Response) => {
 
 // ACCEPTS PENDING USER
 const acceptUser = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email, tags } = req.body;
 
-  if (!email) return res.status(400).json("Not enough information provided");
+  if (!email || !tags) return res.status(400).json("Not enough information provided");
   try {
-    const data = await acceptAnUser(email);
+    const data = await acceptAnUser(email, tags);
     res.status(200).json(data);
   } catch (error) {
     const errorMessage = (error as Error).message;
@@ -131,8 +134,8 @@ const rejectUser = async (req: Request, res: Response) => {
 
 // GETS ALL THE INFORMATION FROM A CERTAIN USER
 const getUserInformation = async (req: Request, res: Response) => {
-  const session_token = req.cookies.session_token;
   try {
+    const session_token = req.cookies.session_token;
     const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
     const data = await getUserInfo(user_id);
     res.status(200).json(data);
@@ -149,7 +152,7 @@ const getPendingUsers = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json('Server failed');
   }
-}
+};
 
 // DELETES AN ACCOUNT
 const deleteMyAccount = async (req: Request, res: Response) => {
@@ -165,7 +168,6 @@ const deleteMyAccount = async (req: Request, res: Response) => {
 
 //  DELETES A USER -> ONLY ADMIN
 const deleteUserAccount = async (req: Request, res: Response) => {
-
   const informationIsRight = await validateUserDelete(req, res);
   if (!informationIsRight) return res.status(400).json("Not enough information provided");
 
@@ -176,7 +178,53 @@ const deleteUserAccount = async (req: Request, res: Response) => {
   } catch (error) {
     res.status(500).json('Server failed');
   };
+};
 
+// UPDATE ALL THE INFORMATION FROM A CERTAIN USER
+const updateUser = async (req: any, res: Response, next: NextFunction) => {
+  await upload.single('profile_picture')(req, res, async (err: Error) => {
+    const session_token = req.cookies.session_token;
+
+    try {
+      const user_id = jwt.verify(session_token, process.env.SECRET).user_id;
+
+      let currentUserInfo = await getUserInfo(user_id);
+      const oldProfilePicture = currentUserInfo.profile_picture;
+      // Delete old profile picture if user updates to a new one
+      if (req.file && oldProfilePicture) {
+        deleteOldProfilePicture(req.file, oldProfilePicture);
+      }
+      // new path or old path
+      const profile_picture = req.file ? req.file.filename : oldProfilePicture;
+
+      const data = await updateUserInfo(user_id, req.body, profile_picture);
+      return res.status(201).json(data);
+    } catch (error) {
+      console.log(error);
+      res.status(500).json({ msg: 'Server Failed', error });
+    }
+  });
+}
+
+// UPDATE ALL THE INFORMATION FROM A CERTAIN USER
+const logUserOut = async (req: any, res: Response, next: NextFunction) => {
+  try {
+    const session_token = req.cookies.session_token;
+    res.clearCookie('session_token');
+    res.status(200).json('User logged out');
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
+};
+
+const getAllUsers = async (req: Request, res: Response) => {
+  try {
+    const session_token = req.cookies.session_token;
+    const data = await getAllOfTheUsers();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
 };
 
 module.exports = {
@@ -187,5 +235,8 @@ module.exports = {
   getUserInformation,
   loginUser,
   deleteUserAccount,
-  getPendingUsers
+  getPendingUsers,
+  updateUser,
+  logUserOut,
+  getAllUsers
 };

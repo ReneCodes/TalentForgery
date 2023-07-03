@@ -55,7 +55,7 @@ export const HomeMe = () => {
 			</Box>
 			<Box sx={{}}>
 				<EmployeePendingCard />
-				<EmployeeProfileForm />
+
 				<Box sx={styles.noBar}>
 					{mockVideoArray.length > 0 &&
 						mockVideoArray.map((videoData: TutorialVideoDataType) => (

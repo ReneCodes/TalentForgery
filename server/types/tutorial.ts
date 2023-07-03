@@ -11,7 +11,7 @@ export type createdTutorial = {
   // question_ids: any[];
   question_ids: string;
   questions_shown: String[];
-  tags?: String[];
+  tags: any;
   access_date: Date;
   due_date: Date;
 };

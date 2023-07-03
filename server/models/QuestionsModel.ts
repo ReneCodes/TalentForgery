@@ -17,11 +17,18 @@ async function getTutorialQuestions(tutorial_id: UUID) {
   const tutorial = await Tutorial.findOne({ where: { tutorial_id } });
   if (!tutorial) throw new Error('Invalid tutorial id');
   else {
-    const questions = await Question.findAll(
-      {
-        where: { tutorial_id },
-        attributes: ['question', 'options', 'answer', 'question_id'],
-      });
+    const questions: any[] = [];
+    const questions_id: string[] = tutorial.questions_id;
+
+    for (const question_id of questions_id) {
+      const question = await Question.findOne(
+        {
+          where: { question_id },
+          attributes: ['question', 'options', 'answer', 'question_id'],
+        });
+      questions.push({ question })
+    };
+
     return questions;
   }
 };

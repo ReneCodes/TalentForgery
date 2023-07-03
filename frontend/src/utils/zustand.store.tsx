@@ -1,4 +1,7 @@
 import {create} from 'zustand';
+import {persist, createJSONStorage} from 'zustand/middleware';
+
+import {UpdateProfile, PendingPerson} from '../@types/Types';
 
 interface MinonState {
 	minon: number;
@@ -36,8 +39,54 @@ interface LoginAndOut {
 	MinonLogout: () => void;
 }
 
-export const LoginAndOut = create<LoginAndOut>()((set) => ({
-	logedIn: false,
-	MinonLogin: () => set(() => ({logedIn: true})),
-	MinonLogout: () => set(() => ({logedIn: false})),
+export const LoginAndOut = create<LoginAndOut>()(
+	persist(
+		// @ts-ignore
+		(set, get) => ({
+			logedIn: false,
+			MinonLogin: () => set({logedIn: true}),
+			MinonLogout: () => set(() => ({logedIn: false})),
+		}),
+		{
+			name: 'minon-logged-in', // unique storage name
+			storage: createJSONStorage(() => sessionStorage), // (optional) by default, 'localStorage' is used
+		}
+	)
+);
+
+// USER PROFILE STORE
+interface ProfileInfo {
+	avatar_url_path: string;
+	localProfileInfo: UpdateProfile;
+	UpdateProfileInfo: (profileData: Partial<UpdateProfile>) => void;
+}
+
+export const userProfileStore = create<ProfileInfo>()((set) => ({
+	avatar_url_path: `http://localhost:3001/images/profile_pictures/`,
+	localProfileInfo: {
+		role: '',
+		first_name: '',
+		last_name: '',
+		email: '',
+		personal_email: '',
+		phone: '',
+		department: '',
+		profile_picture: '',
+		user_id: '',
+	},
+
+	UpdateProfileInfo: (profileData) =>
+		set((state) => ({
+			localProfileInfo: {...state.localProfileInfo, ...profileData},
+		})),
+}));
+
+// PENDING USER STORE
+interface PendingUser {
+	pendingPerson: PendingPerson[];
+	storePendingPeople: (personArr: PendingPerson[]) => void;
+}
+export const PendingUserStore = create<PendingUser>()((set) => ({
+	pendingPerson: [],
+	storePendingPeople: (personArr) => set(() => ({pendingPerson: personArr})),
 }));

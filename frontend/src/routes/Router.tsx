@@ -1,5 +1,5 @@
 import App from '../App';
-import ErrorPage from '../Pages/Error';
+import ErrorPage from '../Pages/ErrorPage';
 import {createBrowserRouter} from 'react-router-dom';
 
 import Login from '../Pages/Login';
@@ -53,7 +53,7 @@ export const Router = createBrowserRouter([
 	},
 	{
 		path: '/profile',
-		element: <ContactInfo info={info} />,
+		element: <ContactInfo />,
 	},
 	{
 		path: '/stats',

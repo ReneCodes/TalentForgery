@@ -5,13 +5,12 @@ import WindowIcon from '@mui/icons-material/Window';
 import SettingsIcon from '@mui/icons-material/Settings';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {LoginAndOut, NavbarStore} from '../../utils/zustand.store';
-import theme from '../../config/theme';
+import {YellowTooltip} from '../Tooltips/CustomTooltips';
 
 export const AppHeader = () => {
 	const {collapsed, toggled, breakpoint, isCollapsed, isToggled} = NavbarStore();
 
 	const {MinonLogout} = LoginAndOut();
-	const {secondary, primary} = theme.palette;
 
 	function handleNavbar() {
 		if (breakpoint) {
@@ -36,26 +35,45 @@ export const AppHeader = () => {
 			sx={styles.appBar}>
 			<Toolbar sx={styles.toolbar}>
 				<Box sx={styles.infoIcons}>
-					<IconButton
-						onClick={handleNavbar}
-						color="secondary">
-						<WindowIcon />
-					</IconButton>
-					<Box sx={{color: secondary.main}} />
-					<Typography variant="overline">Minon Mentor</Typography>
+					<YellowTooltip
+						title="Toggle Navbar"
+						placement="bottom-start"
+						describeChild
+						arrow>
+						<IconButton
+							aria-label="Toggle Navbar"
+							onClick={handleNavbar}
+							color="secondary">
+							<WindowIcon />
+						</IconButton>
+					</YellowTooltip>
+
+					<Box />
+					<Typography
+						variant="overline"
+						sx={{cursor: 'default'}}>
+						Minon Mentor
+					</Typography>
 				</Box>
 				<Box sx={styles.infoIcons}>
-					<IconButton
+					{/* <IconButton
 						title="Settings"
 						color="inherit">
 						<SettingsIcon />
-					</IconButton>
-					<IconButton
+					</IconButton> */}
+					<YellowTooltip
 						title="Logout"
-						onClick={MinonLogout}
-						color="inherit">
-						<LogoutIcon />
-					</IconButton>
+						placement="left"
+						enterDelay={600}
+						describeChild
+						arrow>
+						<IconButton
+							aria-label="Logout"
+							onClick={MinonLogout}
+							color="inherit">
+							<LogoutIcon />
+						</IconButton>
+					</YellowTooltip>
 				</Box>
 			</Toolbar>
 		</AppBar>
@@ -66,12 +84,6 @@ export const AppHeader = () => {
 const styles = {
 	appBar: {
 		bgcolor: 'grey.900',
-	},
-	appLogo: {
-		borderRadius: 2,
-		width: 30,
-		ml: 2,
-		cursor: 'pointer',
 	},
 	infoIcons: {
 		display: 'flex',

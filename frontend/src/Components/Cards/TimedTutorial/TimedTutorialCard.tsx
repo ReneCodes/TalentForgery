@@ -4,7 +4,6 @@ import Card from '@mui/material/Card';
 import CardActions from '@mui/material/CardActions';
 import CardContent from '@mui/material/CardContent';
 import CardMedia from '@mui/material/CardMedia';
-import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import theme from '../../../config/theme';
@@ -38,7 +37,7 @@ const questionData = [
 
 const videoData = {
 	title: 'Warehaouse Safty Regulations',
-	video_url: 'src/assets/Temp_assets/warehouse.mp4',
+	video_url: '../src/assets/Temp_assets/warehouse.mp4',
 	description: 'Learn how to use a forklift and move around safely in the warehouse',
 	question_ids: [questionData[0], questionData[1], questionData[2]],
 	questions_shown: 2,
@@ -49,6 +48,7 @@ const videoData = {
 const TimedTutorialCard = () => {
 	const {white, secondary, gray, green} = theme.palette;
 	const [dialogOpen, setDialogOpen] = React.useState(false);
+	// TODO: fetch Tutorial data from BE with Tutorial id
 	const {description, question_ids, access_date, due_date, video_url, title} = videoData;
 
 	// CALC ACCESS ALLOWANCE
@@ -63,30 +63,16 @@ const TimedTutorialCard = () => {
 					videoData={videoData}
 				/>
 			)}
+
 			<CardMedia
+				// VIDEO THUMB
 				component="img"
 				alt={title}
 				height="200"
-				image="src/assets/Temp_assets/purple.png"
+				image="../src/assets/Temp_assets/purple.png"
 			/>
 			<CardContent>
 				<CardActions sx={{position: 'absolute', top: 100, left: '50%', transform: 'translate(-50%,-50%)'}}>
-					{/* <Button
-						onClick={() => setDialogOpen(true)}
-						size="medium"
-						variant="outlined"
-						sx={{
-							backgroundColor: white.main,
-							border: '1px solid',
-							borderColor: gray['300'],
-							color: gray['900'],
-							':hover': {
-								backgroundColor: secondary.main,
-								borderColor: secondary.main,
-							},
-						}}>
-						Start Tutorial
-					</Button> */}
 					<TimedWatchTutorial videoData={videoData} />
 				</CardActions>
 				<Typography
@@ -96,6 +82,8 @@ const TimedTutorialCard = () => {
 					{title}
 				</Typography>
 				<Box sx={{display: 'flex', gap: '10px', justifyContent: 'space-between', alignItems: 'center'}}>
+					{/* TODO: insert time from fetched Data */}
+					07. Jul 23 - 9:00
 					<TimedVideoInfo videoData={videoData} />
 					<Box sx={{display: 'flex'}}>
 						{/* {watched && <CheckCircleIcon sx={{color: green.main, mr: 1}} />}

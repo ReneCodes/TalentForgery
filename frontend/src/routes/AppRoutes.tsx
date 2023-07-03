@@ -7,11 +7,13 @@ import ContactInfo from '../Components/ContactInfo/ContactInfo';
 // import Create from '../Pages/Create';
 import Dashboard from '../Pages/Dashboard';
 import NewCreate from '../Pages/NewCreate';
+import ErrorPage from '../Pages/ErrorPage';
+
 
 const info = {
-	firstName: 'jon',
-	lastName: 'deen',
-	id: 33,
+	first_name: 'jon',
+	last_name: 'deen',
+	user_id: 33,
 	department: 'finance',
 	email: 'jon@gmail.com',
 	secondEmail: 'jonson@gmail.com',
@@ -22,7 +24,7 @@ export const AppRoutes = () => {
 	return (
 		<Routes>
 			<Route
-				path="/"
+				path="/*"
 				element={<HomeMe />}
 			/>
 			<Route
@@ -31,7 +33,7 @@ export const AppRoutes = () => {
 			/>
 			<Route
 				path="/profile"
-				element={<ContactInfo info={info} />}
+				element={<ContactInfo />}
 			/>
 			<Route
 				path="/stats"
