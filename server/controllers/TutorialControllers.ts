@@ -4,10 +4,15 @@ const {
   createTheTutorial,
   getAllTheTutorials,
 } = require("../models/TutorialModel");
+
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
+const { validateTutorialData, validateTutorialId } = require('../middleware/Validation');
+const fs = require('fs');
+
 import { Request, Response } from "express";
-const multer = require('multer');
 import { fileInput } from '../types/user';
+
+const multer = require('multer');
 
 const storage = multer.diskStorage({
   destination: (req: Request, file: File, cb: Function) => {
@@ -26,20 +31,23 @@ export async function createTutorial(req: any, res: Response) {
   const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
 
   await upload.single('video_url')(req, res, async (err: Error) => {
-    const { title, description, question_ids, questions_shown, access_date, due_date, }: createdTutorial = req.body;
 
-    if (!title || !description || !question_ids || !questions_shown || !access_date || !due_date) {
-      return res.status(400).json("All fields are required");
+    const informationIsRight = await validateTutorialData(req, res);
+    if (!informationIsRight) {
+      await fs.unlinkSync(req.file.path);
+      return res.status(400).json("Not enough information provided");
     }
+
+    const { title, description, question_ids, questions_shown, access_date, due_date, }: createdTutorial = req.body;
     if (err) return res.status(500).json('Server failed uploading profile picture');
 
     try {
-      const videoFileName = req.file ? req.file.filename : 'thisisthefile.mp4';
+      const videoFileName = req.file ? req.file.filename : 'no_file.mp4';
       const tutorialData = { title, video_url: videoFileName, description, question_ids, questions_shown, access_date, due_date, };
 
       tutorialData.video_url = videoFileName;
       const [tutorial_id, questions_id] = await createTheTutorial(tutorialData, user_id);
-      res.status(201).json({message: "Tutorial created.", tutorial_id, questions_id});
+      res.status(201).json({ message: "Tutorial created.", tutorial_id, questions_id });
 
     } catch (error) {
       res.status(500).json("Failed to create tutorial.");
@@ -60,12 +68,12 @@ export async function getAllTutorials(req: Request, res: Response) {
 
 export async function getQuestions(req: Request, res: Response) {
 
-  const { tutorial_id } = req.body;
-  if (!tutorial_id) res.status(400).json("Not enough information provided");
+  const informationIsRight = await validateTutorialId(req, res);
+  if (!informationIsRight) return res.status(400).json("Not enough information provided");
 
   try {
+    const { tutorial_id } = req.body;
     const questions = await getTutorialQuestions(tutorial_id);
-
     res.status(200).json(questions);
   } catch (error) {
     const errorMessage = (error as Error).message;

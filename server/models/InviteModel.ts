@@ -1,6 +1,6 @@
 import { UUID } from "crypto";
 const crypto = require('crypto');
-const { Invites } = require('./Schemas');
+const { Invites, User } = require('./Schemas');
 
 const getUserInvite = async (user_id: UUID) => {
   const invite = await Invites.findOne({ where: { user_created: user_id } });
@@ -19,7 +19,14 @@ const checkInvite = async (inviteID: string) => {
     attributes: ['inviteID', 'user_created']
   });
 
-  return inviteFound;
+  if (!inviteFound) {
+    const isFirstUser = User.findOne({ where: {} });
+    if (isFirstUser) return 'isFirstUser';
+    return false;
+  } else {
+    return inviteFound;
+  }
+
 };
 
 module.exports = {

@@ -4,17 +4,17 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
-
-const { checkInvite } = require('./InviteModel');
 const { User, Stats } = require('./Schemas');
 
+const getUserByEmail = async (email: string) => {
+  const userExists = await User.findOne({ where: { email } });
+  return userExists !== null ? true : false;
+};
 
 const registerNewUser = async (providedInformation: registeredUser) => {
   const userList = await User.findOne({ where: {} });
   const findUser = await User.findOne({ where: { email: providedInformation.email } });
-  const invite = await checkInvite(providedInformation.inviteID);
   if (findUser) throw new Error('User already exists');
-  else if (!invite && userList !== null) throw new Error('Invalid invite');
   else {
     const hash = await hashAsync(providedInformation.password, 10);
     providedInformation.password = hash;
@@ -25,7 +25,7 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     await User.create({
       role,
       ...providedInformation,
-      invited_by: !invite ? 'first' : invite.user_created,
+      invited_by: providedInformation.invite,
       user_id,
     });
 
@@ -124,5 +124,6 @@ module.exports = {
   deleteUser,
   getUsersPending,
   acceptAnUser,
-  rejectAnUser
+  rejectAnUser,
+  getUserByEmail
 };

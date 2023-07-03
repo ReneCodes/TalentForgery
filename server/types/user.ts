@@ -7,7 +7,7 @@ export type registeredUser = {
   password: String,
   phone: String,
   departement: String,
-  inviteID: String,
+  invite: String,
   customFileName: String,
 };
 
