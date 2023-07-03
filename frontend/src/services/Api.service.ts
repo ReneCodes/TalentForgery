@@ -1,7 +1,8 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, { AxiosResponse } from 'axios';
 
-import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
-import {NavigateFunction} from 'react-router-dom';
+import { LoginFormValues, RegisterFormValues, UpdateProfile, User } from '../@types/Types';
+import { NavigateFunction } from 'react-router-dom';
+import { SetStateAction } from 'react';
 
 // const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -55,7 +56,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({email, password}, navigate);
+		loginUser({ email, password }, navigate);
 	} catch (error: any) {
 		errorMessage = error.response.data;
 	}
@@ -65,7 +66,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: {data: string} = await axios.get('/api/invite');
+		const invite: { data: string } = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
@@ -88,7 +89,7 @@ export async function getAdminInvite(setLinkText: any) {
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({email});
+		const data = JSON.stringify({ email });
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -218,5 +219,30 @@ export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<
 	} catch (error: any) {
 		alert(error.response.data);
 		throw error;
+	}
+};
+
+export async function getAllUsers(setUsers: SetStateAction<any>) {
+	try {
+		const res: any = await axios.get<UpdateProfile>(`/api/users`);
+		setUsers([...res.data]);
+	} catch (error: any) {
+		alert(error.response.data);
+		throw error;
+	}
+};
+
+export async function getUserStats(email: string) {
+	try {
+		const data = JSON.stringify({ email });
+		const res = await axios.post('/api/user_stats', data, {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		return res;
+	}
+	catch (error: any) {
+		alert(error.response.data);
 	}
 }

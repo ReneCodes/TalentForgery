@@ -10,6 +10,7 @@ const {
   updateUserInfo,
   deleteOldProfilePicture,
   getAllOfTheUsers,
+  getUserStatsByEmail
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -217,6 +218,7 @@ const logUserOut = async (req: any, res: Response, next: NextFunction) => {
   }
 };
 
+// GETS ALL OF THE USERS
 const getAllUsers = async (req: Request, res: Response) => {
   try {
     const session_token = req.cookies.session_token;
@@ -224,6 +226,20 @@ const getAllUsers = async (req: Request, res: Response) => {
     res.status(200).json(data);
   } catch (error) {
     res.status(500).json('Server failed');
+  }
+};
+
+// GETS THE USER STATS
+const getUserStats = async (req: Request, res: Response) => {
+  try {
+    const { email } = req.body;
+    if (!email) return res.status(400).json('Not enough information provided');
+    const data = await getUserStatsByEmail(email);
+    res.status(200).json(data);
+  } catch (error) {
+    const errorMessage = (error as Error).message;
+    if (errorMessage === 'Invalid email') res.status(404).json(errorMessage);
+    else res.status(500).json('Server failed');
   }
 };
 
@@ -238,5 +254,6 @@ module.exports = {
   getPendingUsers,
   updateUser,
   logUserOut,
-  getAllUsers
+  getAllUsers,
+  getUserStats
 };

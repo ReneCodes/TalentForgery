@@ -183,6 +183,16 @@ const deleteProfilePicture = async (fileName: string) => {
   await fs.unlinkSync(`./images/profile_pictures/${fileName}`);
 };
 
+const getUserStatsByEmail = async (email: string) => {
+  const user = await User.findOne({ where: { email } });
+  if(user == null) throw new Error('Invalid email');
+  const stats = await Stats.findOne({
+    where: { user_id: user.user_id },
+    attributes: ['passed', 'failed', 'watched', 'not_watched', 'correct_questions', 'wrong_questions']
+  });
+  return stats;
+};
+
 module.exports = {
   deleteAnUser,
   registerNewUser,
@@ -195,5 +205,6 @@ module.exports = {
   getUserByEmail,
   updateUserInfo,
   deleteOldProfilePicture,
-  getAllOfTheUsers
+  getAllOfTheUsers,
+  getUserStatsByEmail
 };
