@@ -2,20 +2,20 @@ const router = require('express').Router();
 
 const UserController = require('./controllers/UserController');
 const InviteController = require('./controllers/InviteController');
-const TutorialController = require("./controllers/TutorialControllers");
+const TutorialController = require('./controllers/TutorialControllers');
 const TestController = require('./controllers/TestController');
 
-const { authUser, authAdminUser, userExists } = require('./middleware/AuthMiddleware');
+const {authUser, authAdminUser, userExists} = require('./middleware/AuthMiddleware');
 
 // AUTHENTICATION ROUTES
-router.post("/register", UserController.registerUser);
-router.post("/login", UserController.loginUser);
-router.get("/auth_user", authUser, userExists);
+router.post('/register', UserController.registerUser);
+router.post('/login', UserController.loginUser);
+router.get('/auth_user', authUser, userExists);
 
 // ACCEPT / REJECT / UPDATE USERS
-router.post("/accept_user", authAdminUser, UserController.acceptUser);
-router.post("/reject_user", authAdminUser, UserController.rejectUser);
-router.post("/update_user", authAdminUser, UserController.updateUser);
+router.post('/accept_user', authAdminUser, UserController.acceptUser);
+router.post('/reject_user', authAdminUser, UserController.rejectUser);
+router.post('/update_user', authUser, UserController.updateUser);
 
 // INFORMATION ROUTES
 router.get('/invite', authAdminUser, InviteController.getInvite);
@@ -34,6 +34,5 @@ router.post('/handle_test_done', authUser, TestController.handleTest);
 // DELETE USER
 router.delete('/user', authUser, UserController.deleteMyAccount);
 router.delete('/an_user', authAdminUser, UserController.deleteUserAccount);
-
 
 module.exports = router;
