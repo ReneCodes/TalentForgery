@@ -1,7 +1,7 @@
 import {create} from 'zustand';
 import {persist, createJSONStorage} from 'zustand/middleware';
 
-import {UpdateProfile} from '../@types/Types';
+import {UpdateProfile, PendingPerson} from '../@types/Types';
 
 interface MinonState {
 	minon: number;
@@ -79,4 +79,14 @@ export const userProfileStore = create<ProfileInfo>()((set) => ({
 		set((state) => ({
 			localProfileInfo: {...state.localProfileInfo, ...profileData},
 		})),
+}));
+
+// PENDING USER STORE
+interface PendingUser {
+	pendingPerson: PendingPerson[];
+	storePendingPeople: (personArr: PendingPerson[]) => void;
+}
+export const PendingUserStore = create<PendingUser>()((set) => ({
+	pendingPerson: [],
+	storePendingPeople: (personArr) => set(() => ({pendingPerson: personArr})),
 }));

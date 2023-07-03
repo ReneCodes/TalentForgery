@@ -15,7 +15,6 @@ import {userProfileStore} from '../../utils/zustand.store';
 
 export default function EmployeeProfileForm() {
 	const {avatar_url_path, localProfileInfo, UpdateProfileInfo} = userProfileStore();
-	let avatarPath = avatar_url_path;
 	// Local States
 	const [open, setOpen] = React.useState(false);
 	const [readOnly, setReadOnly] = React.useState(true);
@@ -23,10 +22,6 @@ export default function EmployeeProfileForm() {
 	const [updateError, setUpdateError] = React.useState('');
 	// Collor Theme
 	const {secondary, gray, white, red, green} = theme.palette;
-
-	React.useEffect(() => {
-		// console.log('local userProfile', userProfile);
-	}, [localProfileInfo]);
 
 	// React hook Form
 	const updateProfile = useForm<UpdateProfile>({
@@ -95,11 +90,13 @@ export default function EmployeeProfileForm() {
 	};
 
 	return (
-		<div>
+		<Box sx={{width: '100%'}}>
 			<Button
-				variant="outlined"
-				onClick={handleClickOpen}>
-				Open form dialog
+				aria-label="update profile"
+				variant="contained"
+				onClick={handleClickOpen}
+				fullWidth>
+				Update Profile
 			</Button>
 			<Dialog
 				open={open}
@@ -125,7 +122,7 @@ export default function EmployeeProfileForm() {
 											alt="profile image"
 											src={
 												localProfileInfo.profile_picture
-													? (avatarPath += localProfileInfo.profile_picture)
+													? `${avatar_url_path}/${localProfileInfo.profile_picture}`
 													: 'src/assets/default_user.png'
 											}></Avatar>
 									)}
@@ -298,7 +295,7 @@ export default function EmployeeProfileForm() {
 				</DialogContent>
 				<DialogContentText></DialogContentText>
 			</Dialog>
-		</div>
+		</Box>
 	);
 }
 
@@ -315,7 +312,7 @@ const styles = {
 		height: '100%',
 		objectFit: 'cover',
 		border: 3,
-		borderColor: 'gray.900',
+		borderColor: 'primary.main',
 		backgrondColor: 'red.main',
 	},
 	department: {

@@ -27,17 +27,6 @@ export type UpdateProfile = {
 	user_id: string | number;
 };
 
-// export interface UpdateUserProfile extends UpdateProfile {
-// 	// first_name: string;
-// 	// last_name: string;
-// 	// email: string;
-// 	// personal_email: string;
-// 	// phone: string;
-// 	// department: string;
-// 	// profile_picture: string;
-// 	// user_id: string;
-// }
-
 export type User = {
 	first_name: string;
 	last_name: string;
@@ -57,3 +46,32 @@ export type TutorialVideoDataType = {
 	has_form: boolean;
 	from_done: boolean;
 };
+
+export interface PendingPerson {
+	dataValues: {
+		role: string;
+		first_name: string;
+		last_name: string;
+		email: string;
+		department: string;
+		profile_picture: string;
+		invited_by: string;
+	};
+	_previousDataValues: {
+		role: string;
+		first_name: string;
+		last_name: string;
+		email: string;
+		department: string;
+		profile_picture: string;
+		invited_by: string;
+	};
+	uniqno: number;
+	_changed?: any;
+	_options?: any;
+	isNewRecord: boolean;
+	invited_by: {
+		first_name: string;
+		last_name: string;
+	};
+}
