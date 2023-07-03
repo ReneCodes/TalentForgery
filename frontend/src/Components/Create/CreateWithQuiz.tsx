@@ -6,6 +6,8 @@ import VideoPreview from './VideoPreview';
 import Question from './NewQuestion';
 import { QuestionType } from '../../utils/types';
 import { TextField } from '@mui/material';
+import Schedule from './Schedule';
+import ImagePreview from './ImagePreview';
 
 interface FormInfo {
 	title: string;
@@ -16,6 +18,7 @@ interface FormInfo {
 interface DataType {
 	title: string;
 	video_url: any;
+  image_url: any;
 	description: string;
 	question_ids: QuestionType[];
 	questions_shown: number;
@@ -25,8 +28,11 @@ interface DataType {
 
 const CreateWithQuiz = () => {
   const [open, setOpen] = useState(false);
+  const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
-	const [data, setData] = useState(new FormData());
+	const [videoData, setVideoData] = useState(new FormData());
+  const [imageSubmit, setImageSubmit] = useState(false);
+	const [imageData, setImageData] = useState(new FormData());
   const [questionNumber, setQuestionNumber] = useState(1);
   const [getData, setGetData] = useState(false);
   const [questions, setQuestions] = useState<QuestionType[]>([])
@@ -34,6 +40,7 @@ const CreateWithQuiz = () => {
   const [formInfo, setFormInfo] = useState<DataType>({
     title: '',
 		video_url: {} as File,
+    image_url: {} as File,
 		description: '',
 		question_ids: [],
 		questions_shown: 0,
@@ -52,16 +59,50 @@ const CreateWithQuiz = () => {
     setOpen(false);
   };
 
+  const handleScheduleOpen = () => {
+    setScheduleOpen(true);
+  };
+
+  const handleScheduleClose = () => {
+    setScheduleOpen(false);
+    handleClose();
+  };
+
+  const handleScheduleData = (data: {startDate: string, endDate: string}) => {
+    if (parseInt(length) > questions.length) {
+      alert('too few questions')
+    } else {
+      setFormInfo((res) => {
+        return {
+          ...res,
+          access_date: data.startDate,
+          due_date: data.endDate,
+          question_ids: questions
+        }
+      });
+    }
+  };
+
   const handleDataFromForm = (childData: FormInfo) => {
-		setFormInfo((res) => {
-      return {
-        ...res,
-        title: childData.title,
-        description: childData.description,
-        tags: childData.tags,
-        length,
-      }
-    });
+    if (!childData.title || !childData.description || !length) {
+      alert('form information missing');
+      setGetData(false);
+    } else if (!videoSubmit || !imageSubmit) {
+      alert('video and thumbnail is needed');
+      setGetData(false);
+    } else {
+      setFormInfo((res) => {
+        return {
+          ...res,
+          title: childData.title,
+          description: childData.description,
+          tags: childData.tags,
+          length,
+          video_url: videoData,
+          image_url: imageData
+        }
+      });
+    }
     console.log(formInfo)
 	};
 
@@ -81,12 +122,31 @@ const CreateWithQuiz = () => {
 				setVideoSubmit(true);
 				const formatedFile = new FormData();
 				formatedFile.append('video', file);
-				setData(formatedFile);
+				setVideoData(formatedFile);
 			}
 		} else {
 			setVideoSubmit(false);
 		}
 	};
+
+  const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
+    const file = event.target.files?.[0];
+
+    if(file) {
+      const fileSize = file.size / (1024 * 1024)
+      if(fileSize > 10) {
+        alert('file size to large, the limit is 10mb');
+        setImageSubmit(false);
+      } else {
+        setImageSubmit(true)
+        const formattedFile = new FormData();
+        formattedFile.append('image', file);
+        setImageData(formattedFile);
+      }
+    } else {
+      setImageSubmit(false);
+    }
+  }
 
   const handleAddQuestion = () => {
     setQuestionNumber((res) => res+1)
@@ -94,6 +154,7 @@ const CreateWithQuiz = () => {
 
   const handleSubmit = () => {
     setGetData(true);
+    handleScheduleOpen();
   }
 
   return (
@@ -114,7 +175,14 @@ const CreateWithQuiz = () => {
               onChange={handleFileUpload}
               className="video_upload"
             />
-            <VideoPreview showPreview={videoSubmit} videoData={data} />
+            <VideoPreview showPreview={videoSubmit} videoData={videoData} />
+            <input
+              type="file"
+              accept="image/*"
+              onChange={handleImageUpload}
+              className="video_upload"
+            />
+            <ImagePreview showPreview={imageSubmit} imageData={imageData} />
           </div>
         </div>
         <div className='divider'></div>
@@ -136,6 +204,11 @@ const CreateWithQuiz = () => {
           <Button onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
+      <Schedule 
+        open={scheduleOpen}  
+        onClose={handleScheduleClose}
+        onData={handleScheduleData}
+      />
     </div>
   );
 }
