@@ -9,11 +9,11 @@ interface TutorialInfoProps {
   tutorial: DataType;
 }
 
-const TutorialInfo: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
+const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
   return (
     <div>
       <Dialog onClose={onClose} open={open}>
-        <DialogTitle>Genral Info Tutorial</DialogTitle>
+        <DialogTitle>Tutorial Reshedule</DialogTitle>
         <div className="info_box">
           <div className="info_info">
             <h2>{tutorial.title}</h2>
@@ -26,4 +26,4 @@ const TutorialInfo: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
   );
 }
 
-export default TutorialInfo;
+export default TutorialReshedule;
