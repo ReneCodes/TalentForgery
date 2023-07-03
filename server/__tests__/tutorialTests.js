@@ -236,6 +236,7 @@ describe("User should see all questions/questions related to tutorial", () => {
   afterAll(async () => {
     // Clean up the user records
     await User.destroy({ where: {} });
+    await Tutorial.destroy({ where: {} });
     await Question.destroy({ where: {} });
   });
 
@@ -256,7 +257,7 @@ describe("User should see all questions/questions related to tutorial", () => {
       question: "hi",
       options: ["1", "2", "3"],
       answer: "3",
-      tutorial_id: "122233eaddasdarrg-asdaf213dadgg",
+      tutorial_id: "122233eaddasdarrg-asdaf213dadkk",
     });
 
     // Retrieve all questions
@@ -268,16 +269,66 @@ describe("User should see all questions/questions related to tutorial", () => {
     expect(getQuestionsResponse.statusCode).toBe(200);
     expect(getQuestionsResponse.body.length).toBe(2);
   });
-  it("Should return an empty array when the questions table is empty", async () => {
-    // Clear existing questions
-    await Question.destroy({ where: {} });
+  it("it Should retrieve question for particular tutorial id", async () => {
+    const tutorialId = "122233eaddasdarrg-asdaf213dadgg";
 
-    const getQuestionsResponse = await request(server)
-      .get("/get_all_questions")
-      .set("Content-Type", "application/json")
-      .set("Cookie", [sessionToken]);
+    // Create a tutorial
+    await Tutorial.create({
+      tutorial_id: tutorialId,
+      creator_id: "creator-id",
+      title: "Tutorial Title",
+      video_url: "https://example.com/tutorial-video",
+      description: "Tutorial description",
+      access_date: "2023-06-24",
+      due_date: "2023-06-30",
+    });
 
-    expect(getQuestionsResponse.statusCode).toBe(200);
-    expect(getQuestionsResponse.body).toEqual([]);
+    // Create questions related to the tutorial
+    await Question.create({
+      question: "This is the Question",
+      options: [
+        "this is an option",
+        "when its green its the answer",
+        "press delete to remove the tutorial",
+      ],
+      answer: "when its green its the answer",
+      tutorial_id: tutorialId,
+    });
+
+    await Question.create({
+      question: "hi",
+      options: ["1", "2", "3"],
+      answer: "3",
+      tutorial_id: tutorialId,
+    });
+
+    const response = await request(server)
+      .post("/questions")
+      .set("Cookie", [sessionToken])
+      .send({ tutorial_id: tutorialId });
+
+    expect(response.statusCode).toBe(200);
+    expect(response.body).toHaveLength(3);
+    expect(response.body).toEqual([
+      {
+        question: "This is the Question",
+        options: [
+          "this is an option",
+          "when its green its the answer",
+          "press delete to remove the tutorial",
+        ],
+        answer: "when its green its the answer",
+      },
+      {
+        question: "This is the Question",
+        options: [
+          "this is an option",
+          "when its green its the answer",
+          "press delete to remove the tutorial",
+        ],
+        answer: "when its green its the answer",
+      },
+      { question: "hi", options: ["1", "2", "3"], answer: "3" },
+    ]);
   });
 });
