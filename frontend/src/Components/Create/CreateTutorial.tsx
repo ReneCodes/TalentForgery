@@ -170,9 +170,9 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
             <ImagePreview showPreview={imageSubmit} imageData={imageData} />
           </div>
         </div>
-        <div>
-          <Button>Cancel</Button>
-          <Button onClick={handleSubmit}>Schedule</Button>
+        <div className='quiz_line schedule_line'>
+          <Button variant='contained' onClick={handleClose}>Cancel</Button>
+          <Button variant='contained' onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
       <Schedule 

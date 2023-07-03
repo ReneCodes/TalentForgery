@@ -203,7 +203,7 @@ const CreateWithQuiz = () => {
         </div>
         <Divider />
         <div className='quiz_line schedule_line'>
-          <Button variant="contained">Cancel</Button>
+          <Button variant="contained" onClick={handleClose}>Cancel</Button>
           <Button variant="contained" onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
