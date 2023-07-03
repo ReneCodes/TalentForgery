@@ -2,7 +2,6 @@ import {FC, useState} from 'react';
 import {useForm} from 'react-hook-form';
 import {
 	Container,
-	Input,
 	Typography,
 	TextField,
 	FormControl,
@@ -195,7 +194,10 @@ const Login: FC = () => {
 			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', my: 4}}>
 				<Button
 					type="button"
-					onClick={MinonLogin}
+					onClick={() => {
+						MinonLogin();
+						navigate('/');
+					}}
 					variant="contained"
 					aria-label="login"
 					sx={{backgroundColor: red.main}}>

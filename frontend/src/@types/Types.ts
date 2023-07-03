@@ -4,33 +4,30 @@ export type LoginFormValues = {
 };
 
 export type RegisterFormValues = {
-	email: string;
-	password: string;
-	profile_image: File | any;
 	first_name: string;
 	last_name: string;
-	department: string;
+	email: string;
 	personal_email: string;
-	confirmPassword: string;
 	phone: string;
+	department: string;
+	profile_picture?: File | string;
+	password: string;
+	confirmPassword: string;
 };
 
 export type UpdateProfile = {
-	profile_image: File | any;
-	user_id: string | number;
+	role?: string;
 	first_name: string;
 	last_name: string;
 	email: string;
+	personal_email?: string;
+	phone?: string;
 	department: string;
-	personal_email: string;
-	phone: string;
+	profile_picture?: File | string;
+	user_id: string | number;
 };
 
-export interface UserProfile extends File {
-	url: string;
-}
-
-export type person = {
+export type User = {
 	first_name: string;
 	last_name: string;
 	email: string;
@@ -49,3 +46,32 @@ export type TutorialVideoDataType = {
 	has_form: boolean;
 	from_done: boolean;
 };
+
+export interface PendingPerson {
+	dataValues: {
+		role: string;
+		first_name: string;
+		last_name: string;
+		email: string;
+		department: string;
+		profile_picture: string;
+		invited_by: string;
+	};
+	_previousDataValues: {
+		role: string;
+		first_name: string;
+		last_name: string;
+		email: string;
+		department: string;
+		profile_picture: string;
+		invited_by: string;
+	};
+	uniqno: number;
+	_changed?: any;
+	_options?: any;
+	isNewRecord: boolean;
+	invited_by: {
+		first_name: string;
+		last_name: string;
+	};
+}

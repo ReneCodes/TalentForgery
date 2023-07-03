@@ -3,9 +3,9 @@ import {Container, Typography, Box, Paper, Divider, Stack, Avatar, Button} from 
 
 import {userProfileStore} from '../../utils/zustand.store';
 import theme from '../../config/theme';
-import EmployeeProfileForm from '../Cards/EmployeeProfileForm';
+import EmployeeProfileForm from './EmployeeProfileForm';
 
-const ContactInfo: FC = () => {
+const EmployeePendingInfo: FC = () => {
 	// Zustand Store
 	const {avatar_url_path, localProfileInfo} = userProfileStore();
 	// Profile Info
@@ -16,13 +16,13 @@ const ContactInfo: FC = () => {
 
 	return (
 		<Container>
-			<Box sx={{minWidth: 250, display: {sx: 'column', md: 'flex'}}}>
+			<Box sx={{minWidth: 250, display: 'column'}}>
 				<Stack
 					spacing={2}
 					sx={{maxWidth: '500px', mb: 4}}>
 					<Avatar
 						sx={{
-							display: {xs: 'block', sm: 'none'},
+							display: 'block',
 							width: '120px',
 							height: 'auto',
 							m: 2,
@@ -98,33 +98,15 @@ const ContactInfo: FC = () => {
 					</Box>
 				</Stack>
 				<Box sx={styles.update}>
-					<Avatar
-						sx={styles.avatar}
-						alt="profile image"
-						src={profile_picture ? localProfileAvatar : '../src/assets/default_user.png'}></Avatar>
-
-					<Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
-						<EmployeeProfileForm />
-
-						<Button
-							variant="contained"
-							sx={{width: '100%'}}>
-							Update Password
-						</Button>
-					</Box>
+					<EmployeeProfileForm />
 				</Box>
 			</Box>
 			<Divider />
-			<Typography
-				variant="h5"
-				sx={styles.header}>
-				Certificates
-			</Typography>
 		</Container>
 	);
 };
 
-export default ContactInfo;
+export default EmployeePendingInfo;
 
 /** @type {import("@mui/material").SxProps} */
 const styles = {
@@ -144,7 +126,7 @@ const styles = {
 		},
 	},
 	header: {
-		textAlign: {xs: 'center', sm: 'left'},
+		textAlign: 'left',
 	},
 	detail: {px: 1, fontSize: '20px'},
 	paper: {
@@ -159,7 +141,7 @@ const styles = {
 		fontSize: '14px',
 	},
 	avatar: {
-		display: {xs: 'none', sm: 'block', md: 'block'},
+		display: 'block',
 		width: '100%',
 		maxWidth: '120px',
 		height: 'auto',
@@ -169,13 +151,10 @@ const styles = {
 	},
 	update: {
 		display: 'flex',
-		flexDirection: {sm: 'row', md: 'column'},
 		justifyContent: 'center',
 		alignItems: 'center',
-		width: {xs: '230px', sm: '400px', md: '230px'},
-		maxWidth: {xs: '230px', sm: '400px', md: '230px'},
-		gap: 3,
-		p: 2,
-		mx: {xs: 'auto', sm: 4, md: 0},
+		maxWidth: '200px',
+		m: 2,
+		mx: 'auto',
 	},
 };

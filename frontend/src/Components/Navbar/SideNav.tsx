@@ -8,7 +8,7 @@ import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
 import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
 import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
 import {Link, useLocation} from 'react-router-dom';
-import {NavbarStore} from '../../utils/zustand.store';
+import {NavbarStore, userProfileStore} from '../../utils/zustand.store';
 
 interface MenuItemStyles {
 	root?: ElementStyles;
@@ -24,6 +24,10 @@ interface MenuItemStyles {
 type ElementStyles = CSSObject | ((params: MenuItemStylesParams) => CSSObject | undefined);
 
 export const SideNav = () => {
+	const {avatar_url_path, localProfileInfo} = userProfileStore();
+	// TODO: show Links depending on User Role
+	const {profile_picture, department, first_name, role} = localProfileInfo;
+	const localProfileAvatar = `${avatar_url_path}/${profile_picture}`;
 	const {collapsed, toggled, breakpoint, isToggled, reachedBreakpoint} = NavbarStore();
 
 	const theme = useTheme();
@@ -48,15 +52,15 @@ export const SideNav = () => {
 				<Avatar
 					sx={styles.avatar}
 					alt="profile image"
-					src="src/assets/bob_minion.png"></Avatar>
+					src={profile_picture ? localProfileAvatar : '../src/assets/default_user.png'}></Avatar>
 				{!collapsed && (
 					<Box textAlign={'center'}>
 						<Typography
 							variant="body2"
 							sx={styles.department}>
-							Department
+							Department: {department}
 						</Typography>
-						<Typography variant="overline">Bob</Typography>
+						<Typography variant="overline">{first_name}</Typography>
 					</Box>
 				)}
 			</Box>
@@ -170,9 +174,10 @@ const styles = {
 		alignItems: 'center',
 		flexDirection: 'column',
 		my: 5,
+		cursor: 'default',
 	},
 	avatar: {
-		width: '40%',
+		width: '45%',
 		height: 'auto',
 		border: 3,
 		borderColor: 'primary.main',

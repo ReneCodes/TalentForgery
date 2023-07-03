@@ -84,8 +84,8 @@ const Register = () => {
 		const checkPassword = handlePasswordCheck(formData.password, formData.confirmPassword);
 
 		if (checkPassword) {
-			const requestAnswer = await registerUser(formData, navigate);
-			if (requestAnswer) setRegisterError(requestAnswer);
+			const registerAnswer = await registerUser(formData, navigate);
+			if (registerAnswer) setRegisterError(registerAnswer);
 			else {
 				MinonLogin();
 				reset({

@@ -1,3 +1,4 @@
+const fs = require('fs');
 import { UUID } from "crypto";
 import { registeredUser, loginUser, UserType } from "../types/user";
 const crypto = require("crypto");
@@ -34,7 +35,7 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     })
 
     return role === 'admin' ? "Admin User created" : "User created";
-  }
+	}
 };
 
 const loginTheUser = async ({ email, password }: loginUser) => {
@@ -116,14 +117,51 @@ const deleteAnUser = async (userDeleteEmail: string) => {
   return;
 };
 
+const updateUserInfo = async (user_id: UUID, body: any, profile_picture: string) => {
+	const {first_name, last_name, email, personal_email, phone, department} = body;
+	const updatedUserInfo = await User.update(
+		{
+			first_name,
+			last_name,
+			email,
+			personal_email,
+			phone,
+			department,
+			profile_picture,
+		},
+		{
+			where: {
+				user_id,
+			},
+		}
+	);
+	if (!updatedUserInfo) throw new Error('user_id is invalid');
+	else {
+		return updatedUserInfo;
+	}
+};
+
+const deleteOldProfilePicture = async (file: any, oldProfilePicture: string) => {
+	try {
+		const filePath = file.path.split('/').slice(0, -1);
+		filePath.push(oldProfilePicture);
+		const oldPicturePath = filePath.join('/');
+		await fs.unlinkSync(oldPicturePath);
+	} catch (error) {
+		console.log({msg: 'No Old Profile Image found'});
+	}
+};
+
 module.exports = {
-  deleteAnUser,
-  registerNewUser,
-  getUserInfo,
-  loginTheUser,
-  deleteUser,
-  getUsersPending,
-  acceptAnUser,
-  rejectAnUser,
-  getUserByEmail
+	deleteAnUser,
+	registerNewUser,
+	getUserInfo,
+	loginTheUser,
+	deleteUser,
+	getUsersPending,
+	acceptAnUser,
+	rejectAnUser,
+  getUserByEmail,
+	updateUserInfo,
+	deleteOldProfilePicture,
 };
