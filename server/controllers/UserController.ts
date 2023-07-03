@@ -32,7 +32,6 @@ const upload = multer({ storage });
 
 // REGISTERS THE USER
 // req: Request -> req.file will complain if you leave with type
-
 const registerUser = async (req: any, res: Response, next: NextFunction) => {
 
   await upload.single('profile_image')(req, res, async (err: Error) => {
@@ -41,7 +40,7 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     if (err) return res.status(500).json('Server failed uploading profile picture');
 
     if (!informationIsRight) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(400).json("Not enough information provided");
     }
 
@@ -50,14 +49,16 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     } = req.body;
 
     const invite = await checkInvite(inviteID);
+    console.log(invite);
+
     if (!invite) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(409).json('Invalid invite')
     };
 
     const userExists = await getUserByEmail(email);
     if (userExists) {
-      await fs.unlinkSync(req.file.path);
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(409).json('User already exists');
     };
 
@@ -101,11 +102,11 @@ const loginUser = async (req: Request, res: Response) => {
 
 // ACCEPTS PENDING USER
 const acceptUser = async (req: Request, res: Response) => {
-  const { email } = req.body;
+  const { email, tags } = req.body;
 
-  if (!email) return res.status(400).json("Not enough information provided");
+  if (!email || !tags) return res.status(400).json("Not enough information provided");
   try {
-    const data = await acceptAnUser(email);
+    const data = await acceptAnUser(email, tags);
     res.status(200).json(data);
   } catch (error) {
     const errorMessage = (error as Error).message;

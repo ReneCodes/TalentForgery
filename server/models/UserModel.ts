@@ -27,6 +27,7 @@ const registerNewUser = async (providedInformation: registeredUser) => {
       ...providedInformation,
       invited_by: providedInformation.invite,
       user_id,
+      tags: [],
     });
 
     await Stats.create({
@@ -60,10 +61,11 @@ const loginTheUser = async ({ email, password }: loginUser) => {
   }
 };
 
-const acceptAnUser = async (email: string) => {
+const acceptAnUser = async (email: string, tags: string[]) => {
   const findUser = await User.findOne({ where: { email } });
   if (!findUser) throw new Error("User doesn't exist");
   findUser.role = 'user';
+  findUser.tags = [...tags];
   await findUser.save();
 }
 

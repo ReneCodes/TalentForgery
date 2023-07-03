@@ -17,20 +17,37 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
     questions_id,
   });
 
-  for (const question of questionsParsed) {
-    const currQuestionId = crypto.randomUUID();
-    questions_id.push(currQuestionId);
-    await createQuestion({
-      question: question.question,
-      options: question.options,
-      answer: question.answer,
-      question_id: currQuestionId,
-    });
+  if (questionsParsed) {
+    for (const question of questionsParsed) {
+      const currQuestionId = crypto.randomUUID();
+      questions_id.push(currQuestionId);
+      await createQuestion({
+        question: question.question,
+        options: question.options,
+        answer: question.answer,
+        question_id: currQuestionId,
+      });
+    };
+
+    tutorial.questions_id = [...questions_id];
   };
 
-  tutorial.questions_id = [...questions_id];
   await tutorial.save();
   return [tutorial.tutorial_id, questions_id];
+
+};
+
+const getUserTutorials = async (user_id: UUID) => {
+  const user_tags = await User.findOne({ where: { user_id } }).user_tags;
+  const allVideos = [];
+
+  const normal_videos = await Tutorial.findOne({where: {tags: null}})
+  const tagged_videos = await Tutorial.findOne({where: user_tags});
+
+  allVideos.push(normal_videos);
+  allVideos.push(tagged_videos);
+
+  return allVideos;
 };
 
 const getAllTheTutorials = async () => {
@@ -42,4 +59,4 @@ const getAllTheTutorials = async () => {
   }
 };
 
-module.exports = { createTheTutorial, getAllTheTutorials };
+module.exports = { createTheTutorial, getAllTheTutorials, getUserTutorials };

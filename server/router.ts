@@ -22,7 +22,8 @@ router.get('/user', authUser, UserController.getUserInformation);
 router.get('/pending_users', authAdminUser, UserController.getPendingUsers);
 
 // TUTORIAL ROUTES
-router.get('/get_all_tutorials', authUser, TutorialController.getAllTutorials);
+router.get('/get_all_tutorials', authAdminUser, TutorialController.getAllTutorials);
+router.get('/get_tutorials', authUser, TutorialController.getTutorials);
 router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial);
 router.get('/get_all_questions', authUser, TutorialController.getAllQuestions);
 router.post('/questions', authUser, TutorialController.getQuestions);

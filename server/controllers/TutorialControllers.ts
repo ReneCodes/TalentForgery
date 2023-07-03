@@ -3,6 +3,7 @@ const jwt = require("jsonwebtoken");
 const {
   createTheTutorial,
   getAllTheTutorials,
+  getUserTutorials,
 } = require("../models/TutorialModel");
 
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
@@ -26,7 +27,7 @@ const storage = multer.diskStorage({
 
 const upload = multer({ storage });
 
-export async function createTutorial(req: any, res: Response) {
+async function createTutorial(req: any, res: Response) {
   const sessionToken = req.cookies.session_token;
   const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
 
@@ -56,7 +57,7 @@ export async function createTutorial(req: any, res: Response) {
 
 };
 
-export async function getAllTutorials(req: Request, res: Response) {
+async function getAllTutorials(req: Request, res: Response) {
   try {
     const tutorials = await getAllTheTutorials();
 
@@ -66,7 +67,18 @@ export async function getAllTutorials(req: Request, res: Response) {
   }
 };
 
-export async function getQuestions(req: Request, res: Response) {
+async function getTutorials(req: Request, res: Response) {
+  try {
+    const sessionToken = req.cookies.session_token;
+    const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
+    const tutorials = await getUserTutorials(user_id);
+    res.status(200).json(tutorials);
+  } catch (error) {
+    res.status(500).json("Failed to retrieve tutorial");
+  }
+}
+
+async function getQuestions(req: Request, res: Response) {
 
   const informationIsRight = await validateTutorialId(req, res);
   if (!informationIsRight) return res.status(400).json("Not enough information provided");
@@ -77,6 +89,8 @@ export async function getQuestions(req: Request, res: Response) {
     res.status(200).json(questions);
   } catch (error) {
     const errorMessage = (error as Error).message;
+    console.log(errorMessage);
+
     if (errorMessage === "Invalid tutorial id") { res.status(404).json(errorMessage); }
     else res.status(500).json('Server failed');
   }
@@ -84,7 +98,7 @@ export async function getQuestions(req: Request, res: Response) {
 
 };
 
-export async function getAllQuestions(req: Request, res: Response) {
+async function getAllQuestions(req: Request, res: Response) {
 
   try {
     const questions = await getTheQuestions();
@@ -96,4 +110,4 @@ export async function getAllQuestions(req: Request, res: Response) {
 
 };
 
-module.exports = { createTutorial, getAllTutorials, getQuestions, getAllQuestions };
+module.exports = { createTutorial, getAllTutorials, getQuestions, getAllQuestions, getTutorials};
