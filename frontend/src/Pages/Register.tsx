@@ -14,7 +14,6 @@ import {
   InputAdornment,
   InputLabel,
   Stack,
-  ImageListItem,
   OutlinedInput,
 } from "@mui/material";
 import { Visibility, VisibilityOff } from "@mui/icons-material";
@@ -224,9 +223,7 @@ const Register = () => {
               {/* Profile Image */}
               <Box display="flex">
                 <label htmlFor="profile_image">
-                  <ImageListItem
-                    sx={{ width: 100, height: 100, borderRadius: 999 }}
-                  >
+                  <div style={{ width: 100, height: 100, borderRadius: 999 }}>
                     {file.name ? (
                       <img
                         style={{
@@ -241,7 +238,7 @@ const Register = () => {
                     ) : (
                       <FaceIcon sx={{ width: 80, height: 80 }} />
                     )}
-                  </ImageListItem>
+                  </div>
                 </label>
 
                 <TextField
