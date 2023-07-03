@@ -1,4 +1,3 @@
-import { Box } from '@mui/system';
 import { FC } from 'react';
 
 interface VideoPreviewComp {
@@ -8,11 +7,9 @@ interface VideoPreviewComp {
 
 const VideoPreview: FC<VideoPreviewComp> = ({showPreview, videoData}) => {
   return <div>
-    {showPreview && <Box>
-      <video className='video_player' controls>
-        <source src={URL.createObjectURL(videoData.get('video'))} type="video/mp4" />
-      </video>
-    </Box>}
+    {showPreview && <video className='video_player' controls>
+      <source src={URL.createObjectURL(videoData.get('video'))} type="video/mp4" />
+      </video>}
   </div>
 }
 

@@ -1,16 +1,21 @@
 import {FC} from 'react';
-import {Container, Typography, Box, Paper, Divider, Stack, Avatar, Button} from '@mui/material';
+import {Container, Typography, Box, Paper, Divider, Stack, Avatar, Button, colors} from '@mui/material';
 
 import {userProfileStore} from '../../utils/zustand.store';
 import theme from '../../config/theme';
-import EmployeeProfileForm from './EmployeeProfileForm';
+import TagsList from '../Create/TagsList';
 
-const EmployeePendingInfo: FC = () => {
+const EmployeePendingInfo = ({user}: any) => {
 	// Zustand Store
-	const {avatar_url_path, localProfileInfo} = userProfileStore();
+	const {avatar_url_path} = userProfileStore();
+
+	// Destructuring User
+	const {dataValues, invited_by} = user;
+	const pendingUser = dataValues;
+	const {first_name, last_name, email, phone, department, profile_picture} = pendingUser;
+
 	// Profile Info
-	const {first_name, last_name, email, personal_email, phone, department, profile_picture} = localProfileInfo;
-	const localProfileAvatar = `${avatar_url_path}/${profile_picture}`;
+	const localProfileAvatar = `${avatar_url_path}${profile_picture}`;
 	// Theme
 	const {gray} = theme.palette;
 
@@ -23,8 +28,11 @@ const EmployeePendingInfo: FC = () => {
 					<Avatar
 						sx={{
 							display: 'block',
-							width: '120px',
+							width: '130px',
 							height: 'auto',
+							maxHeight: '130px',
+							objectFit: 'cover',
+							objectPosition: '50% 50%',
 							m: 2,
 							alignSelf: 'center',
 							border: '2px solid',
@@ -68,7 +76,7 @@ const EmployeePendingInfo: FC = () => {
 							elevation={1}
 							square
 							sx={styles.paper}>
-							<Typography sx={styles.detail}>{phone}</Typography>
+							<Typography sx={styles.detail}>{phone ? phone : <span style={{color: gray[300]}}>none</span>}</Typography>
 							<Divider />
 							<Typography sx={styles.helper}>Phone</Typography>
 						</Paper>
@@ -91,17 +99,22 @@ const EmployeePendingInfo: FC = () => {
 							elevation={1}
 							square
 							sx={styles.paper}>
-							<Typography sx={styles.detail}>{personal_email}</Typography>
+							<Typography sx={styles.detail}>
+								{invited_by.first_name}
+								{invited_by.last_name}
+							</Typography>
 							<Divider />
-							<Typography sx={styles.helper}>Private Email</Typography>
+							<Typography sx={styles.helper}>Invited By</Typography>
 						</Paper>
 					</Box>
 				</Stack>
+				<Divider />
 				<Box sx={styles.update}>
-					<EmployeeProfileForm />
+					<TagsList />
+
+					{/* <Typography variant="overline">{}</Typography> */}
 				</Box>
 			</Box>
-			<Divider />
 		</Container>
 	);
 };
@@ -151,6 +164,7 @@ const styles = {
 	},
 	update: {
 		display: 'flex',
+		flexDirection: 'column',
 		justifyContent: 'center',
 		alignItems: 'center',
 		maxWidth: '200px',

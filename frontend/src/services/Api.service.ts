@@ -87,7 +87,7 @@ export async function getAdminInvite(setLinkText: any) {
 	}
 }
 
-export async function rejectUser(email: string, setPeoplePending: any) {
+export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
 		const data = JSON.stringify({ email });
 		await axios.post('/api/reject_user', data, {
@@ -96,7 +96,7 @@ export async function rejectUser(email: string, setPeoplePending: any) {
 			},
 		});
 
-		setPeoplePending((currData: any[]) => {
+		filterPendingPeople((currData: any[]) => {
 			const newArr = currData.filter((person) => person.dataValues.email !== email);
 			return newArr;
 		});
@@ -105,16 +105,16 @@ export async function rejectUser(email: string, setPeoplePending: any) {
 	}
 }
 
-export async function acceptUser(email: string, setPeoplePending: any) {
+export async function acceptUser(email: string, tags: string[], filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email, tags});
 		await axios.post('/api/accept_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
 
-		setPeoplePending((currData: any[]) => {
+		filterPendingPeople((currData: any[]) => {
 			const newArr = currData.filter((person) => person.dataValues.email !== email);
 			return newArr;
 		});
@@ -123,10 +123,10 @@ export async function acceptUser(email: string, setPeoplePending: any) {
 	}
 }
 
-export async function getPendingUsers(setPeoplePending: any) {
+export async function getPendingUsers(storePendingPeople: any) {
 	try {
 		const res = await axios.get('/api/pending_users');
-		setPeoplePending(res.data);
+		storePendingPeople(res.data);
 	} catch (error: any) {
 		alert(error.response.data);
 	}
@@ -211,9 +211,10 @@ export async function updateProfileData(profileData: UpdateProfile) {
 	}
 }
 
-export async function getSingleUserProfileData(): Promise<AxiosResponse<UpdateProfile>> {
+export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<AxiosResponse<UpdateProfile>> {
 	try {
 		const res = await axios.get<UpdateProfile>(`/api/user`);
+		UpdateProfileInfo(res.data);
 		return res;
 	} catch (error: any) {
 		alert(error.response.data);

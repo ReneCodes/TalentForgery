@@ -25,6 +25,7 @@ export type UpdateProfile = {
 	department: string;
 	profile_picture?: File | string;
 	user_id: string | number;
+	tags: string[];
 };
 
 export type User = {

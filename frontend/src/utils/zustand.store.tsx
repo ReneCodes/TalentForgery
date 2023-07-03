@@ -73,6 +73,7 @@ export const userProfileStore = create<ProfileInfo>()((set) => ({
 		department: '',
 		profile_picture: '',
 		user_id: '',
+		tags: [],
 	},
 
 	UpdateProfileInfo: (profileData) =>
@@ -85,8 +86,33 @@ export const userProfileStore = create<ProfileInfo>()((set) => ({
 interface PendingUser {
 	pendingPerson: PendingPerson[];
 	storePendingPeople: (personArr: PendingPerson[]) => void;
+	filterPendingPeople: (callback: (currData: PendingPerson[]) => PendingPerson[]) => void;
 }
-export const PendingUserStore = create<PendingUser>()((set) => ({
+export const PendingUserStore = create<PendingUser>((set) => ({
 	pendingPerson: [],
 	storePendingPeople: (personArr) => set(() => ({pendingPerson: personArr})),
+	filterPendingPeople: (callback) => set((state) => ({pendingPerson: callback(state.pendingPerson)})),
+}));
+
+// USER/TUTORIAL TAG STORE
+interface TagsList {
+	defaultTags: string[];
+	selctedTags: string[];
+	storeSelectedTags: (tagsArr: string[]) => void;
+}
+export const TutorialTagStore = create<TagsList>((set) => ({
+	defaultTags: [
+		'FIRE',
+		'EMERGENCY',
+		'QUALITY',
+		'HR',
+		'ADMIN',
+		'ONBOARDING',
+		'FINANCE',
+		'JANITOR',
+		'PROCUREMENT',
+		'WAREHOUSE',
+	],
+	selctedTags: [],
+	storeSelectedTags: (tagsArr) => set(() => ({selctedTags: tagsArr})),
 }));

@@ -100,9 +100,9 @@ theme = createTheme(theme, {
 			display: 'block',
 			fontWeight: 500,
 		},
-		h6: {
-			fontSize: '1rem',
-		},
+		// h6: {
+		// 	fontSize: '1rem',
+		// },
 		h7: {
 			fontSize: '0.8rem',
 		},
