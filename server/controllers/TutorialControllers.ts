@@ -39,18 +39,23 @@ async function createTutorial(req: any, res: Response) {
       return res.status(400).json("Not enough information provided");
     }
 
-    const { title, description, question_ids, questions_shown, access_date, due_date, }: createdTutorial = req.body;
+    const { title, description, question_ids, questions_shown, access_date, due_date, tags}: createdTutorial = req.body;
     if (err) return res.status(500).json('Server failed uploading profile picture');
 
     try {
-      const videoFileName = req.file ? req.file.filename : 'no_file.mp4';
-      const tutorialData = { title, video_url: videoFileName, description, question_ids, questions_shown, access_date, due_date, };
+      const videoFileName = req.file ? req.file.filename : 'no_file';
+      const tutorialData = {
+        title, video_url: videoFileName, description,
+        question_ids, questions_shown, access_date, due_date, tags};
 
       tutorialData.video_url = videoFileName;
       const [tutorial_id, questions_id] = await createTheTutorial(tutorialData, user_id);
       res.status(201).json({ message: "Tutorial created.", tutorial_id, questions_id });
 
     } catch (error) {
+      const errorMessage = (error as Error).message;
+      console.log(errorMessage);
+
       res.status(500).json("Failed to create tutorial.");
     }
   })
@@ -60,7 +65,6 @@ async function createTutorial(req: any, res: Response) {
 async function getAllTutorials(req: Request, res: Response) {
   try {
     const tutorials = await getAllTheTutorials();
-
     res.status(200).json(tutorials);
   } catch (error) {
     res.status(500).json("Failed to retrieve tutorial");
@@ -74,6 +78,8 @@ async function getTutorials(req: Request, res: Response) {
     const tutorials = await getUserTutorials(user_id);
     res.status(200).json(tutorials);
   } catch (error) {
+    console.log(error);
+
     res.status(500).json("Failed to retrieve tutorial");
   }
 }

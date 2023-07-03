@@ -67,12 +67,14 @@ const acceptAnUser = async (email: string, tags: string[]) => {
   findUser.role = 'user';
   findUser.tags = [...tags];
   await findUser.save();
+  return 'User accepted';
 }
 
 const rejectAnUser = async (email: string) => {
   const findUser = await User.findOne({ where: { email } });
   if (!findUser) throw new Error("User doesn't exist");
-  return await deleteAnUser(email);
+  await deleteAnUser(email);
+  return 'User rejected';
 }
 
 const getUserInfo = async (user_id: UUID) => {
@@ -110,12 +112,13 @@ const getUsersPending = async (): Promise<UserType[]> => {
 }
 
 const deleteUser = async (user_id: UUID) => {
-  return await User.destroy({ where: { user_id } });
+  await User.destroy({ where: { user_id } });
+  return 'Account deleted';
 };
 
 const deleteAnUser = async (userDeleteEmail: string) => {
   await User.destroy({ where: { email: userDeleteEmail } });
-  return;
+  return 'User deleted';
 };
 
 module.exports = {

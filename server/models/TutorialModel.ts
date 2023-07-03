@@ -9,6 +9,7 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
 
   const questions_id: string[] = [];
   const questionsParsed = JSON.parse(providedInformation.question_ids);
+  providedInformation.tags = JSON.parse(providedInformation.tags);
 
   const tutorial = await Tutorial.create({
     ...providedInformation,

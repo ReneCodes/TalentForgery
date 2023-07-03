@@ -49,7 +49,6 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     } = req.body;
 
     const invite = await checkInvite(inviteID);
-    console.log(invite);
 
     if (!invite) {
       req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
@@ -66,7 +65,7 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
       const profile_picture = req.file ? req.file.filename : null;
       const data = await registerNewUser({
         first_name, last_name, email, personal_email, password,
-        phone, department, invite, profile_picture
+        phone, department, invite: invite.user_created, profile_picture
       });
       return res.status(201).json(data);
     } catch (error) {
