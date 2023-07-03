@@ -82,7 +82,7 @@ const rejectAnUser = async (email: string) => {
 const getUserInfo = async (user_id: UUID) => {
   const userInfo = await User.findOne({
     where: { user_id },
-    attributes: ['role', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
+    attributes: ['role', 'tags', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
   });
   if (!userInfo) throw new Error("user_id is invalid");
   else {
@@ -171,6 +171,14 @@ const deleteOldProfilePicture = async (file: any, oldProfilePicture: string) => 
   }
 };
 
+const getAllOfTheUsers = async () => {
+  const allUsers = await User.findAll({
+    where: { role: 'user' },
+    attributes: ['role', 'tags', 'first_name', 'last_name', 'email', 'personal_email', 'phone', 'department', 'profile_picture'],
+  });
+  return allUsers;
+};
+
 const deleteProfilePicture = async (fileName: string) => {
   await fs.unlinkSync(`./images/profile_pictures/${fileName}`);
 };
@@ -187,4 +195,5 @@ module.exports = {
   getUserByEmail,
   updateUserInfo,
   deleteOldProfilePicture,
+  getAllOfTheUsers
 };
