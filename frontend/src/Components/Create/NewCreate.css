@@ -16,8 +16,10 @@
 .form {
   display: flex;
   flex-direction: column;
+  justify-content: space-between;
   margin: 20px;
   width: 80%;
+  height: 350px;
 }
 
 .video_player {
@@ -44,13 +46,12 @@
 .divider {
   height: 1px;
   background-color: black;
-  margin: 0px 20px;
-  margin-bottom: 10px;
+  margin: 10px 20px;
 }
 
 .question_card {
-  margin-left: 20px;
-  margin-bottom: 20px;
+  margin: 20px;
+  margin-bottom: 10px;
 }
 
 .calendars {
@@ -59,4 +60,38 @@
 
 .image_preview {
   width: 200px;
+}
+
+.button_line {
+  display: flex;
+  margin-left: 30px;
+}
+
+.quiz_line {
+  display: flex;
+  justify-content: space-between;
+  margin: 20px 20px;
+}
+
+.schedule_line{
+  margin: 20px 80px;
+}
+
+.question_add {
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+}
+
+.X {
+  height: 25px;
+}
+
+.question_options {
+  margin-top: 10px;
+}
+
+.tutorial_title {
+  display: flex;
+  justify-content: center;
 }

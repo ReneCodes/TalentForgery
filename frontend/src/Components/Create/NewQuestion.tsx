@@ -34,14 +34,14 @@ const Question: FC<QuestionComp> = ({getData, onData}) => {
   return <>
     {show && 
       <Card sx={{ maxWidth: 400, padding: 2 }} className="question">
-        <div>
+        <div className="question_add">
         <TextField 
           label="Question" 
           variant="outlined" 
           value={question}
           onChange={(e) => setQuestion(e.target.value)}
         />
-        <Button onClick={handleDelete}>X</Button>
+        <Button className="X" variant="contained" onClick={handleDelete}>X</Button>
         </div>
         <RadioGroup>
           {options.map((option) => (
@@ -55,13 +55,15 @@ const Question: FC<QuestionComp> = ({getData, onData}) => {
             />
           ))}
         </RadioGroup>
-        <TextField 
-          label="Options" 
-          variant="outlined" 
-          value={option}
-          onChange={(e) => setOption(e.target.value)}
-        />
-        <Button onClick={handleAdd}>Add option</ Button>
+        <div className="question_options">
+          <TextField 
+            label="Options" 
+            variant="outlined" 
+            value={option}
+            onChange={(e) => setOption(e.target.value)}
+          />
+          <Button variant="contained" onClick={handleAdd}>Add option</ Button>
+        </div>
       </Card>
     }
   </>

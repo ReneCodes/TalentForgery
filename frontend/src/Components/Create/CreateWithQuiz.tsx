@@ -5,7 +5,7 @@ import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import Question from './NewQuestion';
 import { QuestionType } from '../../utils/types';
-import { TextField } from '@mui/material';
+import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';
 import ImagePreview from './ImagePreview';
 
@@ -164,7 +164,9 @@ const CreateWithQuiz = () => {
         </Button>
       </div>
       <Dialog onClose={handleClose} open={open}>
-        <h2 className='dialog'>Tutorial with Quiz</h2>
+        <div className='tutorial_title'>
+          <h2>Tutorial with Quiz</h2>
+        </div>
         <div className='create_tutorial'>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
           <div>
@@ -184,23 +186,23 @@ const CreateWithQuiz = () => {
             <ImagePreview showPreview={imageSubmit} imageData={imageData} />
           </div>
         </div>
-        <div className='divider'></div>
+        <Divider />
         {[...Array(questionNumber)].map((_, index) => (
           <div className='question_card' key={index}><Question getData={getData} onData={handleDataFromQuestions} /></div>
         ))}
-        <div>
+        <div className='quiz_line'>
           <TextField 
             label='quiz length'
             value={length}
             type='number'
             onChange={(e) => setLength(e.target.value)}
           ></TextField>
-          <Button onClick={handleAddQuestion}>Add Question</Button>
+          <Button variant="contained" onClick={handleAddQuestion}>Add Question</Button>
         </div>
-        <div className='divider'></div>
-        <div>
-          <Button>Cancel</Button>
-          <Button onClick={handleSubmit}>Schedule</Button>
+        <Divider />
+        <div className='quiz_line schedule_line'>
+          <Button variant="contained">Cancel</Button>
+          <Button variant="contained" onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
       <Schedule 

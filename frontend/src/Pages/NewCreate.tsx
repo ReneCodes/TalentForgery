@@ -13,7 +13,7 @@ const NewCreate = () => {
 
   return <div>
     <h2>Create Tutorial</h2>
-    <div>
+    <div className="button_line">
       <CreateWithQuiz />
       <CreateTutorial />
     </div>

@@ -28,7 +28,6 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
     <TextField 
       id="standard-basic" 
       label="Title" 
-      variant="standard" 
       value={title}
       onChange={(e) => setTitle(e.target.value)}
     />
@@ -36,15 +35,13 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
       id="standard-basic" 
       label="Description" 
       multiline
-      rows={4}
-      variant="standard" 
+      rows={4} 
       value={description}
       onChange={(e) => setDesciption(e.target.value)}
     />
     <TextField 
       id="standard-basic" 
       label="tags" 
-      variant="standard" 
       value={tag}
       onChange={(e) => setTag(e.target.value)}
     />
