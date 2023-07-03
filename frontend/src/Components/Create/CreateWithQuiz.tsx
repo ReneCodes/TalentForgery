@@ -103,7 +103,6 @@ const CreateWithQuiz = () => {
         }
       });
     }
-    console.log(formInfo)
 	};
 
   const handleDataFromQuestions = (childData: QuestionType) => {

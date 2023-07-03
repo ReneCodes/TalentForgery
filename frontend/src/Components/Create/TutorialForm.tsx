@@ -35,6 +35,8 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
     <TextField 
       id="standard-basic" 
       label="Description" 
+      multiline
+      rows={4}
       variant="standard" 
       value={description}
       onChange={(e) => setDesciption(e.target.value)}
