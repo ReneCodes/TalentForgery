@@ -1,4 +1,5 @@
 import { useState } from "react";
+import CreateTutorial from "../Components/Create/CreateTutorial";
 import CreateWithQuiz from "../Components/Create/CreateWithQuiz";
 import Filter from "../Components/Create/Filter";
 
@@ -9,11 +10,12 @@ const NewCreate = () => {
     setFilter(childData);
     console.log(filter);
   }
-  
+
   return <div>
     <h2>Create Tutorial</h2>
     <div>
       <CreateWithQuiz />
+      <CreateTutorial />
     </div>
 
     <div className="tutorial_list_line">

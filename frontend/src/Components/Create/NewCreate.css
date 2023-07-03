@@ -40,3 +40,10 @@
 .create_tutorial {
   display: flex;
 }
+
+.divider {
+  height: 1px;
+  background-color: black;
+  margin: 0px 20px;
+  margin-bottom: 10px;
+}

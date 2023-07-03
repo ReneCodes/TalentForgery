@@ -3,7 +3,6 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
-import Question from './NewQuestion';
 
 interface FormInfo {
 	title: string;
@@ -12,7 +11,7 @@ interface FormInfo {
 	length: string;
 }
 
-const CreateWithQuiz = () => {
+const CreateTutorial = () => {
   const [open, setOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
 	const [data, setData] = useState(new FormData());
@@ -59,11 +58,11 @@ const CreateWithQuiz = () => {
     <div>
         <div className='filter_label'>
         <Button variant="contained" onClick={handleClickOpen}>
-          Tutorial With Quiz
+          Simple Tutorial
         </Button>
       </div>
       <Dialog onClose={handleClose} open={open}>
-        <h2 className='dialog'>Tutorial with Quiz</h2>
+        <h2 className='dialog'>Simple Tutorial</h2>
         <div className='create_tutorial'>
           <TutorialForm getData={false} onData={handleDataFromForm} />
           <div>
@@ -76,11 +75,9 @@ const CreateWithQuiz = () => {
             <VideoPreview showPreview={videoSubmit} videoData={data} />
           </div>
         </div>
-        <div className='divider'></div>
-        <Question />
       </Dialog>
     </div>
   );
 }
 
-export default CreateWithQuiz;
+export default CreateTutorial;
