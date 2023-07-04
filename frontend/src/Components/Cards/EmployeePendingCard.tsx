@@ -53,9 +53,10 @@ export default function EmployeePendingCard({user}: any) {
 		await rejectUser(email, filterPendingPeople);
 	};
 
-	React.useEffect(() => {
-		console.log('UseEffect PENDING', pendingPerson);
-	}, [pendingPerson]);
+	// TODO: Delete for production
+	// React.useEffect(() => {
+	// 	console.log('UseEffect PENDING', pendingPerson);
+	// }, [pendingPerson]);
 
 	return (
 		<div>

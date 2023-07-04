@@ -5,7 +5,12 @@ import WindowIcon from '@mui/icons-material/Window';
 import LogoutIcon from '@mui/icons-material/Logout';
 import {LoginAndOut, NavbarStore, PendingUserStore, userProfileStore} from '../../utils/zustand.store';
 import {YellowTooltip} from '../Tooltips/CustomTooltips';
-import {getPendingUsers, getSingleUserProfileData} from '../../services/Api.service';
+import {
+	getAllTutorials,
+	getPendingUsers,
+	getSingleUserProfileData,
+	getUsersTutorials,
+} from '../../services/Api.service';
 
 export const AppHeader = () => {
 	const {localProfileInfo, UpdateProfileInfo} = userProfileStore();
@@ -17,13 +22,16 @@ export const AppHeader = () => {
 		initalLoad();
 	}, []);
 	useEffect(() => {
-		console.log('APP HEADER pendingPerson', pendingPerson);
-		console.log('APP HEADER localProfileInfo', localProfileInfo);
+		// console.log('APP HEADER pendingPerson', pendingPerson);
+		// console.log('APP HEADER localProfileInfo', localProfileInfo);
+		// console.log('APP HEADER Users Tutorials', 'STORE not ready');
+		// console.log('APP HEADER All Tutorials', 'STORE not ready');
 	}, [localProfileInfo, pendingPerson]);
 
 	async function initalLoad() {
 		console.log('INITIAL LOAD');
-
+		await getUsersTutorials();
+		await getAllTutorials();
 		await getSingleUserProfileData(UpdateProfileInfo);
 		await getPendingUsers(storePendingPeople);
 	}

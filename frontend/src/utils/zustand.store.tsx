@@ -94,7 +94,7 @@ export const PendingUserStore = create<PendingUser>((set) => ({
 	filterPendingPeople: (callback) => set((state) => ({pendingPerson: callback(state.pendingPerson)})),
 }));
 
-// USER/TUTORIAL TAG STORE
+// TUTORIAL TAG STORE
 interface TagsList {
 	defaultTags: string[];
 	selctedTags: string[];
@@ -115,4 +115,16 @@ export const TutorialTagStore = create<TagsList>((set) => ({
 	],
 	selctedTags: [],
 	storeSelectedTags: (tagsArr) => set(() => ({selctedTags: tagsArr})),
+}));
+
+// TUTORIAL STORE
+interface TutorialStore {
+	userTutorials: string[];
+	allTutorials: string[];
+	// storeSelectedTags: (tagsArr: string[]) => void;
+}
+export const TutorialStore = create<TutorialStore>(() => ({
+	userTutorials: [],
+	allTutorials: [],
+	// storeSelectedTags: (tagsArr) => set(() => ({selctedTags: tagsArr})),
 }));

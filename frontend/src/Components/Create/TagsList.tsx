@@ -21,20 +21,7 @@ const MenuProps = {
 	},
 };
 
-const names = [
-	'FIRE',
-	'EMERGENCY',
-	'QUALITY',
-	'HR',
-	'ADMIN',
-	'ONBOARDING',
-	'FINANCE',
-	'JANITOR',
-	'PROCUREMENT',
-	'WAREHOUSE',
-];
-
-// Chnage Style of selected Item
+// Change Style of selected Item
 function getStyles(tagName: string, tagsChip: readonly string[], theme: Theme) {
 	return {
 		fontWeight:
@@ -94,6 +81,7 @@ export default function TagsList() {
 						<MenuItem
 							key={tagName}
 							value={tagName}
+							aria-label={tagName}
 							style={getStyles(tagName, tagsChip, theme)}>
 							<Checkbox checked={tagsChip.indexOf(tagName) > -1} />
 							<ListItemText primary={tagName} />

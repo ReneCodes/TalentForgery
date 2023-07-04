@@ -1,11 +1,10 @@
-import axios, { AxiosResponse } from 'axios';
+import axios, {AxiosResponse} from 'axios';
 
-import { LoginFormValues, RegisterFormValues, UpdateProfile, User } from '../@types/Types';
-import { NavigateFunction } from 'react-router-dom';
-import { SetStateAction } from 'react';
+import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
+import {NavigateFunction} from 'react-router-dom';
+import {SetStateAction} from 'react';
 
-// const baseURL = import.meta.env.VITE_BE_BASE_URL;
-
+// LOGIN / AUTH / CREATE  USER
 export async function authUser(navigate: NavigateFunction, callback?: any) {
 	try {
 		await axios.get('/api/auth_user');
@@ -56,17 +55,17 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({ email, password }, navigate);
+		loginUser({email, password}, navigate);
 	} catch (error: any) {
 		errorMessage = error.response.data;
 	}
 
 	return errorMessage;
 }
-
+// INVITE / ACCEPT / REJECT / PENDING USER
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: { data: string } = await axios.get('/api/invite');
+		const invite: {data: string} = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
@@ -89,7 +88,7 @@ export async function getAdminInvite(setLinkText: any) {
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -132,6 +131,7 @@ export async function getPendingUsers(storePendingPeople: any) {
 	}
 }
 
+// TUTORIAL
 export async function postTutorial(data: any) {
 	try {
 		const formData = new FormData();
@@ -155,13 +155,24 @@ export async function postTutorial(data: any) {
 	}
 }
 
-export async function getTutorials() {
+export async function getUsersTutorials() {
 	try {
-		const res = await axios.get('/api//get_all_tutorials');
+		const res = await axios.get('/api/get_tutorials');
+		console.log('get Users Tutorials', res.data);
+		return res;
+	} catch (error: any) {
+		alert(error.response.data + 'GET USER TUTORIALS');
+	}
+}
+
+export async function getAllTutorials() {
+	try {
+		const res = await axios.get('/api/get_all_tutorials');
+		console.log('get All Tutorials', res.data);
 
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		alert(error.response.data + 'GET ALL TUTORIALS');
 	}
 }
 
@@ -185,6 +196,7 @@ export async function getQuestionsByIds(idArr: any[]) {
 	}
 }
 
+// UPDATE / STATS / ALL / USER PROFILE
 export async function updateProfileData(profileData: UpdateProfile) {
 	const formData = new FormData();
 
@@ -220,7 +232,7 @@ export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<
 		alert(error.response.data);
 		throw error;
 	}
-};
+}
 
 export async function getAllUsers(setUsers: SetStateAction<any>) {
 	try {
@@ -230,19 +242,18 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 		alert(error.response.data);
 		throw error;
 	}
-};
+}
 
 export async function getUserStats(email: string) {
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		const res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
 		return res;
-	}
-	catch (error: any) {
+	} catch (error: any) {
 		alert(error.response.data);
 	}
 }
