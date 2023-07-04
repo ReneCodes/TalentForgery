@@ -10,9 +10,12 @@ import { AppHeader } from './Components/Header/AppHeader';
 import { NotAuthenticatedRoutes } from './routes/NotAuthenticatedRoutes';
 import { LoginAndOut } from './utils/zustand.store';
 
+export function navigateTo(path: string) {
+  window.history.pushState(null, '', path);
+}
+
 const App: React.FC = () => {
 	const { logedIn } = LoginAndOut();
-
 	const authenticated = logedIn;
 
 	return (

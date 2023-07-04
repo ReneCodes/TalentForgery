@@ -7,7 +7,6 @@ const { validateTutorialData, validateTutorialId } = require('../middleware/Vali
 const fs = require('fs');
 
 import { Request, Response } from 'express';
-import { fileInput } from '../types/user';
 
 const multer = require('multer');
 
