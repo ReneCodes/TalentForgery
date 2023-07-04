@@ -63,7 +63,7 @@ function UserStatsCard(props: any) {
                 }}>
                   <Typography sx={{ margin: 'auto' }} >45%</Typography>
                 </Box>
-                <Typography sx={{ margin: 'auto' }}>Tests</Typography>
+                <Typography sx={{ margin: 'auto' }}>Questions</Typography>
               </Box>
 
               <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
@@ -74,7 +74,7 @@ function UserStatsCard(props: any) {
                 }}>
                   <Typography>55%</Typography>
                 </Box>
-                <Typography>Tests</Typography>
+                <Typography>Tutorials</Typography>
               </Box>
 
             </Box>
