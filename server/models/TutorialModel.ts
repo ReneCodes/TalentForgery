@@ -46,7 +46,7 @@ const getUserTutorials = async (user_id: UUID) => {
   const normal_videos = await Tutorial.findAll(
     {
       where: { tags: null },
-      attributes: ['tutorial_id', 'title', 'video_url',
+      attributes: ['tutorial_id', 'title', 'video_url', 'video_thumb',
         'questions_id', 'description', 'questions_shown', 'access_date', 'tags', 'due_date'],
     });
 
@@ -58,7 +58,7 @@ const getUserTutorials = async (user_id: UUID) => {
       },
     },
     attributes: ['tutorial_id', 'title', 'video_url', 'questions_id', 'description',
-      'questions_shown', 'access_date', 'tags', 'due_date'],
+      'questions_shown', 'access_date', 'tags', 'due_date', 'video_thumb'],
   });
 
   allVideos.push(normal_videos);
@@ -69,7 +69,10 @@ const getUserTutorials = async (user_id: UUID) => {
 
 const getAllTheTutorials = async () => {
   try {
-    const tutorials = await Tutorial.findAll();
+    const tutorials = await Tutorial.findAll({
+      attributes: ['tutorial_id', 'title', 'video_url', 'questions_id', 'description',
+        'questions_shown', 'access_date', 'tags', 'due_date', 'video_thumb'],
+    });
     return tutorials;
   } catch (error) {
     throw new Error("Failed to retrieve tutorials");
