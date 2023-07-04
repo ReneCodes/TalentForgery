@@ -21,8 +21,6 @@ function UserStatsCard(props: any) {
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const imageUrl = `${baseURL}images/profile_pictures/${user.profile_picture}`;
 
-  console.log(user);
-
   return (
     <div>
       <Dialog
@@ -105,7 +103,7 @@ function UserStatsCard(props: any) {
                 <ApartmentIcon />
                 <strong>Tags:</strong> {user.tags.map((tag: string) => {
                   return (
-                    <Box key={tag} sx={{backgroundColor: '#848484', p: 0.7, borderRadius: 99}}>{tag}</Box>
+                    <Box key={tag} sx={{backgroundColor: '#848484', py: 0.2, px: 1, borderRadius: 1}}>{tag}</Box>
                   )
                 })}
               </Typography>

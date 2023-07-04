@@ -18,7 +18,10 @@ function AllUserStats() {
   const [search, setSearch] = useState<string>('');
 
   useEffect(() => {
-    getAllUsers(setUsersSearched);
+    (async () => {
+      const data = await getAllUsers(setUsersSearched);
+      setUsers(data);
+    })();
   }, []);
 
   async function enableUserStats(user: User) {
@@ -30,9 +33,9 @@ function AllUserStats() {
 
   async function deleteAccount() {
     await deleteAnUserAccount(userForStats.email);
-    const allUsers = users.filter(user => user.email !== userForStats.email);
+    const allUsersFiltered = users.filter(user => user.email !== userForStats.email);
 
-    setUsers(allUsers);
+    setUsers(allUsersFiltered);
     setUserStats({});
     setUserForStats({})
     setShowStats(false);
@@ -51,7 +54,7 @@ function AllUserStats() {
         return nameSliced === e.target.value;
       });
 
-      setUsersSearched(allUsersFiltered)
+      setUsersSearched([...allUsersFiltered])
     }
 
   };
@@ -66,7 +69,6 @@ function AllUserStats() {
       />
     )
   });
-
 
   return (
     <Container>

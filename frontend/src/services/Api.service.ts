@@ -238,6 +238,7 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 	try {
 		const res: any = await axios.get<UpdateProfile>(`/api/users`);
 		setUsers([...res.data]);
+		return res.data;
 	} catch (error: any) {
 		alert(error.response.data);
 		throw error;
