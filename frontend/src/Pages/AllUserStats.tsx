@@ -5,6 +5,7 @@ import { useEffect, useState } from "react";
 import { User } from "../@types/Types";
 import { getAllUsers, getUserStats, deleteAnUserAccount } from "../services/Api.service";
 import UserStatsCard from "../Components/Cards/UserStatsCard";
+import SmallPieChart from "../Components/PieChart/SmallPieChart";
 
 
 function AllUserStats() {
@@ -78,6 +79,30 @@ function AllUserStats() {
           closeStats={() => setShowStats(false)} deleteAccount={deleteAccount}
         />
       }
+
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10, my: 2 }}>
+        <Box sx={{
+          display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Typography variant='h5'>Tests</Typography>
+          <SmallPieChart first_value={90} first_text={'Failed'} second_value={80} second_text={'Passed'} />
+        </Box>
+        <Box sx={{
+          display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Typography variant='h5'>Questions</Typography>
+          <SmallPieChart first_value={50} first_text={'Failed'} second_value={80} second_text={'Passed'} />
+        </Box>
+        <Box sx={{
+          display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'center',
+          alignItems: 'center'
+        }}>
+          <Typography variant='h5'>Tutorials</Typography>
+          <SmallPieChart first_value={40} first_text={'Not watched'} second_value={20} second_text={'Watched'} />
+        </Box>
+      </Box>
 
       <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px' }}>
         <Typography variant="h5">Total Users: {usersSearched.length}</Typography>
