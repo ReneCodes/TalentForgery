@@ -43,6 +43,7 @@ export interface DataType {
 	title: string;
 	video_url: any;
   image_url: any;
+	tags: string[];
 	description: string;
 	question_ids: QuestionType[];
 	questions_shown: number;

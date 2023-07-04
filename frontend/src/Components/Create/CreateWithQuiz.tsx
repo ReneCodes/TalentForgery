@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import Question from './NewQuestion';
-import { QuestionType } from '../../utils/types';
+import { DataType, QuestionType } from '../../utils/types';
 import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';
 import ImagePreview from './ImagePreview';
@@ -13,17 +13,6 @@ interface FormInfo {
 	title: string;
 	description: string;
 	tags: string[];
-}
-
-interface DataType {
-	title: string;
-	video_url: any;
-  image_url: any;
-	description: string;
-	question_ids: QuestionType[];
-	questions_shown: number;
-	access_date: string;
-	due_date: string;
 }
 
 const CreateWithQuiz = () => {
@@ -46,6 +35,7 @@ const CreateWithQuiz = () => {
 		questions_shown: 0,
 		access_date: '',
 		due_date: '',
+    tags: []
 	});
 
   useEffect(() => console.log(formInfo), [formInfo]);
@@ -97,7 +87,7 @@ const CreateWithQuiz = () => {
           title: childData.title,
           description: childData.description,
           tags: childData.tags,
-          length,
+          questions_shown: parseInt(length),
           video_url: videoData,
           image_url: imageData
         }

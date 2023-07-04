@@ -4,7 +4,7 @@ import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import ImagePreview from './ImagePreview';
-import { QuestionType } from '../../utils/types';
+import { DataType } from '../../utils/types';
 import Schedule from './Schedule';
 
 interface FormInfo {
@@ -12,17 +12,6 @@ interface FormInfo {
 	description: string;
 	tags: string[];
 	length: string;
-}
-
-interface DataType {
-	title: string;
-	video_url: any;
-  image_url: any;
-	description: string;
-	question_ids: QuestionType[];
-	questions_shown: number;
-	access_date: string;
-	due_date: string;
 }
 
 const CreateTutorial: FC<{onData: any}> = ({onData}) => {
@@ -42,6 +31,7 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
 		questions_shown: 0,
 		access_date: '',
 		due_date: '',
+    tags: []
 	});
 
   useEffect(() => {
