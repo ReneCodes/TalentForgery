@@ -8,6 +8,7 @@ import { DataType, QuestionType } from '../../utils/types';
 import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';
 import ImagePreview from './ImagePreview';
+import ImportQuestion from './ImportQuestion';
 
 interface FormInfo {
 	title: string;
@@ -179,6 +180,7 @@ const CreateWithQuiz = () => {
           </div>
         </div>
         <Divider />
+        <ImportQuestion onData={undefined} />
         {[...Array(questionNumber)].map((_, index) => (
           <div className='question_card' key={index}><Question getData={getData} onData={handleDataFromQuestions} /></div>
         ))}
