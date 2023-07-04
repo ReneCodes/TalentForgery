@@ -28,7 +28,7 @@ export const AppHeader = () => {
 		await getSingleUserProfileData(UpdateProfileInfo);
 		await getUsersTutorials(storeUserTutorials);
 		const role = await getUserRole();
-		// console.log('ROLE:', role);
+		console.log('ROLE:', role);
 		if (role === 'admin') {
 			await getPendingUsers(storePendingPeople);
 			await getAllTutorials(storeAllTutorials);

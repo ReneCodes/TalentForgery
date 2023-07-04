@@ -122,15 +122,18 @@ export const TutorialTagStore = create<TagsList>((set) => ({
 }));
 
 // TUTORIAL STORE
+import {VideoDataT} from './types';
 interface TutorialStore {
-	userTutorials: string[];
-	allTutorials: string[];
-	storeUserTutorials: (tutorialsArr: string[]) => void;
-	storeAllTutorials: (tutorialsArr: string[]) => void;
+	video_base_url: string;
+	userTutorials: any[];
+	allTutorials: any[];
+	storeUserTutorials: (tutorialsArr: any[]) => void;
+	storeAllTutorials: (tutorialsArr: any[]) => void;
 }
 export const TutorialStore = create<TutorialStore>((set) => ({
-	userTutorials: [],
-	allTutorials: [],
+	video_base_url: 'http://localhost:3001/videos/',
+	userTutorials: [[{}], [{}]],
+	allTutorials: [{}],
 	storeUserTutorials: (tutorialsArr) => set(() => ({userTutorials: tutorialsArr})),
 	storeAllTutorials: (tutorialsArr) => set(() => ({allTutorials: tutorialsArr})),
 }));
