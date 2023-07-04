@@ -5,7 +5,8 @@ const { updateUserStats } = require('../models/StatsModel');
 const { getUserInfo } = require('../models/UserModel');
 const nodemailer = require('nodemailer');
 const { validateTestDone } = require('../middleware/Validation');
-
+const fs = require('fs');
+const path = require('path');
 
 import { TestCorrectionType } from '../types/questions';
 
@@ -25,8 +26,14 @@ const handleTest = async (req: Request, res: Response) => {
     await updateUserStats(user_id, userPassed, totalRight, totalWrong);
     const [questionsString, userPassedText] = await handleEmailData(testCorrection, userPassed);
 
-    const userEmail = await getUserInfo(user_id).email;
-    await sendEmail(userPassedText, totalRight, totalWrong, questionsString, userEmail);
+    const userInfo = await getUserInfo(user_id);
+    const userEmail = userInfo.email;
+    const profile_picture = userInfo.profile_picture;
+    await sendEmail(
+      { userPassedText, totalRight, totalWrong },
+      { userEmail, profile_picture },
+      { questionsString, title: 'How to peel a banana', description: 'The description will go here'}
+    );
 
     return res.status(200).json('Check your email');
   } catch (error) {
@@ -84,11 +91,18 @@ const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed:
 };
 
 const sendEmail = async (
-  userPassed: string, totalRight: number,
-  totalWrong: number,
-  questionsString: string,
-  userEmail: string,
+  stats: { userPassedText: string, totalRight: number, totalWrong: number, },
+  user: { userEmail: string, profile_picture: string },
+  tutorial: { questionsString: string, title: string, description: string, }
 ) => {
+
+  let profilePicturePath;
+  if(user.profile_picture) {
+    profilePicturePath = `images/profile_pictures/${user.profile_picture}`;
+  } else{
+    profilePicturePath = `images/profile_pictures/default_user.png`;
+  }
+  const profilePictureData = fs.readFileSync(path.resolve(profilePicturePath));
 
   const html = `<!DOCTYPE html>
   <html lang="en">
@@ -115,13 +129,13 @@ const sendEmail = async (
       <tr>
         <td style="width: 100px; padding: 20px;">
           <div style="border: 2px solid black; width: 100px; height: 100px; border-radius: 50%; overflow: hidden;">
-            <img style="object-fit: cover; width: 100%; height: 100%;" src="https://example.com/frontend/src/assets/bob_minion.png" alt="Minion Image">
+          <img style="object-fit: cover; width: 100%; height: 100%;" src="cid:profilePicture">
           </div>
         </td>
         <td style="padding: 20px;">
-            ${userPassed}
+            ${stats.userPassedText}
           <div>
-            <h3 style="font-size: 16px; font-weight: 400; margin: 0;">Total: ${totalRight} / ${totalRight + totalWrong}</h3>
+            <h3 style="font-size: 16px; font-weight: 400; margin: 0;">Total: ${stats.totalRight} / ${stats.totalRight + stats.totalWrong}</h3>
           </div>
         </td>
       </tr>
@@ -130,14 +144,14 @@ const sendEmail = async (
     <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px;">
       <tr>
         <td>
-          <h2 style="font-size: 20px; font-weight: 400; margin: 0;">How to peel a banana</h2>
-          <p style="font-size: 14px; margin: 0;">The description will go here</p>
+          <h2 style="font-size: 20px; font-weight: 400; margin: 0;">${tutorial.title}</h2>
+          <p style="font-size: 14px; margin: 0;">${tutorial.description}</p>
         </td>
       </tr>
     </table>
 
     <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; padding: 20px; border: 2px solid black; border-radius: 10px;">
-    ${questionsString}
+    ${tutorial.questionsString}
     </table>
 
   </body>
@@ -154,10 +168,17 @@ const sendEmail = async (
 
   const mailOptions = {
     from: process.env.EMAIL_ACCOUNT,
-    // to: userEmail,
+    // to: user.userEmail,
     to: process.env.EMAIL_ACCOUNT,
     subject: "Nodemailer Test",
     html: html,
+    attachments: [
+      {
+        filename: 'profile_picture.jpg',
+        content: profilePictureData,
+        cid: 'profilePicture' // Unique identifier for the attachment
+      }
+    ]
   };
 
   transporter.sendMail(mailOptions, function (error: Error, info: any) {
