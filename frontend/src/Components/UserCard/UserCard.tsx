@@ -9,20 +9,24 @@ function UserCard({ first_name, last_name, profile_picture, email, callback }: a
 
   return (
     <Container sx={{
-      m: 'auto', width: '270px', height: 'max-content', py: 2,
-      backgroundColor: '#F7F7F7', border: 1, borderRadius: 2, display: 'flex',
-      flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+      m: 'auto 0', width: 'max-content', height: '110px', py: 2,
+      backgroundColor: '#fffff', borderRadius: 1.3, display: 'flex',
+      flexDirection: 'row', alignItems: 'center', justifyContent: 'space-between', cursor: 'pointer',
+      boxShadow: 6, gap: 3
     }} onClick={callback}>
 
-      <Box sx={{ mb: 1, width: '100px', height: '100px', borderRadius: 99, overflow: 'hidden' }}>
-        {profile_picture ?
-          <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={imageUrl} alt="Not found" />
-          : <FaceIcon sx={{ width: 100, height: 100 }} />
-        }
+      <Box>
+        <Typography variant="h6"><strong>{first_name} {last_name}</strong></Typography>
+        <Typography>{email}</Typography>
       </Box>
 
-      <Typography><strong>Email: </strong>{email}</Typography>
-      <Typography><strong>Name: </strong>{first_name} {last_name}</Typography>
+
+      <Box sx={{ mb: 1, width: '70px', height: '70px', borderRadius: 99, overflow: 'hidden' }}>
+        {profile_picture ?
+          <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={imageUrl} alt="Not found" />
+          : <FaceIcon sx={{ width: 70, height: 70 }} />
+        }
+      </Box>
 
     </Container>
   )
