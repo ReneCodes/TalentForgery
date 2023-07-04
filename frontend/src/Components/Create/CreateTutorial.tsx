@@ -6,6 +6,7 @@ import VideoPreview from './VideoPreview';
 import ImagePreview from './ImagePreview';
 import { DataType } from '../../utils/types';
 import Schedule from './Schedule';
+import { postTutorial } from '../../services/Api.service';
 
 interface FormInfo {
 	title: string;
@@ -123,13 +124,25 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
   };
 
   const handleScheduleData = (data: {startDate: string, endDate: string}) => {
-    setFormInfo((res) => {
-      return {
-        ...res,
-        access_date: data.startDate,
-        due_date: data.endDate,
+    (async() => {
+      try {
+        const tutorial = await postTutorial({
+          ...formInfo,
+          access_date: data.startDate,
+          due_date: data.endDate
+        });
+        console.log(tutorial);
+        setFormInfo((res) => {
+          return {
+            ...res,
+            access_date: data.startDate,
+            due_date: data.endDate,
+          }
+        });
+      } catch(err) {
+        alert(err);
       }
-    });
+    })();
   }
 
   return (

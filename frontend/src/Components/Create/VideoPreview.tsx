@@ -10,7 +10,7 @@ const VideoPreview: FC<VideoPreviewComp> = ({showPreview, videoData}) => {
   {typeof videoData === 'string' ? (
     <div>
       <video className='video_player' controls>
-        <source src={`../../../../server/videos/${videoData}`} type="video/mp4" />
+        <source src={`http://localhost:3001/videos/${videoData}`} type="video/mp4" />
       </video>
     </div>
   ) : (
