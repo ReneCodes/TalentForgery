@@ -1,4 +1,4 @@
-import { Dialog, DialogTitle } from "@mui/material";
+import { Button, Dialog, DialogTitle, Divider } from "@mui/material";
 import { FC} from "react";
 import { DataType } from "../../utils/types";
 import VideoPreview from "./VideoPreview";
@@ -20,6 +20,10 @@ const TutorialInfo: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
             <h3>{tutorial.description}</h3>
           </div>
           <VideoPreview showPreview={true} videoData={tutorial.video_url} />
+        </div>
+        <Divider />
+        <div className="info_close">
+          <Button variant="contained" onClick={onClose}>Close</Button>
         </div>
       </Dialog>
     </div>
