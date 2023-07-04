@@ -10,8 +10,9 @@ function UserCard({ first_name, last_name, profile_picture, email, callback }: a
   return (
     <Container sx={{
       m: 'auto', width: '270px', height: 'max-content', py: 2,
-      backgroundColor: '#F7F7F7', border: 1, borderRadius: 2, display: 'flex',
-      flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer'
+      backgroundColor: '#fffff', border: 1, borderRadius: 1.3, display: 'flex',
+      flexDirection: 'column', alignItems: 'center', justifyContent: 'center', cursor: 'pointer',
+      boxShadow: 6,
     }} onClick={callback}>
 
       <Box sx={{ mb: 1, width: '100px', height: '100px', borderRadius: 99, overflow: 'hidden' }}>
