@@ -1,4 +1,4 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
@@ -18,7 +18,7 @@ interface FormInfo {
 	tags: string[];
 }
 
-const CreateWithQuiz = () => {
+const CreateWithQuiz: FC<{onData: any}> = ({onData}) => {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
@@ -42,8 +42,11 @@ const CreateWithQuiz = () => {
     image_url: {} as File,
 	});
 
-  useEffect(() => console.log(formInfo), [formInfo]);
-  useEffect(() => console.log(questions), [questions]);
+  useEffect(() => {
+    if(formInfo.access_date) {
+      onData(formInfo)
+    }
+  }, [formInfo]);
 
   const handleClickOpen = () => {
     setOpen(true);

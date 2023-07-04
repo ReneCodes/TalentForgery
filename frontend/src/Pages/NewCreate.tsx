@@ -34,7 +34,7 @@ useEffect(() => {
   return <div>
     <h2>Create Tutorial</h2>
     <div className="button_line">
-      <CreateWithQuiz />
+      <CreateWithQuiz onData={handleDataFromTutorial} />
       <CreateTutorial onData={handleDataFromTutorial} />
     </div>
 

@@ -10,7 +10,7 @@ import Typography from '@mui/material/Typography';
 import { Filter1 } from '@mui/icons-material';
 import './NewCreate.css'
 
-const filters = ['newest', 'oldest', 'with quizzes', 'without quizzes'];
+const filters = ['newest', 'oldest'];
 
 const Filter: FC<{onData: any}> = ({onData}) => {
   const [open, setOpen] = useState(false);
