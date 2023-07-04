@@ -105,12 +105,6 @@ const ContactInfo: FC = () => {
 
 					<Box sx={{display: 'flex', flexDirection: 'column', gap: 3}}>
 						<EmployeeProfileForm />
-
-						<Button
-							variant="contained"
-							sx={{width: '100%'}}>
-							Update Password
-						</Button>
 					</Box>
 				</Box>
 			</Box>

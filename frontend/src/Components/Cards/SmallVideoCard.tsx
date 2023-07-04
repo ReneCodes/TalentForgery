@@ -16,11 +16,14 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import VideoInfo from './VideoInfo';
 import {VideoDataT} from '../../utils/types';
+import {TutorialStore} from '../../utils/zustand.store';
 
-export default function SmallVideoCard({videoData}: VideoDataT) {
-	const {white, secondary, gray, green} = theme.palette;
+export default function SmallVideoCard({videoData}: any) {
+	const {video_base_url} = TutorialStore();
+	const {white, secondary, gray} = theme.palette;
 	const [dialogOpen, setDialogOpen] = React.useState(false);
-	const {thumbnail, watched, has_form, topic, from_done, title} = videoData;
+	// TODO: include Topic
+	const {video_thumb, topic, title} = videoData;
 	return (
 		<Card sx={{maxWidth: 345, minWidth: 300, position: 'relative'}}>
 			{dialogOpen && (
@@ -34,7 +37,7 @@ export default function SmallVideoCard({videoData}: VideoDataT) {
 				component="img"
 				alt={title}
 				height="200"
-				image={thumbnail}
+				image={`${video_base_url}${video_thumb}`}
 			/>
 			<CardContent>
 				<CardActions sx={{position: 'absolute', top: 100, left: '50%', transform: 'translate(-50%,-50%)'}}>
@@ -62,24 +65,12 @@ export default function SmallVideoCard({videoData}: VideoDataT) {
 					{title}
 				</Typography>
 				<Box sx={{display: 'flex', gap: '10px', justifyContent: 'space-between', alignItems: 'center'}}>
-					<Typography
+					{/* <Typography
 						variant="overline"
 						color={gray['700']}>
-						{topic}
-					</Typography>
+						{topic} 
+					</Typography> */}
 					<VideoInfo videoData={videoData} />
-					<Box sx={{display: 'flex'}}>
-						{watched && <CheckCircleIcon sx={{color: green.main, mr: 1}} />}
-						{has_form ? (
-							<Box>
-								{from_done ? (
-									<AssignmentTurnedInIcon sx={{color: green['900']}} />
-								) : (
-									<AssignmentIcon sx={{color: secondary.main}} />
-								)}
-							</Box>
-						) : null}
-					</Box>
 				</Box>
 			</CardContent>
 		</Card>

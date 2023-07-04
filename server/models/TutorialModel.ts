@@ -8,40 +8,40 @@ const { Op } = require('sequelize');
 
 const createTheTutorial = async (providedInformation: createdTutorial, user_id: UUID) => {
 
-  const questions_id: string[] = [];
-  const questionsParsed = JSON.parse(providedInformation.question_ids);
-  providedInformation.tags = JSON.parse(providedInformation.tags);
+	const questions_id: string[] = [];
+	const questionsParsed = JSON.parse(providedInformation.question_ids);
+	providedInformation.tags = JSON.parse(providedInformation.tags);
 
-  const tutorial = await Tutorial.create({
-    ...providedInformation,
-    creator_id: user_id,
-    tutorial_id: crypto.randomUUID(),
-    questions_id,
-  });
+	const tutorial = await Tutorial.create({
+		...providedInformation,
+		creator_id: user_id,
+		tutorial_id: crypto.randomUUID(),
+		questions_id,
+	});
 
-  if (questionsParsed) {
-    for (const question of questionsParsed) {
-      const currQuestionId = crypto.randomUUID();
-      questions_id.push(currQuestionId);
-      await createQuestion({
-        question: question.question,
-        options: question.options,
-        answer: question.answer,
-        question_id: currQuestionId,
-      });
-    };
+	if (questionsParsed) {
+		for (const question of questionsParsed) {
+			const currQuestionId = crypto.randomUUID();
+			questions_id.push(currQuestionId);
+			await createQuestion({
+				question: question.question,
+				options: question.options,
+				answer: question.answer,
+				question_id: currQuestionId,
+			});
+		};
 
-    tutorial.questions_id = [...questions_id];
-  };
+		tutorial.questions_id = [...questions_id];
+	};
 
-  await tutorial.save();
-  return [tutorial.tutorial_id, questions_id];
+	await tutorial.save();
+	return [tutorial.tutorial_id, questions_id];
 
 };
 
 const getUserTutorials = async (user_id: UUID) => {
   const user = await User.findOne({ where: { user_id } });
-  const allVideos = [];
+	const allVideos = [];
 
   const normal_videos = await Tutorial.findAll(
     {
@@ -61,10 +61,10 @@ const getUserTutorials = async (user_id: UUID) => {
       'questions_shown', 'access_date', 'tags', 'due_date', 'video_thumb'],
   });
 
-  allVideos.push(normal_videos);
-  allVideos.push(tagged_videos);
+	allVideos.push(normal_videos);
+	allVideos.push(tagged_videos);
 
-  return allVideos;
+	return allVideos;
 };
 
 const getAllTheTutorials = async () => {
@@ -76,7 +76,7 @@ const getAllTheTutorials = async () => {
     return tutorials;
   } catch (error) {
     throw new Error("Failed to retrieve tutorials");
-  }
+	}
 };
 
 module.exports = { createTheTutorial, getAllTheTutorials, getUserTutorials };
