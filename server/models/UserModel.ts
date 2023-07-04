@@ -12,6 +12,11 @@ const getUserByEmail = async (email: string) => {
   return userExists !== null ? true : false;
 };
 
+const getUserByNumber = async (phone: string) => {
+  const userExists = await User.findOne({ where: { phone } });
+  return userExists !== null ? true : false;
+};
+
 const registerNewUser = async (providedInformation: registeredUser) => {
   const userList = await User.findOne({ where: {} });
   const findUser = await User.findOne({ where: { email: providedInformation.email } });
@@ -215,5 +220,6 @@ module.exports = {
   updateUserInfo,
   deleteOldProfilePicture,
   getAllOfTheUsers,
-  getUserStatsByEmail
+  getUserStatsByEmail,
+  getUserByNumber
 };

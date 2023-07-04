@@ -8,6 +8,10 @@ const transporter = nodemailer.createTransport({
   }
 });
 
+const accountSid = process.env.TWILLIO_ACCOUNT_SID;
+const authToken = process.env.TWILLIO_AUTH_TOKEN;
+const client = require('twilio')(accountSid, authToken);
+
 const sendEmail = async (html: string, user_sent: string, profilePictureData?: any) => {
 
   let profileInfo = profilePictureData ? [{
@@ -30,4 +34,19 @@ const sendEmail = async (html: string, user_sent: string, profilePictureData?: a
   });
 };
 
-module.exports = { sendEmail };
+const sendMessage = async (number: string, code: string) => {
+
+  const body = `Confirm your phone number on the Minon Mentor app with this code ${code}`;
+
+  client.messages
+    .create({
+      body,
+      from: process.env.TWILLIO_NUMBER,
+      to: number
+    })
+    .then((message: any) => console.log('SMS sent. SID:', message.sid))
+    .catch((error: any) => console.error('Error sending SMS:', error));
+
+};
+
+module.exports = { sendEmail, sendMessage };

@@ -10,7 +10,10 @@ const { authUser, authAdminUser, userExists } = require('./middleware/AuthMiddle
 
 // VALIDATION ROUTES
 router.post("/validate_email", ValidateInformation.validateEmail);
+router.post("/validate_number", ValidateInformation.validateNumber);
+
 router.post("/confirm_email", ValidateInformation.confirmEmail);
+router.post("/confirm_number", ValidateInformation.confirmNumber);
 
 // AUTHENTICATION ROUTES
 router.post("/register", UserController.registerUser);

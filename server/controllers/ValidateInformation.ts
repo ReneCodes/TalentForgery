@@ -1,6 +1,6 @@
 import { Request, Response } from "express";
-const { getUserByEmail } = require("../models/UserModel");
-const { sendEmail } = require("./SendInformation");
+const { getUserByEmail, getUserByNumber } = require("../models/UserModel");
+const { sendEmail, sendMessage } = require("./SendInformation");
 const { saveCode, checkCode, deleteCode, checkContactWaiting } = require("../models/Codes");
 
 const createCode = async () => {
@@ -91,7 +91,41 @@ const confirmEmail = async (req: Request, res: Response) => {
 
 };
 
-module.exports = { validateEmail, confirmEmail };
+const validateNumber = async (req: Request, res: Response) => {
+
+  const { number } = req.body;
+  if (!number) return res.status(400).json("Not enough information provided");
+
+  const numberRegistered = await getUserByNumber(number);
+  if (numberRegistered) return res.status(409).json("Number already confirmed");
+
+  const numberWaiting = await checkContactWaiting(number);
+  if (numberWaiting) return res.status(409).json("Number waiting to be confirmed");
+
+  const code = await createCode();
+  await saveCode(code, number, 'number');
+
+  sendMessage(number, code);
+  return res.status(200).json("Check your smartphone");
+};
+
+const confirmNumber = async (req: Request, res: Response) => {
+  const { number, code } = req.body;
+  if (!number || !code) return res.status(400).json("Not enough information provided");
+
+  const rightCode = await checkCode(number, code);
+  if (rightCode === 'Not Found') {
+    res.status(404).json(rightCode);
+  } else if (rightCode === 'Wrong Code') {
+    res.status(409).json(rightCode);
+  } else {
+    await deleteCode(number);
+    return res.status(200).json(rightCode);
+  }
+
+};
+
+module.exports = { validateEmail, confirmEmail, validateNumber, confirmNumber };
 
 
 

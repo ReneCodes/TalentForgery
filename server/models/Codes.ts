@@ -17,9 +17,6 @@ const saveCode = async (code: number, contact: string, confirm: string) => {
 
 const checkCode = async (contact: string, code: number) => {
   const info = await Codes.findOne({ where: { contact} });
-
-  console.log(info.code, code);
-
   if (!info) return 'Not Found';
   else if(info.code !== code) return 'Wrong Code';
   else return 'Right Code';
