@@ -5,7 +5,7 @@ import theme from '../../config/theme';
 import EmailIcon from '@mui/icons-material/Email';
 import ApartmentIcon from '@mui/icons-material/Apartment';
 import Person4Icon from '@mui/icons-material/Person4';
-
+import FaceIcon from '@mui/icons-material/Face';
 
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
@@ -22,7 +22,7 @@ function UserStatsCard(props: any) {
   console.log(stats);
 
   return (
-    <div style={{ backgroundColor: '#D9D9D9' }}>
+    <div>
       <Dialog
         open={showStats}
         fullScreen={fullScreen}
@@ -30,17 +30,17 @@ function UserStatsCard(props: any) {
         aria-labelledby="responsive-dialog-title"
       >
 
-        <DialogContent sx={{ backgroundColor: '#D9D9D9', p: '30px 90px' }} >
+        <DialogContent sx={{ backgroundColor: '#ffffff', p: '30px 90px' }} >
 
           <Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'center', alignItems: 'center', gap: '20px' }}>
 
-              <Box sx={{ width: '100px', height: '100px', borderRadius: 99, overflow: 'hidden', mt: 1 }}>
+              <Box sx={{ width: '100px', height: '100px', display: 'flex',alignItems: 'start', justifyContent: 'start', borderRadius: 99, overflow: 'hidden', mt: 1 }}>
                 {user.profile_picture ?
                   <img style={{ objectFit: 'cover', width: '100%', height: '100%' }} src={imageUrl} alt="Not found" />
                   :
-                  <FaceIcon sx={{ width: 150, height: 150 }} />
+                  <FaceIcon sx={{ width: '100%', height: '100%', objectFit: 'contain', m: 'auto', }} />
                 }
               </Box>
 
@@ -131,7 +131,7 @@ function UserStatsCard(props: any) {
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <Box sx={{
                     width: '70px', height: '70px', borderRadius: 99,
-                    overflow: 'hidden', mt: 1, backgroundColor: '#ffffff',
+                    overflow: 'hidden', mt: 1, backgroundColor: '#848484',
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
                   }}>
                     <Typography>{stats.todo}</Typography>
@@ -176,7 +176,7 @@ function UserStatsCard(props: any) {
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <Box sx={{
                     width: '70px', height: '70px', borderRadius: 99,
-                    overflow: 'hidden', mt: 1, backgroundColor: '#ffffff',
+                    overflow: 'hidden', mt: 1, backgroundColor: '#848484',
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
                   }}>
                     <Typography>{stats.todo}</Typography>
@@ -210,7 +210,7 @@ function UserStatsCard(props: any) {
                 <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center' }}>
                   <Box sx={{
                     width: '70px', height: '70px', borderRadius: 99,
-                    overflow: 'hidden', mt: 1, backgroundColor: '#ffffff',
+                    overflow: 'hidden', mt: 1, backgroundColor: '#848484',
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
                   }}>
                     <Typography>{stats.not_watched}</Typography>
