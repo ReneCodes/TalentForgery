@@ -122,7 +122,7 @@ export const TutorialTagStore = create<TagsList>((set) => ({
 }));
 
 // TUTORIAL STORE
-import {VideoDataT} from './types';
+// import {VideoDataT} from './types';
 interface TutorialStore {
 	video_base_url: string;
 	userTutorials: any[];

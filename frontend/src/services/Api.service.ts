@@ -184,24 +184,38 @@ export async function getAllTutorials(storeAllTutorials: any) {
 	}
 }
 
-export async function getQuestions() {
-	try {
-		const res = await axios.get('/api/questions');
+export async function getQuestions(body: any, setTutorialQuestions: any) {
+	if (body.tutorial_id) {
+		// console.log('SEND ID', body);
+		try {
+			const res = await axios.post('/api/questions', body);
+			setTutorialQuestions(res.data);
+			return res;
+		} catch (error: any) {
+			console.error(error.response.data, '<= No Questions');
+			// throw error;
+		}
+	}
+}
 
+export async function sendFinishedTest(body: any) {
+	try {
+		const res = await axios.post('/api/handle_test_done', body);
+		console.log(res.data);
 		return res;
 	} catch (error: any) {
-		console.error(error.response.data, '<= No Questions');
+		console.error(error.response.data, '<= No Test');
 		// throw error;
 	}
 }
 
-export async function getQuestionsByIds(idArr: any[]) {
+export async function getAllDataBaseQuestions() {
 	try {
-		const res = await axios.get(`/api/questions/${idArr}`);
+		const res = await axios.get('/api/get_all_questions');
 
 		return res;
 	} catch (error: any) {
-		console.error(error.response.data, '<= No Single Questions');
+		console.error(error.response.data, '<= No Questions');
 		// throw error;
 	}
 }
@@ -238,6 +252,7 @@ export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<
 	try {
 		const res = await axios.get<UpdateProfile>(`/api/user`);
 		await UpdateProfileInfo(res.data);
+		// console.log("QUESTIONS",res.data)
 		return res;
 	} catch (error: any) {
 		console.error(error.response.data, '<= No Profile Data');
