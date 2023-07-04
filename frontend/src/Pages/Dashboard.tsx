@@ -1,7 +1,6 @@
 import { Container, Box, Button, Typography, Dialog, IconButton, TextField } from '@mui/material';
 import { useState } from 'react';
 import { getAdminInvite, acceptUser, rejectUser } from '../services/Api.service';
-import { NavigateFunction, useNavigate } from 'react-router-dom';
 import { PendingUserStore, TutorialTagStore } from '../utils/zustand.store';
 import UserCard from "../Components/UserCard/UserCard";
 import useMediaQuery from '@mui/material/useMediaQuery';
@@ -12,7 +11,6 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EmployeePendingInfo from '../Components/Cards/EmployeePendingInfo';
 import { PendingPerson } from '../@types/Types';
-import SearchIcon from '@mui/icons-material/Search';
 
 const Dashboard = () => {
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
@@ -47,6 +45,7 @@ const Dashboard = () => {
 	const handleReject = async () => {
 		storeSelectedTags([]);
 		await rejectUser(user.dataValues.email, filterPendingPeople);
+		handleClose();
 	};
 
 
