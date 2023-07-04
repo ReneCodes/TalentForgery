@@ -10,7 +10,7 @@ const ImagePreview: FC<ImagePreviewComp> = ({ showPreview, imageData }) => {
   return <>
   {typeof imageData === 'string' ? (
     <div>
-      <img className="image_preview" src={`../../../../server/images/thumbnails/${imageData}`} alt="Image Preview" />
+      <img className="image_preview" src={`server/images/${imageData}`} alt="Image Preview" />
     </div>
   ) : (
     <div>

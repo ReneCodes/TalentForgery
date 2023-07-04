@@ -1,5 +1,6 @@
 import { Button, Dialog, DialogTitle, Divider } from "@mui/material";
 import { FC, useState} from "react";
+import { postTutorial } from "../../services/Api.service";
 import { DataType } from "../../utils/types";
 import QuestionList from "./NewQuestionList";
 import Schedule from "./Schedule";
@@ -25,14 +26,25 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
   };
 
   const handleScheduleData = (data: {startDate: string, endDate: string}) => {
-    setFormInfo((res) => {
-      return {
-        ...res,
-        access_date: data.startDate,
-        due_date: data.endDate,
+    (async() => {
+      try {
+        const tutorial = await postTutorial({
+          ...formInfo,
+          access_date: data.startDate,
+          due_date: data.endDate
+        });
+        console.log(tutorial);
+        setFormInfo((res) => {
+          return {
+            ...res,
+            access_date: data.startDate,
+            due_date: data.endDate,
+          }
+        });
+      } catch(err) {
+        alert(err);
       }
-    });
-    console.log(formInfo);
+    })();
   }
 
   return (
