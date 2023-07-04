@@ -1,4 +1,4 @@
-import { FC } from 'react';
+import { FC, useEffect } from 'react';
 
 interface ImagePreviewComp {
   showPreview: boolean,
@@ -6,13 +6,20 @@ interface ImagePreviewComp {
 }
 
 const ImagePreview: FC<ImagePreviewComp> = ({ showPreview, imageData }) => {
-  return (
+  useEffect(() => console.log(imageData), [imageData]);
+  return <>
+  {typeof imageData === 'string' ? (
+    <div>
+      <img className="image_preview" src={`../../../../server/images/thumbnails/${imageData}`} alt="Image Preview" />
+    </div>
+  ) : (
     <div>
       {showPreview && (
         <img className="image_preview" src={URL.createObjectURL(imageData.get('image'))} alt="Image Preview" />
       )}
     </div>
-  );
+  )}
+  </>
 }
 
 export default ImagePreview;

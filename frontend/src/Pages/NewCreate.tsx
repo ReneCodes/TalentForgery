@@ -1,13 +1,27 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import CreateTutorial from "../Components/Create/CreateTutorial";
 import CreateWithQuiz from "../Components/Create/CreateWithQuiz";
 import Filter from "../Components/Create/Filter";
 import TutorialList from "../Components/Create/TutorialList";
+import { getAllTutorials } from "../services/Api.service";
 import { DataType } from '../utils/types';
 
 const NewCreate = () => {
   const [filter, setFilter] = useState('newest');
   const [tutorials, setTutorials] = useState<DataType[]>([]);
+
+useEffect(() => {
+  (async () => {
+    try {
+      const response = await getAllTutorials();
+      const tutorialList = response?.data; 
+      console.log(1, tutorialList);
+      setTutorials(tutorialList);
+    } catch (err) {
+      alert(err);
+    }
+  })();
+}, []);
 
   const handleFilterChange = (childData: string) => {
     setFilter(childData);

@@ -31,7 +31,7 @@ const TutorialCard: FC<{tutorial: DataType}> = ({tutorial}) => {
     <Card className="tutorial_card" onClick={handleClickOpen}>
       <h3>{tutorial.title}</h3>
       <div className="tutorial_picture">
-        <ImagePreview showPreview={true} imageData={tutorial.image_url} />
+        <ImagePreview showPreview={true} imageData={tutorial.image_url || tutorial.video_thumb} />
       </div>
       <div className="check_button">
         <Button onClick={handleClickOpen2}><Checklist /></Button>
