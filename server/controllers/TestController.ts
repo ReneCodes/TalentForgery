@@ -40,23 +40,44 @@ const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed:
   let userPassedText = '';
 
   userPassedText = userPassed ?
-    '<h2 style="height: max-content;margin-left:20px; color: green;"> Passed </h2>' :
-    '<h2 style="height: max-content;margin-left:20px; color: red;"> Failed </h2>';
+    `<div style="color: green;" >
+      <h3 style="font-size: 18px; font-weight: 400; margin: 0;" > Passed </h3>
+     </div>
+    ` :
+    `<div style="color: red;" >
+      <h3 style="font-size: 18px; font-weight: 400; margin: 0;" > Failed </h3>
+     </div>
+    `
 
   testCorrection.forEach((question) => {
 
-    questionsString += `<tr><div><h2>${question.question}</h2><ul style="flex-wrap: wrap; display: flex; flex-direction: row; gap: 40px;">`;
+    questionsString += `
+    <tr>
+      <td>
+        <h2 style="font-size: 20px; font-weight: 400; margin: 0;"><strong>${question.question}</strong></h2>
+        <ul style="list-style-type: none; padding: 0; display: flex; flex-wrap: wrap;">
+        `;
 
     question.options.forEach((option) => {
       if (question.failed && question.userAnswer === option) {
-        questionsString += `<li style="color: red; margin-right:10px;"> ${option} </li>`;
+        questionsString += `
+        <li style="color: red; margin-bottom:10px;">
+          <h3 style="font-size: 16px; font-weight: 400; margin: 0;">${option}</h3>
+        </li>`;
       } else if (option === question.rightAnswer) {
-        questionsString += `<li style="color: green; margin-right:10px;"> ${option} </li>`;
+        questionsString += `
+        <li style="color: green; margin-bottom:10px;">
+          <h3 style="font-size: 16px; font-weight: 400; margin: 0;">${option}</h3>
+        </li>`;
       } else {
-        questionsString += `<li style=" margin-right:10px;">${option}</li>`;
+        questionsString += `
+        <li style="color: black; margin-bottom:10px;">
+          <h3 style="font-size: 16px; font-weight: 400; margin: 0;">${option}</h3>
+        </li>`;
       }
-    })
-    questionsString += `</ul></div></tr>`;
+    });
+
+    questionsString += `</ul></td></tr>`;
   });
 
   return [questionsString, userPassedText];
@@ -71,36 +92,57 @@ const sendEmail = async (
 
   const html = `<!DOCTYPE html>
   <html lang="en">
-
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Hello</title>
+    <title>Test Results</title>
   </head>
 
-  <body style="width: 100%; height: 100%; box-sizing: border-box;">
-    <div style="width: max-content; height: max-content;">
-      <table>
-      <div>
-        <tr>
-          <h1>These are your latest results</h1>
-        </tr>
-      </div>
+  <body style="width: 100%; margin: 0; padding: 0; background-color: #ffffff; font-family: 'Poppins', sans-serif;">
 
-        <div style="max-width: 500px; flex-wrap: wrap;text-align: start; display: flex; flex-direction: column; gap: 20px;">
-          <tr>
-            <div style="flex-wrap: wrap; height: max-content; width: max-content;display: flex; flex-direction: column; align-items: start; justify-content: start;">
-              <h2 style="height: max-content;">Total: ${totalRight} / ${totalRight + totalWrong} </h2>
-              ${userPassed}
-            </div>
-          </tr>
-          ${questionsString}
-        </div>
-      </table>
-    </div>
+    <table style="width: 100%; max-width: 1000px; margin: 0 auto; background-color: #5b5b5b; color: white;">
+      <tr>
+        <td style="padding: 9px 20px;">
+          <h2 style="font-size: 20px; font-weight: 400; margin: 0;">Minon Mentor</h2>
+        </td>
+        <td style="padding: 9px 20px; text-align: right;">
+        <h4 style="font-size: 14px; font-weight: 400; margin: 0;">04/07/2023</h4>
+      </td>
+      </tr>
+    </table>
+
+    <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px;">
+      <tr>
+        <td style="width: 100px; padding: 20px;">
+          <div style="border: 2px solid black; width: 100px; height: 100px; border-radius: 50%; overflow: hidden;">
+            <img style="object-fit: cover; width: 100%; height: 100%;" src="https://example.com/frontend/src/assets/bob_minion.png" alt="Minion Image">
+          </div>
+        </td>
+        <td style="padding: 20px;">
+            ${userPassed}
+          <div>
+            <h3 style="font-size: 16px; font-weight: 400; margin: 0;">Total: ${totalRight} / ${totalRight + totalWrong}</h3>
+          </div>
+        </td>
+      </tr>
+    </table>
+
+    <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px;">
+      <tr>
+        <td>
+          <h2 style="font-size: 20px; font-weight: 400; margin: 0;">How to peel a banana</h2>
+          <p style="font-size: 14px; margin: 0;">The description will go here</p>
+        </td>
+      </tr>
+    </table>
+
+    <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; padding: 20px; border: 2px solid black; border-radius: 10px;">
+    ${questionsString}
+    </table>
+
   </body>
-
-  </html>`;
+  </html>
+  `
 
   const transporter = nodemailer.createTransport({
     service: 'gmail',
