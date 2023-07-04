@@ -158,11 +158,22 @@ const CreateWithQuiz = () => {
         boo = false;
       }
     }
-
     if(boo) {
       setImported((res) => [...res, childData])
     }
+
+    boo = true;
+    for (const question of questions) {
+      if(question.question === childData.question) {
+        boo = false;
+      }
+    }
+    if(boo) {
+      setQuestions((res) => [...res, childData])
+    }
   }
+
+  useEffect(() => console.log(questions), [questions])
 
   return (
     <div>
