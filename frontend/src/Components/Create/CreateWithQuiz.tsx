@@ -9,6 +9,7 @@ import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';
 import ImagePreview from './ImagePreview';
 import ImportQuestion from './ImportQuestion';
+import ImportedQuestions from './ImportedQuestions';
 
 interface FormInfo {
 	title: string;
@@ -26,6 +27,7 @@ const CreateWithQuiz = () => {
   const [questionNumber, setQuestionNumber] = useState(1);
   const [getData, setGetData] = useState(false);
   const [questions, setQuestions] = useState<QuestionType[]>([])
+  const [imported, setImported] = useState<QuestionType[]>([]);
   const [length, setLength] = useState('');
   const [formInfo, setFormInfo] = useState<DataType>({
     title: '',
@@ -149,6 +151,19 @@ const CreateWithQuiz = () => {
     handleScheduleOpen();
   }
 
+  const handleImport = (childData: QuestionType) => {
+    let boo = true;
+    for (const question of imported) {
+      if(question.question === childData.question) {
+        boo = false;
+      }
+    }
+
+    if(boo) {
+      setImported((res) => [...res, childData])
+    }
+  }
+
   return (
     <div>
         <div className='filter_label'>
@@ -180,7 +195,9 @@ const CreateWithQuiz = () => {
           </div>
         </div>
         <Divider />
-        <ImportQuestion onData={undefined} />
+        <ImportQuestion onData={handleImport} />
+        <ImportedQuestions questions={imported} />
+
         {[...Array(questionNumber)].map((_, index) => (
           <div className='question_card' key={index}><Question getData={getData} onData={handleDataFromQuestions} /></div>
         ))}

@@ -134,3 +134,8 @@
 .input_box {
   width: 250px;
 }
+
+.imported_question {
+  margin-left: 20px;
+  margin-top: 20px;
+}
