@@ -5,9 +5,9 @@ import Filter from "../Components/Create/Filter";
 import TutorialList from "../Components/Create/TutorialList";
 import { getAllTutorials } from "../services/Api.service";
 import { DataType } from '../utils/types';
+import filter from '../Components/Create/filterFunction';
 
 const NewCreate = () => {
-  const [filter, setFilter] = useState('newest');
   const [tutorials, setTutorials] = useState<DataType[]>([]);
 
 useEffect(() => {
@@ -24,8 +24,7 @@ useEffect(() => {
 }, []);
 
   const handleFilterChange = (childData: string) => {
-    setFilter(childData);
-    console.log(filter);
+    setTutorials((res) => filter(childData, res));
   }
 
   const handleDataFromTutorial = (childData: DataType) => {
