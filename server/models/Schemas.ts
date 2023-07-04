@@ -184,6 +184,21 @@ const Question = sequelize.define('question', {
 	},
 });
 
+const Codes = sequelize.define('code', {
+	email: {
+		type: DataTypes.TEXT,
+		allowNull: false,
+	},
+	code: {
+		type: DataTypes.TEXT,
+		allowNull: false
+	},
+	confirm: {
+		type: DataTypes.TEXT,
+		allowNull: false,
+	},
+});
+
 if (process.env.ENV !== 'Test') {
 	// SETTING UP THE FOREIGN KEY OF THE INVITES TABLE
 	User.hasOne(Invites, {foreignKey: 'user_created', sourceKey: 'user_id'});

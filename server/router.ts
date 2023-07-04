@@ -4,8 +4,12 @@ const UserController = require('./controllers/UserController');
 const InviteController = require('./controllers/InviteController');
 const TutorialController = require("./controllers/TutorialControllers");
 const TestController = require('./controllers/TestController');
+const ValidateInformation = require('./controllers/ValidateInformation');
 
 const { authUser, authAdminUser, userExists } = require('./middleware/AuthMiddleware');
+
+// VALIDATION ROUTES
+router.post("/validate_email", ValidateInformation.validateEmail);
 
 // AUTHENTICATION ROUTES
 router.post("/register", UserController.registerUser);

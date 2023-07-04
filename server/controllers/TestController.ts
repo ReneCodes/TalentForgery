@@ -3,7 +3,7 @@ const jwt = require('jsonwebtoken');
 const { correctQuestions } = require("../models/QuestionsModel");
 const { updateUserStats } = require('../models/StatsModel');
 const { getUserInfo } = require('../models/UserModel');
-const nodemailer = require('nodemailer');
+const {sendEmail} = require('./SendInformation');
 const { validateTestDone } = require('../middleware/Validation');
 const fs = require('fs');
 const path = require('path');
@@ -29,7 +29,7 @@ const handleTest = async (req: Request, res: Response) => {
     const userInfo = await getUserInfo(user_id);
     const userEmail = userInfo.email;
     const profile_picture = userInfo.profile_picture;
-    await sendEmail(
+    await handleSendEmail(
       { userPassedText, totalRight, totalWrong },
       { userEmail, profile_picture },
       { questionsString, title: 'How to peel a banana', description: 'The description will go here'}
@@ -90,7 +90,7 @@ const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed:
   return [questionsString, userPassedText];
 };
 
-const sendEmail = async (
+const handleSendEmail = async (
   stats: { userPassedText: string, totalRight: number, totalWrong: number, },
   user: { userEmail: string, profile_picture: string },
   tutorial: { questionsString: string, title: string, description: string, }
@@ -156,35 +156,9 @@ const sendEmail = async (
 
   </body>
   </html>
-  `
+  `;
 
-  const transporter = nodemailer.createTransport({
-    service: 'gmail',
-    auth: {
-      user: process.env.EMAIL_ACCOUNT,
-      pass: process.env.EMAIL_PASSWORD
-    }
-  });
-
-  const mailOptions = {
-    from: process.env.EMAIL_ACCOUNT,
-    // to: user.userEmail,
-    to: process.env.EMAIL_ACCOUNT,
-    subject: "Nodemailer Test",
-    html: html,
-    attachments: [
-      {
-        filename: 'profile_picture.jpg',
-        content: profilePictureData,
-        cid: 'profilePicture' // Unique identifier for the attachment
-      }
-    ]
-  };
-
-  transporter.sendMail(mailOptions, function (error: Error, info: any) {
-    if (error) console.log(error);
-  });
-
+  sendEmail(html, profilePictureData);
 };
 
 module.exports = { handleTest };
