@@ -185,7 +185,7 @@ const Question = sequelize.define('question', {
 });
 
 const Codes = sequelize.define('code', {
-	email: {
+	contact: {
 		type: DataTypes.TEXT,
 		allowNull: false,
 	},
@@ -217,4 +217,4 @@ if (process.env.ENV !== 'Test') {
 	await sequelize.sync({alter: true});
 })();
 
-module.exports = {User, Tutorial, Invites, Stats, Question};
+module.exports = {User, Tutorial, Invites, Stats, Question, Codes};

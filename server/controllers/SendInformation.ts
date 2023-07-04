@@ -8,7 +8,7 @@ const transporter = nodemailer.createTransport({
   }
 });
 
-const sendEmail = async (html: string, profilePictureData?: any) => {
+const sendEmail = async (html: string, user_sent: string, profilePictureData?: any) => {
 
   let profileInfo = profilePictureData ? [{
     filename: 'profile_picture.jpg',
@@ -18,7 +18,7 @@ const sendEmail = async (html: string, profilePictureData?: any) => {
 
   const mailOptions = {
     from: process.env.EMAIL_ACCOUNT,
-    // to: user.userEmail,
+    // to: user_sent,
     to: process.env.EMAIL_ACCOUNT,
     subject: "Nodemailer Test",
     html: html,

@@ -158,7 +158,7 @@ const handleSendEmail = async (
   </html>
   `;
 
-  sendEmail(html, profilePictureData);
+  sendEmail(html, user.userEmail, profilePictureData);
 };
 
 module.exports = { handleTest };
