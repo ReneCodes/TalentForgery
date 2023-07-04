@@ -10,6 +10,7 @@ import Schedule from './Schedule';
 import ImagePreview from './ImagePreview';
 import ImportQuestion from './ImportQuestion';
 import ImportedQuestions from './ImportedQuestions';
+import { postTutorial } from '../../services/Api.service';
 
 interface FormInfo {
 	title: string;
@@ -31,14 +32,14 @@ const CreateWithQuiz = () => {
   const [length, setLength] = useState('');
   const [formInfo, setFormInfo] = useState<DataType>({
     title: '',
-		video_url: {} as File,
-    image_url: {} as File,
 		description: '',
 		question_ids: [],
 		questions_shown: 0,
 		access_date: '',
 		due_date: '',
-    tags: []
+    tags: [],
+		video_url: {} as File,
+    image_url: {} as File,
 	});
 
   useEffect(() => console.log(formInfo), [formInfo]);
@@ -61,18 +62,27 @@ const CreateWithQuiz = () => {
     handleClose();
   };
 
-  const handleScheduleData = (data: {startDate: string, endDate: string}) => {
+  const handleScheduleData = async (data: { startDate: string, endDate: string }) => {
     if (parseInt(length) > questions.length) {
-      alert('too few questions')
+      alert('Too few questions');
     } else {
-      setFormInfo((res) => {
-        return {
+      try {
+        const tutorial = await postTutorial({
+          ...formInfo,
+          access_date: data.startDate,
+          due_date: data.endDate,
+          question_ids: questions
+        });
+        console.log(tutorial);
+        setFormInfo((res) => ({
           ...res,
           access_date: data.startDate,
           due_date: data.endDate,
           question_ids: questions
-        }
-      });
+        }));
+      } catch (err) {
+        alert(err);
+      }
     }
   };
 
@@ -172,8 +182,6 @@ const CreateWithQuiz = () => {
       setQuestions((res) => [...res, childData])
     }
   }
-
-  useEffect(() => console.log(questions), [questions])
 
   return (
     <div>

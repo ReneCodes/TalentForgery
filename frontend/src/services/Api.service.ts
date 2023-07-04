@@ -138,13 +138,20 @@ export async function postTutorial(data: any) {
 
 		Object.entries(data).forEach(([key, value]: any) => {
 			if (value instanceof FormData) {
-				const video = value.get('video') as File;
-				formData.append('video_url', video);
-			} else if (key === 'question_ids') {
-				formData.append(key, JSON.stringify(value)); // stringify Array
+				const file: any = value.get('video') || value.get('image');
+				if (value.get('video')) key = 'video_url';
+				else key = 'video_thumb';
+				formData.append(key, file);
+			} else if (key === 'question_ids' || key === 'tags') {
+				formData.append(key, JSON.stringify(value));
 			} else {
 				formData.append(key, value);
 			}
+		});
+
+		console.log('Form Data:');
+		formData.forEach((value, key) => {
+			console.log(key, value);
 		});
 
 		const res = await axios.post('/api/create_tutorial', formData);

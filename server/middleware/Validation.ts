@@ -56,6 +56,7 @@ const validateTutorialData = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       allRight = false;
+      console.log('Validation errors:', errors.array());
     }
   });
 

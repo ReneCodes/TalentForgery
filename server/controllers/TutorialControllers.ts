@@ -1,43 +1,47 @@
-import {createdTutorial} from '../types/tutorial';
+import { createdTutorial } from '../types/tutorial';
 const jwt = require('jsonwebtoken');
-const {createTheTutorial, getAllTheTutorials, getUserTutorials} = require('../models/TutorialModel');
+const { createTheTutorial, getAllTheTutorials, getUserTutorials } = require('../models/TutorialModel');
 
-const {getTutorialQuestions, getTheQuestions} = require('../models/QuestionsModel');
-const {validateTutorialData, validateTutorialId} = require('../middleware/Validation');
+const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
+const { validateTutorialData, validateTutorialId } = require('../middleware/Validation');
 const fs = require('fs');
 
-import {Request, Response} from 'express';
-import {fileInput} from '../types/user';
+import { Request, Response } from 'express';
+import { fileInput } from '../types/user';
 
 const multer = require('multer');
 
 const storage = multer.diskStorage({
-	destination: (req: Request, file: File, cb: Function) => {
-		cb(null, '../server/videos');
+	destination: (req: Request, file: any, cb: any) => {
+		if (file.fieldname === 'video_thumb') {
+			cb(null, './images/thumbnails');
+		} else {
+			cb(null, './videos');
+		}
 	},
-	filename: (req: Request, file: fileInput, cb: Function) => {
+	filename: (req: Request, file: any, cb: any) => {
 		const customFileName = Date.now() + file.originalname;
 		cb(null, Date.now() + customFileName);
 	},
 });
 
-const upload = multer({storage});
 
+const upload = multer({ storage });
 async function createTutorial(req: any, res: Response) {
 	const sessionToken = req.cookies.session_token;
 	const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
 
 	await upload.fields([
-		{name: 'video_url', maxCount: 1},
-		{name: 'video_thumb', maxCount: 1},
-	])(req, res, async (err: Error) => {
+		{ name: 'video_url', maxCount: 1 },
+		{ name: 'video_thumb', maxCount: 1 },
+	])(req, res, async (err: Error) => {		
 		const informationIsRight = await validateTutorialData(req, res);
 		if (!informationIsRight) {
 			req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
 			return res.status(400).json('Not enough information provided');
 		}
 
-		const {title, description, question_ids, questions_shown, access_date, due_date, tags}: createdTutorial = req.body;
+		const { title, description, question_ids, questions_shown, access_date, due_date, tags }: createdTutorial = req.body;
 		if (err) return res.status(500).json('Server failed uploading tutorial');
 
 		try {
@@ -58,7 +62,7 @@ async function createTutorial(req: any, res: Response) {
 
 			tutorialData.video_url = videoFileName;
 			const [tutorial_id, questions_id] = await createTheTutorial(tutorialData, user_id);
-			res.status(201).json({message: 'Tutorial created.', tutorial_id, questions_id});
+			res.status(201).json({ message: 'Tutorial created.', tutorial_id, questions_id });
 		} catch (error) {
 			const errorMessage = (error as Error).message;
 			console.log(errorMessage);
@@ -94,7 +98,7 @@ async function getQuestions(req: Request, res: Response) {
 	if (!informationIsRight) return res.status(400).json('Not enough information provided');
 
 	try {
-		const {tutorial_id} = req.body;
+		const { tutorial_id } = req.body;
 		const questions = await getTutorialQuestions(tutorial_id);
 		res.status(200).json(questions);
 	} catch (error) {
@@ -116,4 +120,4 @@ async function getAllQuestions(req: Request, res: Response) {
 	}
 }
 
-module.exports = {createTutorial, getAllTutorials, getQuestions, getAllQuestions, getTutorials};
+module.exports = { createTutorial, getAllTutorials, getQuestions, getAllQuestions, getTutorials };
