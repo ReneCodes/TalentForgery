@@ -11,8 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 const corsConfig = {
-  origin: `http://localhost:${process.env.FRONT_END_PORT}`, // put in .env
-  credentials: true,
+	origin: `http://localhost:${process.env.FRONT_END_PORT}`, // put in .env
+	credentials: true,
 };
 
 app.use(cors(corsConfig));
@@ -20,6 +20,7 @@ app.use(bodyParser());
 app.use(cookieParser());
 
 app.use('/images', express.static(path.join(__dirname + '../../', 'images')));
+app.use('/videos', express.static(path.join(__dirname + '../../', 'videos')));
 app.use(router);
 
 const server = app.listen(PORT, () => console.log(`Running at http://localhost:${PORT}/`));
