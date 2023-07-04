@@ -2,33 +2,33 @@
 import React, {FC} from 'react';
 import SmallVideoCard from '../../Components/Cards/SmallVideoCard';
 import {Box, Typography} from '@mui/material';
-import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
-import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
-import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
-import {TutorialVideoDataType} from '../../@types/Types';
+// import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
+// import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
+// import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
+// import {TutorialVideoDataType} from '../../@types/Types';
 import TimedTutorialCard from '../../Components/Cards/TimedTutorial/TimedTutorialCard';
 import {PendingUserStore, TutorialStore} from '../../utils/zustand.store';
 
+import {SmallVideoData} from '../../@types/Types';
+
 export const HomeMe = () => {
-	const {userTutorials, allTutorials} = TutorialStore();
 	const {pendingPerson} = PendingUserStore();
+
+	const {userTutorials} = TutorialStore();
 	const generalTutorials = userTutorials[0];
 	const scheduledTutorials = userTutorials[1];
-	// TODO: make sure scheduledTutorials will be passed down  to children
-	const firstQuizzTutorial = allTutorials[0];
-
 	// console.log('generalTutorials', generalTutorials);
 	// console.log('scheduledTutorials', scheduledTutorials);
 	return (
 		<Box sx={{display: 'flex', flexDirection: 'column', alignItems: {xs: 'center', sm: 'flex-start'}, m: 'auto'}}>
 			<Typography
 				variant="h4"
-				sx={{m: 2, borderBottom: '2px solid red', borderColor: 'primary.main', width: 'fit-content'}}>
+				sx={{m: 2, borderBottom: '2px solid', borderColor: 'primary.main', width: 'fit-content'}}>
 				Latest Tutorials
 			</Typography>
 			<Box sx={styles.noBar}>
 				{generalTutorials &&
-					generalTutorials.slice(0, 4).map((videoData) => (
+					generalTutorials.slice(0, 4).map((videoData: SmallVideoData['videoData']) => (
 						<Box
 							key={Math.floor(Math.random() * 99999999)}
 							sx={{mb: 2}}>
@@ -37,14 +37,14 @@ export const HomeMe = () => {
 					))}
 			</Box>
 
-			<Box sx={{}}>
+			{/* <Box sx={{}}>
 				{pendingPerson &&
 					pendingPerson.map((user) => (
 						<Box key={user.dataValues.profile_picture}>
 							<EmployeePendingCard user={user} />
 						</Box>
 					))}
-			</Box>
+			</Box> */}
 
 			{/* TODO: INSERT TimedTutorials */}
 			{/* <Box sx={styles.noBar}>
@@ -62,19 +62,11 @@ export const HomeMe = () => {
 			</Typography>
 			<Box sx={styles.noBar}>
 				{scheduledTutorials.length > 0 &&
-					scheduledTutorials.slice(0, 4).map((videoData) => (
-						<Box
-							key={Math.floor(Math.random() * 99999999)}
-							sx={{mb: 2}}>
-							<SmallVideoCard videoData={videoData} />
+					scheduledTutorials.slice(0, 2).map((videoData: SmallVideoData['videoData']) => (
+						<Box key={Math.floor(Math.random() * 99999999)}>
 							<TimedTutorialCard videoData={videoData} />
 						</Box>
 					))}
-				{scheduledTutorials.length >= 0 && (
-					<Box key={Math.floor(Math.random() * 99999999)}>
-						<TimedTutorialCard videoData={firstQuizzTutorial} />
-					</Box>
-				)}
 			</Box>
 		</Box>
 	);
@@ -85,7 +77,7 @@ const styles = {
 	noBar: {
 		display: {xs: 'column', sm: 'flex'},
 		gap: 2,
-		columnGap: 2,
+		mb: 4,
 		overflow: 'auto',
 		whiteSpace: 'nowrap',
 		padding: '10px',

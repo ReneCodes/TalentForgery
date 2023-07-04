@@ -49,7 +49,14 @@ const TimedVideoInfo: React.FC<any> = ({videoData}) => {
 					<Button
 						autoFocus
 						aria-label="close"
-						onClick={handleClose}>
+						onClick={handleClose}
+						sx={{
+							backgroundColor: 'gray.700',
+							color: 'white.main',
+							':hover': {
+								backgroundColor: 'gray.900',
+							},
+						}}>
 						Close
 					</Button>
 				</DialogActions>

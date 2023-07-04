@@ -9,6 +9,7 @@ import Box from '@mui/material/Box';
 import theme from '../../../config/theme';
 import TimedVideoInfo from './TimedVideoInfo';
 import TimedWatchTutorial from './TimedWatchTutorial';
+import {SmallVideoData} from '../../../@types/Types';
 
 // Icons
 import AssignmentIcon from '@mui/icons-material/Assignment';
@@ -16,11 +17,11 @@ import {TutorialStore} from '../../../utils/zustand.store';
 import {getQuestions} from '../../../services/Api.service';
 
 // TODO: get the TS Prop Type right
-const TimedTutorialCard = ({videoData}: any) => {
+const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	// Color Theme
 	const {secondary} = theme.palette;
 	// Zustand Stores
-	const {video_base_url} = TutorialStore();
+	const {video_thumb_base_url} = TutorialStore();
 	//
 	const {title, video_thumb, tutorial_id} = videoData;
 	// Local Stores
@@ -44,7 +45,7 @@ const TimedTutorialCard = ({videoData}: any) => {
 				component="img"
 				alt={title}
 				height="200"
-				image={`${video_base_url}${video_thumb}`}
+				image={`${video_thumb_base_url}${video_thumb}`}
 			/>
 			<CardContent>
 				<CardActions sx={{position: 'absolute', top: 100, left: '50%', transform: 'translate(-50%,-50%)'}}>

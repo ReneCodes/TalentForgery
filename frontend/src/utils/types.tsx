@@ -20,22 +20,6 @@ export interface QuestionType {
 	answer: string;
 }
 
-export interface VideoDataT {
-	videoData: {
-		title: string;
-		video_url: string;
-		video_thumb?: string;
-		description: string;
-		topic: string;
-	};
-}
-
-export interface VideoDialogI {
-	dialogOpen: boolean;
-	setDialogOpen: React.Dispatch<React.SetStateAction<boolean>>;
-	metaData: VideoDataT;
-}
-
 export interface DataType {
 	title: string;
 	video_url: any;

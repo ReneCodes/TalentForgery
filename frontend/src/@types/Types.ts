@@ -48,6 +48,21 @@ export type TutorialVideoDataType = {
 	from_done: boolean;
 };
 
+export interface SmallVideoData {
+	videoData: {
+		tutorial_id: string;
+		title: string;
+		video_url: string;
+		video_thumb?: string;
+		questions_id: [];
+		description: string;
+		questions_shown: string;
+		access_date: string;
+		tags: null;
+		due_date: string;
+	};
+}
+
 export interface PendingPerson {
 	dataValues: {
 		role: string;

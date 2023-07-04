@@ -8,26 +8,30 @@ import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
 import Box from '@mui/material/Box';
 import theme from '../../config/theme';
-import VideoDialog from './VideoDialog';
-// Icons
-
-import CheckCircleIcon from '@mui/icons-material/CheckCircle';
-import AssignmentIcon from '@mui/icons-material/Assignment';
-import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import VideoInfo from './VideoInfo';
-import {VideoDataT} from '../../utils/types';
+import SmallVideoInfo from './SmallVideoInfo';
+import SmallVideoDialog from './SmallVideoDialog';
 import {TutorialStore} from '../../utils/zustand.store';
+// types
+import {SmallVideoData} from '../../@types/Types';
 
-export default function SmallVideoCard({videoData}: any) {
-	const {video_base_url} = TutorialStore();
+// Icons
+// import CheckCircleIcon from '@mui/icons-material/CheckCircle';
+// import AssignmentIcon from '@mui/icons-material/Assignment';
+// import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+interface SmallVideoCardProps {
+	videoData: SmallVideoData['videoData'];
+}
+
+const SmallVideoCard: React.FC<SmallVideoCardProps> = ({videoData}) => {
+	const {video_thumb_base_url} = TutorialStore();
 	const {white, secondary, gray} = theme.palette;
 	const [dialogOpen, setDialogOpen] = React.useState(false);
 	// TODO: include Topic
-	const {video_thumb, topic, title} = videoData;
+	const {video_thumb, title} = videoData;
 	return (
-		<Card sx={{maxWidth: 345, minWidth: 300, position: 'relative'}}>
+		<Card sx={{maxWidth: 345, minWidth: 300, position: 'relative', mb: 2}}>
 			{dialogOpen && (
-				<VideoDialog
+				<SmallVideoDialog
 					dialogOpen={dialogOpen}
 					setDialogOpen={setDialogOpen}
 					videoData={videoData}
@@ -37,7 +41,7 @@ export default function SmallVideoCard({videoData}: any) {
 				component="img"
 				alt={title}
 				height="200"
-				image={`${video_base_url}${video_thumb}`}
+				image={`${video_thumb_base_url}${video_thumb}`}
 			/>
 			<CardContent>
 				<CardActions sx={{position: 'absolute', top: 100, left: '50%', transform: 'translate(-50%,-50%)'}}>
@@ -70,13 +74,11 @@ export default function SmallVideoCard({videoData}: any) {
 						color={gray['700']}>
 						{topic} 
 					</Typography> */}
-					<VideoInfo videoData={videoData} />
+					<SmallVideoInfo videoData={videoData} />
 				</Box>
 			</CardContent>
 		</Card>
 	);
-}
+};
 
-// const style = {
-// 	flexDirection: 'column',
-// } as const;
+export default SmallVideoCard;
