@@ -146,13 +146,11 @@ function UserStatsCard(props: any) {
                     overflow: 'hidden', mt: 1, backgroundColor: '#848484',
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
                   }}>
-                    <Typography>{stats.todo}</Typography>
+                    <Typography>{stats.tests_todo}</Typography>
                   </Box>
                   <Typography>Todo</Typography>
                 </Box>
               </Box>
-
-
 
             </Box>
 
@@ -191,7 +189,7 @@ function UserStatsCard(props: any) {
                     overflow: 'hidden', mt: 1, backgroundColor: '#848484',
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
                   }}>
-                    <Typography>{stats.todo}</Typography>
+                    <Typography>{stats.questions_todo}</Typography>
                   </Box>
                   <Typography>Todo</Typography>
                 </Box>
@@ -225,7 +223,7 @@ function UserStatsCard(props: any) {
                     overflow: 'hidden', mt: 1, backgroundColor: '#848484',
                     display: 'flex', justifyContent: 'center', alignItems: 'center',
                   }}>
-                    <Typography>{stats.not_watched}</Typography>
+                    <Typography>{stats.to_watch}</Typography>
                   </Box>
                   <Typography>To Watch</Typography>
                 </Box>

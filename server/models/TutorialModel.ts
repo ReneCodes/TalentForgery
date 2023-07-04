@@ -41,7 +41,6 @@ const createTheTutorial = async (providedInformation: createdTutorial, user_id: 
 
 const getUserTutorials = async (user_id: UUID) => {
   const user = await User.findOne({ where: { user_id } });
-  const allVideos = [];
 
   const normal_videos = await Tutorial.findAll(
     {
@@ -61,9 +60,17 @@ const getUserTutorials = async (user_id: UUID) => {
       'questions_shown', 'access_date', 'tags', 'due_date', 'video_thumb'],
   });
 
-  allVideos.push(normal_videos);
-  allVideos.push(tagged_videos);
+  const tutorialsWatched = user.tutorials_watched;
 
+  const normalVideosFiltered = normal_videos.filter((tutorial: any) => {
+    return !tutorialsWatched.includes(tutorial.tutorial_id)
+  });
+
+  const taggedTutorialsFiltered = tagged_videos.filter((tutorial: any) => {
+    return !tutorialsWatched.includes(tutorial.tutorial_id)
+  });
+
+  const allVideos = [normalVideosFiltered, taggedTutorialsFiltered];
   return allVideos;
 };
 
@@ -79,4 +86,11 @@ const getAllTheTutorials = async () => {
   }
 };
 
-module.exports = { createTheTutorial, getAllTheTutorials, getUserTutorials };
+const markTutorialAsWatched = async (tutorial_id: UUID, user_id: UUID) => {
+  const user = await User.findOne({ where: { user_id } });
+  const tutorials_watched = user.tutorials_watched || [];
+  tutorials_watched.push(tutorial_id);
+  await User.update({ tutorials_watched }, { where: { user_id } });
+};
+
+module.exports = { createTheTutorial, getAllTheTutorials, getUserTutorials, markTutorialAsWatched };

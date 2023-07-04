@@ -40,6 +40,11 @@ const User = sequelize.define('user', {
 		type: DataTypes.TEXT,
 		allowNull: false,
 	},
+	tutorials_watched: {
+		type: DataTypes.ARRAY(DataTypes.STRING),
+		allowNull: false,
+		defaultValue: [],
+	},
 	invited_by: {
 		type: DataTypes.TEXT,
 		allowNull: true,

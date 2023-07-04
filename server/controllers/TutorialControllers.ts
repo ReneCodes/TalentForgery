@@ -1,6 +1,6 @@
 import { createdTutorial } from '../types/tutorial';
 const jwt = require('jsonwebtoken');
-const { createTheTutorial, getAllTheTutorials, getUserTutorials } = require('../models/TutorialModel');
+const { createTheTutorial, getAllTheTutorials, getUserTutorials, markTutorialAsWatched } = require('../models/TutorialModel');
 
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
 const { validateTutorialData, validateTutorialId } = require('../middleware/Validation');
@@ -70,7 +70,7 @@ async function createTutorial(req: any, res: Response) {
 			res.status(500).json('Failed to create tutorial.');
 		}
 	});
-}
+};
 
 async function getAllTutorials(req: Request, res: Response) {
 	try {
@@ -79,7 +79,7 @@ async function getAllTutorials(req: Request, res: Response) {
 	} catch (error) {
 		res.status(500).json('Failed to retrieve tutorial');
 	}
-}
+};
 
 async function getTutorials(req: Request, res: Response) {
 	try {
@@ -91,7 +91,7 @@ async function getTutorials(req: Request, res: Response) {
 		console.log((error as Error).message);
 		res.status(500).json('Failed to retrieve tutorial');
 	}
-}
+};
 
 async function getQuestions(req: Request, res: Response) {
 	const informationIsRight = await validateTutorialId(req, res);
@@ -109,7 +109,7 @@ async function getQuestions(req: Request, res: Response) {
 			res.status(404).json(errorMessage);
 		} else res.status(500).json('Server failed');
 	}
-}
+};
 
 async function getAllQuestions(req: Request, res: Response) {
 	try {
@@ -118,6 +118,29 @@ async function getAllQuestions(req: Request, res: Response) {
 	} catch (error) {
 		res.status(500).json('Server failed');
 	}
-}
+};
 
-module.exports = { createTutorial, getAllTutorials, getQuestions, getAllQuestions, getTutorials };
+async function markTutorial(req: Request, res: Response) {
+	try {
+		const { tutorial_id } = req.body;
+		if(!tutorial_id) return res.status(400).json('Not enough information provided');
+
+		const sessionToken = req.cookies.session_token;
+		const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
+		await markTutorialAsWatched(tutorial_id, user_id);
+		res.status(200).json('Marked');
+
+	} catch (error) {
+		console.log(error);
+
+		res.status(500).json('Server failed');
+	}
+};
+
+module.exports = {
+	createTutorial, getAllTutorials,
+	getQuestions,
+	getAllQuestions,
+	getTutorials,
+	markTutorial,
+};

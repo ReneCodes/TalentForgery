@@ -5,7 +5,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
-const { User, Stats } = require('./Schemas');
+const { User, Stats, Question, Tutorial } = require('./Schemas');
 
 const getUserByEmail = async (email: string) => {
   const userExists = await User.findOne({ where: { email } });
@@ -185,12 +185,21 @@ const deleteProfilePicture = async (fileName: string) => {
 
 const getUserStatsByEmail = async (email: string) => {
   const user = await User.findOne({ where: { email } });
-  if(user == null) throw new Error('Invalid email');
+  if (user == null) throw new Error('Invalid email');
   const stats = await Stats.findOne({
     where: { user_id: user.user_id },
     attributes: ['passed', 'failed', 'watched', 'not_watched', 'correct_questions', 'wrong_questions']
   });
-  return stats;
+
+  const allTutorials = await Tutorial.findAll({ where: {} });
+  const allQuestions = await Question.findAll({ where: {} });
+  const totalTests = allTutorials.filter((tutorial: any) => tutorial.questions_id[0]);
+
+  const tests_todo = totalTests.length - stats.watched;
+  const questions_todo = allQuestions.length - (stats.correct_questions + stats.wrong_questions);
+  const to_watch = allTutorials.length - stats.watched;
+
+  return {...stats.dataValues, tests_todo, questions_todo, to_watch};
 };
 
 module.exports = {

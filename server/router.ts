@@ -31,6 +31,7 @@ router.get('/get_all_questions', authUser, TutorialController.getAllQuestions);
 
 router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial);
 router.post('/questions', authUser, TutorialController.getQuestions);
+router.post('/mark_as_watched', authUser, TutorialController.markTutorial);
 
 // TEST ROUTES
 router.post('/handle_test_done', authUser, TestController.handleTest);
