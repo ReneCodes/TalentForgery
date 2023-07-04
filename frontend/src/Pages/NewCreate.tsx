@@ -5,10 +5,10 @@ import Filter from "../Components/Create/Filter";
 import TutorialList from "../Components/Create/TutorialList";
 import { getAllTutorials } from "../services/Api.service";
 import { DataType } from '../utils/types';
-import filter from '../Components/Create/filterFunction';
 
 const NewCreate = () => {
   const [tutorials, setTutorials] = useState<DataType[]>([]);
+  const [filter, setFilter] = useState('newest');
 
 useEffect(() => {
   (async () => {
@@ -24,7 +24,7 @@ useEffect(() => {
 }, []);
 
   const handleFilterChange = (childData: string) => {
-    setTutorials((res) => filter(childData, res));
+    setFilter(childData);
   }
 
   const handleDataFromTutorial = (childData: DataType) => {
@@ -42,7 +42,7 @@ useEffect(() => {
       <h2>Tutorial List</h2>
       <Filter onData={handleFilterChange} />
     </div>
-    <TutorialList tutorials={tutorials}/>
+    <TutorialList filterName={filter} tutorials={tutorials}/>
   </div>
 }
 

@@ -1,4 +1,4 @@
-import { FC, useEffect } from 'react';
+import { FC } from 'react';
 
 interface ImagePreviewComp {
   showPreview: boolean,
@@ -6,7 +6,6 @@ interface ImagePreviewComp {
 }
 
 const ImagePreview: FC<ImagePreviewComp> = ({ showPreview, imageData }) => {
-  useEffect(() => console.log(imageData), [imageData]);
   return <>
   {typeof imageData === 'string' ? (
     <div>
