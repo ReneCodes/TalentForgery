@@ -9,35 +9,14 @@ import {TutorialVideoDataType} from '../../@types/Types';
 import TimedTutorialCard from '../../Components/Cards/TimedTutorial/TimedTutorialCard';
 import {PendingUserStore, TutorialStore} from '../../utils/zustand.store';
 
-const mockVideoArray = [
-	{
-		title: 'How to peel a Banana',
-		video_url: '16884561345341688456134534dance(540p).mp4',
-		video_thumb: '/src/assets/Temp_assets/chemist_thumb.png',
-		description: ` Lorem ipsum dolor sit amet, consectetur adipisicing elit. Sit voluptatem cupiditate, corporis laudantium explicabo maiores harum aliquid non nobis impedit, recusandae laborum rem alias ducimus id numquam aliquam. Sequi ad earum a deleniti, cum veritatis accusantium recusandae laboriosam autem nesciunt.`,
-		topic: 'science',
-	},
-	{
-		title: "What's that sound",
-		video_url: '/src/assets/Temp_assets/ambient_sound30s.mp4',
-		video_thumb: '/src/assets/Temp_assets/ambient_thumb.png',
-		description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum cumque iste totam perferendis ratione at quia fugit praesentium aliquam labore vel voluptate illo dolorem reiciendis nesciunt minus voluptatem, assumenda excepturi nulla et libero harum neque sunt? Sunt illum nihil, aliquid eos sit neque repellat qui cum placeat eum praesentium temporibus laudantium perferendis a, nobis inventore dolorem aliquam autem debitis excepturi porro quasi eligendi consequatur mollitia? Tenetur adipisci perferendis quisquam eius?`,
-		topic: 'survival',
-	},
-	{
-		title: "What's that sound",
-		video_url: '/src/assets/Temp_assets/ambient_sound30s.mp4',
-		video_thumb: '/src/assets/Temp_assets/ambient_thumb.png',
-		description: `Lorem ipsum dolor sit amet consectetur adipisicing elit. Voluptatum cumque iste totam perferendis ratione at quia fugit praesentium aliquam labore vel voluptate illo dolorem reiciendis nesciunt minus voluptatem, assumenda excepturi nulla et libero harum neque sunt? Sunt illum nihil, aliquid eos sit neque repellat qui cum placeat eum praesentium temporibus laudantium perferendis a, nobis inventore dolorem aliquam autem debitis excepturi porro quasi eligendi consequatur mollitia? Tenetur adipisci perferendis quisquam eius?`,
-		topic: 'survival',
-	},
-];
-
 export const HomeMe = () => {
-	const {userTutorials} = TutorialStore();
+	const {userTutorials, allTutorials} = TutorialStore();
 	const {pendingPerson} = PendingUserStore();
 	const generalTutorials = userTutorials[0];
 	const scheduledTutorials = userTutorials[1];
+	// TODO: make sure scheduledTutorials will be passed down  to children
+	const firstQuizzTutorial = allTutorials[0];
+
 	// console.log('generalTutorials', generalTutorials);
 	// console.log('scheduledTutorials', scheduledTutorials);
 	return (
@@ -93,7 +72,7 @@ export const HomeMe = () => {
 					))}
 				{scheduledTutorials.length >= 0 && (
 					<Box key={Math.floor(Math.random() * 99999999)}>
-						<TimedTutorialCard videoData={generalTutorials} />
+						<TimedTutorialCard videoData={firstQuizzTutorial} />
 					</Box>
 				)}
 			</Box>
