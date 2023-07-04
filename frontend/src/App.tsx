@@ -1,18 +1,21 @@
 // @ts-ignore
 import React from 'react';
 import './App.css';
-import {BrowserRouter} from 'react-router-dom';
-import {Box, CssBaseline, ThemeProvider} from '@mui/material';
-import {SideNav} from './Components/Navbar/SideNav';
+import { BrowserRouter } from 'react-router-dom';
+import { Box, CssBaseline, ThemeProvider } from '@mui/material';
+import { SideNav } from './Components/Navbar/SideNav';
 import theme from './config/theme';
-import {AppRoutes} from './routes/AppRoutes';
-import {AppHeader} from './Components/Header/AppHeader';
-import {AuthRoutes} from './routes/AuthRoutes';
-import {LoginAndOut} from './utils/zustand.store';
+import { AuthenticatedRoutes } from './routes/AuthenticatedRoutes';
+import { AppHeader } from './Components/Header/AppHeader';
+import { NotAuthenticatedRoutes } from './routes/NotAuthenticatedRoutes';
+import { LoginAndOut } from './utils/zustand.store';
+
+export function navigateTo(path: string) {
+  window.history.pushState(null, '', path);
+}
 
 const App: React.FC = () => {
-	const {logedIn} = LoginAndOut();
-
+	const { logedIn } = LoginAndOut();
 	const authenticated = logedIn;
 
 	return (
@@ -27,7 +30,7 @@ const App: React.FC = () => {
 							<Box
 								component={'main'}
 								sx={styles.mainSection}>
-								<AppRoutes />
+								<AuthenticatedRoutes />
 							</Box>
 						</BrowserRouter>
 					</Box>
@@ -37,7 +40,7 @@ const App: React.FC = () => {
 					<Box
 						component={'main'}
 						sx={styles.mainSection}>
-						<AuthRoutes />
+						<NotAuthenticatedRoutes />
 					</Box>
 				</BrowserRouter>
 			)}
