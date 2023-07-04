@@ -59,9 +59,10 @@ interface ProfileInfo {
 	avatar_url_path: string;
 	localProfileInfo: UpdateProfile;
 	UpdateProfileInfo: (profileData: Partial<UpdateProfile>) => void;
+	getUserRole: () => string | undefined;
 }
 
-export const userProfileStore = create<ProfileInfo>()((set) => ({
+export const userProfileStore = create<ProfileInfo>()((set, get) => ({
 	avatar_url_path: `http://localhost:3001/images/profile_pictures/`,
 	localProfileInfo: {
 		role: '',
@@ -80,6 +81,9 @@ export const userProfileStore = create<ProfileInfo>()((set) => ({
 		set((state) => ({
 			localProfileInfo: {...state.localProfileInfo, ...profileData},
 		})),
+	getUserRole: () => {
+		return get().localProfileInfo.role;
+	},
 }));
 
 // PENDING USER STORE
@@ -121,10 +125,12 @@ export const TutorialTagStore = create<TagsList>((set) => ({
 interface TutorialStore {
 	userTutorials: string[];
 	allTutorials: string[];
-	// storeSelectedTags: (tagsArr: string[]) => void;
+	storeUserTutorials: (tutorialsArr: string[]) => void;
+	storeAllTutorials: (tutorialsArr: string[]) => void;
 }
-export const TutorialStore = create<TutorialStore>(() => ({
+export const TutorialStore = create<TutorialStore>((set) => ({
 	userTutorials: [],
 	allTutorials: [],
-	// storeSelectedTags: (tagsArr) => set(() => ({selctedTags: tagsArr})),
+	storeUserTutorials: (tutorialsArr) => set(() => ({userTutorials: tutorialsArr})),
+	storeAllTutorials: (tutorialsArr) => set(() => ({allTutorials: tutorialsArr})),
 }));

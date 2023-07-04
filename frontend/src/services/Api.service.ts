@@ -82,7 +82,8 @@ export async function getAdminInvite(setLinkText: any) {
 			})
 			.catch(() => setLinkText('Failed'));
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= Cannot get Invite');
+		// throw error;
 	}
 }
 
@@ -100,7 +101,8 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 			return newArr;
 		});
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= Cannot Reject User');
+		// throw error;
 	}
 }
 
@@ -118,7 +120,8 @@ export async function acceptUser(email: string, tags: string[], filterPendingPeo
 			return newArr;
 		});
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= Cannot Accept User');
+		// throw error;
 	}
 }
 
@@ -127,7 +130,8 @@ export async function getPendingUsers(storePendingPeople: any) {
 		const res = await axios.get('/api/pending_users');
 		storePendingPeople(res.data);
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= Cannot Get Pending User');
+		// throw error;
 	}
 }
 
@@ -151,28 +155,32 @@ export async function postTutorial(data: any) {
 
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= Cannot Post Tutorial');
+		// throw error;
 	}
 }
 
-export async function getUsersTutorials() {
+export async function getUsersTutorials(storeUserTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_tutorials');
 		console.log('get Users Tutorials', res.data);
+		storeUserTutorials(res.data);
 		return res;
 	} catch (error: any) {
-		alert(error.response.data + 'GET USER TUTORIALS');
+		console.error(error.response.data + '<= GET USER TUTORIALS');
+		// throw error;
 	}
 }
 
-export async function getAllTutorials() {
+export async function getAllTutorials(storeAllTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_all_tutorials');
 		console.log('get All Tutorials', res.data);
-
+		await storeAllTutorials(res.data);
 		return res;
 	} catch (error: any) {
-		alert(error.response.data + 'GET ALL TUTORIALS');
+		console.error(error.response.data + '<= GET ALL TUTORIALS');
+		// throw error;
 	}
 }
 
@@ -182,7 +190,8 @@ export async function getQuestions() {
 
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= No Questions');
+		// throw error;
 	}
 }
 
@@ -192,7 +201,8 @@ export async function getQuestionsByIds(idArr: any[]) {
 
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= No Single Questions');
+		// throw error;
 	}
 }
 
@@ -220,16 +230,17 @@ export async function updateProfileData(profileData: UpdateProfile) {
 	} catch (error: any) {
 		console.log('Error updating Profile', error.toJSON());
 		return error;
+		// throw error;
 	}
 }
 
 export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<AxiosResponse<UpdateProfile>> {
 	try {
 		const res = await axios.get<UpdateProfile>(`/api/user`);
-		UpdateProfileInfo(res.data);
+		await UpdateProfileInfo(res.data);
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= No Profile Data');
 		throw error;
 	}
 }
@@ -239,8 +250,8 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 		const res: any = await axios.get<UpdateProfile>(`/api/users`);
 		setUsers([...res.data]);
 	} catch (error: any) {
-		alert(error.response.data);
-		throw error;
+		console.error(error.response.data, '<= Cannot get all Users');
+		// throw error;
 	}
 }
 
@@ -254,6 +265,7 @@ export async function getUserStats(email: string) {
 		});
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= Cannot get Userstats');
+		// throw error;
 	}
 }
