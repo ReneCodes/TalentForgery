@@ -11,7 +11,7 @@ import { NotAuthenticatedRoutes } from './routes/NotAuthenticatedRoutes';
 import { LoginAndOut } from './utils/zustand.store';
 
 export function navigateTo(path: string) {
-  window.history.pushState(null, '', path);
+	window.history.pushState(null, '', path);
 }
 
 const App: React.FC = () => {
@@ -21,6 +21,7 @@ const App: React.FC = () => {
 	return (
 		<ThemeProvider theme={theme}>
 			<CssBaseline />
+
 			{authenticated ? (
 				<>
 					<AppHeader />
@@ -44,7 +45,7 @@ const App: React.FC = () => {
 					</Box>
 				</BrowserRouter>
 			)}
-		</ThemeProvider>
+		</ThemeProvider >
 	);
 };
 

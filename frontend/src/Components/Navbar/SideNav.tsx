@@ -1,14 +1,14 @@
 // @ts-ignore
-import React, {useEffect} from 'react';
-import {Avatar, Box, Typography, useMediaQuery, useTheme} from '@mui/material';
-import {CSSObject, Menu, MenuItem, MenuItemStylesParams, Sidebar, menuClasses} from 'react-pro-sidebar';
+import React, { useEffect } from 'react';
+import { Avatar, Box, Typography, useMediaQuery, useTheme } from '@mui/material';
+import { CSSObject, Menu, MenuItem, MenuItemStylesParams, Sidebar, menuClasses } from 'react-pro-sidebar';
 // Icons
 import DashboardOutlinedIcon from '@mui/icons-material/DashboardOutlined';
 import StyleOutlinedIcon from '@mui/icons-material/StyleOutlined';
 import SourceOutlinedIcon from '@mui/icons-material/SourceOutlined';
 import AutoGraphOutlinedIcon from '@mui/icons-material/AutoGraphOutlined';
-import {Link, useLocation} from 'react-router-dom';
-import {NavbarStore, userProfileStore} from '../../utils/zustand.store';
+import { Link, useLocation } from 'react-router-dom';
+import { NavbarStore, userProfileStore } from '../../utils/zustand.store';
 
 interface MenuItemStyles {
 	root?: ElementStyles;
@@ -20,16 +20,16 @@ interface MenuItemStyles {
 	subMenuContent?: ElementStyles;
 	SubMenuExpandIcon?: ElementStyles;
 }
-
 type ElementStyles = CSSObject | ((params: MenuItemStylesParams) => CSSObject | undefined);
 
 export const SideNav = () => {
 	// ZUSTAND STORE
-	const {avatar_url_path, localProfileInfo} = userProfileStore();
+	const { avatar_url_path, localProfileInfo } = userProfileStore();
+
 	// TODO: show Links depending on User Role
-	const {profile_picture, department, first_name} = localProfileInfo;
+	const { profile_picture, department, first_name } = localProfileInfo;
 	const localProfileAvatar = `${avatar_url_path}${profile_picture}`;
-	const {collapsed, toggled, breakpoint, isToggled, reachedBreakpoint} = NavbarStore();
+	const { collapsed, toggled, breakpoint, isToggled, reachedBreakpoint } = NavbarStore();
 
 	// useEffect(() => {
 	// 	console.log('localProfileInfo', localProfileInfo);
@@ -73,18 +73,18 @@ export const SideNav = () => {
 				className="menu"
 				menuItemStyles={
 					{
-						button: ({active}) => {
+						button: ({ active }) => {
 							return {
 								backgroundColor: active && 'transparent',
 							};
 						},
-						icon: ({active}) => {
+						icon: ({ active }) => {
 							return {
 								scale: active && '1.2',
 								backgroundColor: active && theme.palette.secondary.main,
 							};
 						},
-						label: ({active}) => {
+						label: ({ active }) => {
 							return {
 								paddingBottom: '5px',
 								borderBottom: active && '1px solid',
@@ -115,58 +115,49 @@ export const SideNav = () => {
 					icon={<DashboardOutlinedIcon name="dash-board" />}>
 					<Typography variant="body2">Home</Typography>
 				</MenuItem>
-				<MenuItem
-					suffix="🔥"
-					className="menu-item"
-					active={location.pathname === '/dashboard'}
-					component={<Link to="/dashboard" />}
-					icon={<DashboardOutlinedIcon name="dash-board" />}>
-					<Typography variant="body2">Dashboard</Typography>
-				</MenuItem>
-				{/* <MenuItem
-						suffix="🔥" // TODO: we could add notification info here
-						active={location.pathname === '/login'}
-						component={<Link to="/login" />}
-						icon={<SourceOutlinedIcon name="Login" />}>
-						<Typography variant="body2">Login</Typography>
-					</MenuItem>
+
+				{localProfileInfo.role === 'admin' ? (
+					<>
+						<MenuItem
+							suffix="🔥"
+							className="menu-item"
+							active={location.pathname === '/dashboard'}
+							component={<Link to="/dashboard" />}
+							icon={<DashboardOutlinedIcon name="dash-board" />}>
+							<Typography variant="body2">Dashboard</Typography>
+						</MenuItem>
+
+						<MenuItem
+							active={location.pathname === '/users_stats'}
+							component={<Link to="/users_stats" />}
+							icon={<StyleOutlinedIcon name="users_stats" />}>
+							<Typography variant="body2">Staff Stats</Typography>
+						</MenuItem>
+
+						<MenuItem
+							active={location.pathname === '/create'}
+							component={<Link to="/create" />}
+							icon={<SourceOutlinedIcon name="create" />}>
+							<Typography variant="body2">Create</Typography>
+						</MenuItem>
+
+					</>
+				) :
 					<MenuItem
-						active={location.pathname === '/register'}
-						component={<Link to="/register" />}
-						icon={<SourceOutlinedIcon name="register" />}>
-						<Typography variant="body2">register</Typography>
+						active={location.pathname === '/stats'}
+						component={<Link to="/stats" />}
+						icon={<AutoGraphOutlinedIcon name="stats" />}>
+						<Typography variant="body2">stats</Typography>
 					</MenuItem>
-				*/}
-				<MenuItem
-					active={location.pathname === '/create'}
-					component={<Link to="/create" />}
-					icon={<SourceOutlinedIcon name="create" />}>
-					<Typography variant="body2">Create</Typography>
-				</MenuItem>
+				}
+
 				<MenuItem
 					active={location.pathname === '/profile'}
 					component={<Link to="/profile" />}
 					icon={<AutoGraphOutlinedIcon name="profile" />}>
 					<Typography variant="body2">Profile</Typography>
 				</MenuItem>
-				<MenuItem
-					active={location.pathname === '/stats'}
-					component={<Link to="/stats" />}
-					icon={<AutoGraphOutlinedIcon name="stats" />}>
-					<Typography variant="body2">stats</Typography>
-				</MenuItem>
-				<MenuItem
-					active={location.pathname === '/staff'}
-					component={<Link to="/staff" />}
-					icon={<StyleOutlinedIcon name="staff" />}>
-					<Typography variant="body2">staff</Typography>
-				</MenuItem>
-				<MenuItem
-					active={location.pathname === '/piechart'}
-					component={<Link to="/piechart" />}
-					icon={<StyleOutlinedIcon name="piechart" />}>
-					<Typography variant="body2">piechart</Typography>
-				</MenuItem>
+
 			</Menu>
 		</Sidebar>
 	);
