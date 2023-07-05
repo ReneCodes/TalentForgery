@@ -51,6 +51,7 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
       alert('video and thumbnail is needed');
       setGetData(false);
     } else {
+      handleScheduleOpen();
       setFormInfo((res) => {
         return {
           ...res,
@@ -104,7 +105,6 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
 
   const handleSubmit = () => {
     setGetData(true);
-    handleScheduleOpen();
   }
 
   const handleScheduleOpen = () => {

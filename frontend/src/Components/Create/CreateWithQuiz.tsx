@@ -97,6 +97,7 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
       alert('video and thumbnail is needed');
       setGetData(false);
     } else {
+      handleScheduleOpen();
       setFormInfo((res) => {
         return {
           ...res,
@@ -161,7 +162,6 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
 
   const handleSubmit = () => {
     setGetData(true);
-    handleScheduleOpen();
   }
 
   const handleImport = (childData: QuestionType) => {
