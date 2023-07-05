@@ -5,16 +5,29 @@ import { SetStateAction } from 'react';
 import { navigateTo } from '../App';
 import { QuestionType } from '../utils/types';
 
-function handleError(error: AxiosError) {
+function handleError(error: AxiosError, navigate?: NavigateFunction) {
+	console.log(error);
 	switch (error.response?.status) {
 		case 403:
-			navigateTo('/unauthorized');
+			if (navigate) {
+				navigate('/unauthorized');
+			} else {
+				navigateTo('/unauthorized');
+			}
 			break;
 		case 404:
-			navigateTo('/not_found');
+			if (navigate) {
+				navigate('/not_found');
+			} else {
+				navigateTo('/not_found');
+			}
 			break;
 		case 500:
-			navigateTo('/server_down');
+			if (navigate) {
+				navigate('/server_down');
+			} else {
+				navigateTo('/server_down');
+			}
 			break;
 		default:
 			return error.response?.data;
@@ -27,26 +40,25 @@ export async function authUser(navigate: NavigateFunction, callback?: any) {
 		await axios.get('/api/auth_user');
 		if (callback) callback();
 	} catch (error: any) {
-		handleError(error);
+		handleError(error, navigate);
 	}
 }
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
-	let errorMessage: string = '';
-
 	try {
 		const res = await axios.post('/api/login', formData);
+		console.log('RES', res);
+		console.log('RES DATA', res.data);
 		if (res.data) {
 			navigate('/');
 		} else {
 			navigate('/login');
 		}
+		return res;
 	} catch (error: any) {
-		handleError(error);
-		errorMessage = error.response.data;
+		handleError(error, navigate);
+		return error;
 	}
-
-	return errorMessage;
 }
 
 export async function logoutUser(navigate?: NavigateFunction) {
@@ -58,8 +70,11 @@ export async function logoutUser(navigate?: NavigateFunction) {
 			navigate('/');
 		}
 	} catch (error: any) {
-		handleError(error);
-		errorMessage = error.response.data;
+		if (navigate) {
+			navigate('/');
+		} else {
+			errorMessage = error.response.data;
+		}
 	}
 
 	return errorMessage;
@@ -88,7 +103,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		const password = formData.get('password') + '';
 		await loginUser({ email, password }, navigate);
 	} catch (error: any) {
-		handleError(error);
+		handleError(error, navigate);
 		errorMessage = error.response.data;
 	}
 
@@ -316,7 +331,7 @@ export async function deleteAnUserAccount(email: string) {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 export async function getStaffStatistics() {
 	try {
@@ -329,11 +344,11 @@ export async function getStaffStatistics() {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 // VERIFICATION
 export async function sendValidation(
-	contact: { email?: string, number?: string },
+	contact: {email?: string; number?: string},
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
@@ -352,13 +367,11 @@ export async function sendValidation(
 		const res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
-
 	} catch (error: any) {
-
 		handleError(error);
 		setError(error.response?.data);
 	}
-};
+}
 
 export async function validateCode(
 	contact: { email?: string, number?: string },
@@ -366,7 +379,6 @@ export async function validateCode(
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
-
 	let res;
 	try {
 		let data;
@@ -385,11 +397,10 @@ export async function validateCode(
 		});
 
 		res = response;
-
 	} catch (error: any) {
 		handleError(error);
 		setError(error.response?.data);
 	}
 
 	return res;
-};
+}
