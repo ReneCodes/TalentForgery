@@ -36,7 +36,8 @@ const TimedVideoInfo: React.FC<any> = ({videoData}) => {
 				fullScreen={fullScreen}
 				open={open}
 				onClose={handleClose}
-				aria-labelledby="responsive-dialog-title">
+				aria-labelledby="responsive-dialog-title"
+				sx={{textAlign: 'center'}}>
 				<DialogTitle
 					id="responsive-dialog-title"
 					variant="h4">

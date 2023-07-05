@@ -3,7 +3,8 @@ import {Button, Card, FormControl, FormControlLabel, Radio, RadioGroup} from '@m
 import {useEffect, useState} from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
-import {sendFinishedTest} from '../../../services/Api.service';
+import {getAllTutorials, getUsersTutorials, markTutorialAsDone, sendFinishedTest} from '../../../services/Api.service';
+import {TutorialStore, userProfileStore} from '../../../utils/zustand.store';
 
 interface TestQuestionComp {
 	question: {
@@ -26,10 +27,12 @@ type QuizzAnswer = {
 };
 
 const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo, tutorialQuestions, videoData}) => {
+	const {getUserRole} = userProfileStore();
+	const {storeUserTutorials, storeAllTutorials} = TutorialStore();
 	const [questions, setQuestions] = useState<TestQuestionComp[]>([]);
 	const [userAnswer, setUserAnswer] = useState<string[]>([]);
 	const [index, setIndex] = useState(0);
-	const tempAnswer = new Array(1);
+	let tempAnswer = '';
 
 	const {tutorial_id, questions_id} = videoData;
 
@@ -39,14 +42,16 @@ const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo, tutorialQues
 
 	const handleAnswer = (e: SyntheticEvent<Element, Event>) => {
 		const target = e.target as HTMLInputElement;
-		tempAnswer[0] = target.value as string;
+		tempAnswer = target.value as string;
 	};
 
 	const nextQuestion = () => {
-		if (tempAnswer[0]) {
+		if (tempAnswer) {
+			userAnswer.push(tempAnswer);
 			setIndex(index + 1);
-			setUserAnswer([...userAnswer, tempAnswer[0]]);
-			if (index === questions.length - 1) handleQuizzDone();
+			if (index === questions.length - 1) {
+				handleQuizzDone();
+			}
 		}
 	};
 
@@ -58,6 +63,21 @@ const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo, tutorialQues
 				question_ids: questions_id,
 			};
 			sendFinishedTest(quizzAnswersBody);
+			// send to mark_as_watched
+			const checkMail = await markTutorialAsDone({tutorial_id});
+			// check Role
+			if(checkMail){
+				if (getUserRole() === 'user') {
+					console.log('fetch user tutorials');
+					await getUsersTutorials(storeUserTutorials);
+				} else if (getUserRole() === 'admin') {
+					console.log('fetch admin tutorials');
+					await getAllTutorials(storeAllTutorials);
+				}
+			}
+
+			// if role admin
+			// reload tutorials
 
 			setQuizzToDo(false);
 			setQuizzDone(true);

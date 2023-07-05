@@ -14,7 +14,7 @@ import TimedQuizzList from './TimedQuizzList';
 import {SmallVideoData} from '../../../@types/Types';
 // icons
 import CloseIcon from '@mui/icons-material/Close';
-import {WhiteTooltip, YellowTooltip} from '../../Tooltips/CustomTooltips';
+import {YellowTooltip} from '../../Tooltips/CustomTooltips';
 
 // Dialog Visual Transistion
 const Transition = React.forwardRef(function Transition(

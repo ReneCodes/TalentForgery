@@ -81,8 +81,11 @@ export default function EmployeeProfileForm() {
 
 	const handleClickOpen = () => {
 		setOpen(true);
-		if (readOnly) setReadOnly(false);
-		else setReadOnly(true);
+		if (readOnly) {
+			setReadOnly(false);
+		} else {
+			setReadOnly(true);
+		}
 	};
 
 	const handleClose = () => {
