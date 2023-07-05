@@ -6,8 +6,11 @@ describe('Create tutorial', () => {
 
     cy.get('button').eq(0).click();
 
-    cy.get('input').eq(0).type('caiankeyes@gmail.com');
-    cy.get('input').eq(1).type('User1_123');
+    const email = Cypress.env('email');
+    const password = Cypress.env('password');
+
+    cy.get('input').eq(0).type(email);
+    cy.get('input').eq(1).type(password);
 
     cy.get('button').eq(1).click();
 
