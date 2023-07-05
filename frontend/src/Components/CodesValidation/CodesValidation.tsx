@@ -30,7 +30,7 @@ export const CodesValidation = (props: any) => {
   } = props;
 
   const [indexSend, setIndexSend] = useState<number[]>([0]);
-  let sending = verification[indexSend[0]].value;
+  let sending = verification[indexSend[0]]?.value;
 
   const [value, setValue] = useState<string>('');
   const [error, setError] = useState<string>('');
@@ -54,7 +54,7 @@ export const CodesValidation = (props: any) => {
 
   function updateVerified(email: boolean, sending: string) {
     const newArr = JSON.parse(JSON.stringify(verification));
-    newArr[indexSend[0]] = { email, contact: sending, verified: true };
+    newArr[indexSend[0]] = { email, value: sending, verified: true };
     setVerification(newArr);
   };
 
@@ -64,7 +64,7 @@ export const CodesValidation = (props: any) => {
 
   useEffect(() => {
 
-    if (indexSend[0] === 0 && sending !== '' && !checkVerified() || indexSend[0] === 1 && sending !== '' && !checkVerified()) {
+    if (indexSend[0] <= 1 && sending !== '' && !checkVerified()) {
       setWhereSend('email');
       emptyVariables();
       sendValidation({ email: sending }, 'email', setError);

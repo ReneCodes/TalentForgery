@@ -119,10 +119,11 @@ const Register = () => {
 
       currData.forEach((element: any, index: number) => {
         const [valueInserted, isEmail] = checkData(formData, index);
+
         endArr.push({
           email: isEmail,
           value: valueInserted,
-          verified: element.value !== valueInserted ? false : true,
+          verified: element.value === valueInserted && element.verified === true ? true : false,
         });
       });
 

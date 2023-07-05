@@ -35,7 +35,7 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 	let errorMessage: string = '';
 
 	try {
-		const res = await axios.post('/api/login', formData);
+		await axios.post('/api/login', formData);
 		navigate('/');
 	} catch (error: any) {
 		handleError(error);
@@ -293,26 +293,26 @@ export async function sendValidation(
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
-	// try {
-	// 	let data;
-	// 	let whereToSend;
+	try {
+		let data;
+		let whereToSend;
 
-	// 	if (whereSend === 'email') {
-	// 		whereToSend = 'validate_email';
-	// 		data = JSON.stringify({ email: contact.email });
-	// 	} else {
-	// 		whereToSend = 'validate_number';
-	// 		data = JSON.stringify({ number: contact.number });
-	// 	}
+		if (whereSend === 'email') {
+			whereToSend = 'validate_email';
+			data = JSON.stringify({ email: contact.email });
+		} else {
+			whereToSend = 'validate_number';
+			data = JSON.stringify({ number: contact.number });
+		}
 
-	// 	axios.post(`/api/${whereToSend}`, data, {
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 	});
+		axios.post(`/api/${whereToSend}`, data, {
+			headers: { 'Content-Type': 'application/json' },
+		});
 
-	// } catch (error: any) {
-	// 	handleError(error);
-	// 	setError((error as Error).message);
-	// }
+	} catch (error: any) {
+		handleError(error);
+		setError((error as Error).message);
+	}
 };
 
 export async function validateCode(
@@ -322,32 +322,31 @@ export async function validateCode(
 	setError: SetStateAction<any>
 ) {
 
-	return {data: 'Right Code'};
-	// let res;
-	// try {
-	// 	let data;
-	// 	let whereToSend;
+	let res;
+	try {
+		let data;
+		let whereToSend;
 
-	// 	if (whereSend === 'email') {
-	// 		whereToSend = 'confirm_email';
-	// 		data = JSON.stringify({ email: contact.email, code });
-	// 	} else {
-	// 		whereToSend = 'confirm_number';
-	// 		data = JSON.stringify({ number: contact.number, code });
-	// 	}
+		if (whereSend === 'email') {
+			whereToSend = 'confirm_email';
+			data = JSON.stringify({ email: contact.email, code });
+		} else {
+			whereToSend = 'confirm_number';
+			data = JSON.stringify({ number: contact.number, code });
+		}
 
-	// 	const response = axios.post(`/api/${whereToSend}`, data, {
-	// 		headers: { 'Content-Type': 'application/json' },
-	// 	});
+		const response = axios.post(`/api/${whereToSend}`, data, {
+			headers: { 'Content-Type': 'application/json' },
+		});
 
-	// 	res = response;
+		res = response;
 
-	// } catch (error: any) {
-	// 	handleError(error);
-	// 	setError((error as Error).message);
-	// }
+	} catch (error: any) {
+		handleError(error);
+		setError((error as Error).message);
+	}
 
-	// return res;
+	return res;
 };
 
 // LOGOUT
