@@ -1,9 +1,9 @@
-import axios, {AxiosError, AxiosResponse} from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
-import {NavigateFunction} from 'react-router-dom';
-import {SetStateAction} from 'react';
-import {navigateTo} from '../App';
+import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
+import { NavigateFunction } from 'react-router-dom';
+import { SetStateAction } from 'react';
+import { navigateTo } from '../App';
 
 function handleError(error: AxiosError) {
 	switch (error.response?.status) {
@@ -70,7 +70,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({email, password}, navigate);
+		loginUser({ email, password }, navigate);
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;
@@ -82,7 +82,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 // INVITE / ACCEPT / REJECT / PENDING USER
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: {data: string} = await axios.get('/api/invite');
+		const invite: { data: string } = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
@@ -105,7 +105,7 @@ export async function getAdminInvite(setLinkText: any) {
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({email});
+		const data = JSON.stringify({ email });
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -123,7 +123,7 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 
 export async function acceptUser(email: string, tags: string[], filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({email, tags});
+		const data = JSON.stringify({ email, tags });
 		await axios.post('/api/accept_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -289,7 +289,7 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 
 export async function getUserStats(email: string) {
 	try {
-		const data = JSON.stringify({email});
+		const data = JSON.stringify({ email });
 		const res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -303,13 +303,75 @@ export async function getUserStats(email: string) {
 
 export async function deleteAnUserAccount(email: string) {
 	try {
-		const data = JSON.stringify({user_delete: email});
+		const data = JSON.stringify({ user_delete: email });
 
 		axios.delete('/api/an_user', {
 			data: data,
-			headers: {'Content-Type': 'application/json'},
+			headers: { 'Content-Type': 'application/json' },
 		});
 	} catch (error: any) {
 		handleError(error);
 	}
-}
+};
+
+// VERIFICATION
+export async function sendValidation(
+	contact: { email?: string, number?: string },
+	whereSend: 'email' | 'phone',
+	setError: SetStateAction<any>
+) {
+	try {
+		let data;
+		let whereToSend;
+
+		if (whereSend === 'email') {
+			whereToSend = 'validate_email';
+			data = JSON.stringify({ email: contact.email });
+		} else {
+			whereToSend = 'validate_number';
+			data = JSON.stringify({ number: contact.number });
+		}
+
+		axios.post(`/api/${whereToSend}`, data, {
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+	} catch (error: any) {
+		handleError(error);
+		setError((error as Error).message);
+	}
+};
+
+export async function validateCode(
+	contact: { email?: string, number?: string },
+	code: string,
+	whereSend: 'email' | 'phone',
+	setError: SetStateAction<any>
+) {
+
+	let res;
+	try {
+		let data;
+		let whereToSend;
+
+		if (whereSend === 'email') {
+			whereToSend = 'confirm_email';
+			data = JSON.stringify({ email: contact.email, code });
+		} else {
+			whereToSend = 'confirm_number';
+			data = JSON.stringify({ number: contact.number, code });
+		}
+
+		const response = axios.post(`/api/${whereToSend}`, data, {
+			headers: { 'Content-Type': 'application/json' },
+		});
+
+		res = response;
+
+	} catch (error: any) {
+		handleError(error);
+		setError((error as Error).message);
+	}
+
+	return res;
+};
