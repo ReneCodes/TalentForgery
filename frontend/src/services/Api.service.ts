@@ -287,6 +287,19 @@ export async function deleteAnUserAccount(email: string) {
 	}
 };
 
+export async function getStaffStatistics() {
+	try {
+		const res = await axios.get('/api/get_staff_statistics', {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		return res;
+	} catch (error: any) {
+		handleError(error);
+	}
+};
+
 // VERIFICATION
 export async function sendValidation(
 	contact: { email?: string, number?: string },

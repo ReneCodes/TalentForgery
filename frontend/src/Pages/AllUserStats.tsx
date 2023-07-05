@@ -3,7 +3,7 @@ import SearchIcon from '@mui/icons-material/Search';
 import UserCard from "../Components/UserCard/UserCard";
 import { useEffect, useState } from "react";
 import { User } from "../@types/Types";
-import { getAllUsers, getUserStats, deleteAnUserAccount } from "../services/Api.service";
+import { getAllUsers, getUserStats, deleteAnUserAccount, getStaffStatistics } from "../services/Api.service";
 import UserStatsCard from "../Components/Cards/UserStatsCard";
 import SmallPieChart from "../Components/PieChart/SmallPieChart";
 
@@ -18,12 +18,31 @@ function AllUserStats() {
   const [showStats, setShowStats] = useState(false);
   const [search, setSearch] = useState<string>('');
 
+  const [staffStats, setStaffStats] = useState<{
+    questionsRight: number,
+    questionsWrong: number,
+    testsPassed: number,
+    testsFailed: number,
+    watched: number,
+    to_watch: number
+  }>({
+    questionsRight: 0,
+    questionsWrong: 0,
+    testsPassed: 0,
+    testsFailed: 0,
+    watched: 0,
+    to_watch: 0,
+  })
+
   useEffect(() => {
     (async () => {
+      const resWithStaffStats: any = await getStaffStatistics();
       const data = await getAllUsers(setUsersSearched);
+      setStaffStats(resWithStaffStats.data);
       setUsers(data);
     })();
   }, []);
+
 
   async function enableUserStats(user: User) {
     const res: any = await getUserStats(user.email);
@@ -86,21 +105,21 @@ function AllUserStats() {
           alignItems: 'center'
         }}>
           <Typography variant='h5'>Tests</Typography>
-          <SmallPieChart first_value={90} first_text={'Failed'} second_value={80} second_text={'Passed'} />
+          <SmallPieChart first_value={staffStats.testsFailed} first_text={'Failed'} second_value={staffStats.testsPassed} second_text={'Passed'} />
         </Box>
         <Box sx={{
           display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'center',
           alignItems: 'center'
         }}>
           <Typography variant='h5'>Questions</Typography>
-          <SmallPieChart first_value={50} first_text={'Failed'} second_value={80} second_text={'Passed'} />
+          <SmallPieChart first_value={staffStats.questionsWrong} first_text={'Failed'} second_value={staffStats.questionsRight} second_text={'Passed'} />
         </Box>
         <Box sx={{
           display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'center',
           alignItems: 'center'
         }}>
           <Typography variant='h5'>Tutorials</Typography>
-          <SmallPieChart first_value={40} first_text={'Not watched'} second_value={20} second_text={'Watched'} />
+          <SmallPieChart first_value={staffStats.watched} first_text={'Not watched'} second_value={staffStats.to_watch} second_text={'Watched'} />
         </Box>
       </Box>
 

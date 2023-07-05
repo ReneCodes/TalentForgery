@@ -28,11 +28,11 @@ class SmallPieChart extends Component<PieChartCompProps> {
     return [
       {
         name: first_text,
-        value: first_value
+        value: first_value > 0 ? first_value : 0.1
       },
       {
         name: second_text,
-        value: second_value
+        value: second_value > 0 ? second_value : 0.1
       },
     ];
   }

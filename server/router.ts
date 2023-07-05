@@ -29,6 +29,7 @@ router.post("/user_stats", authAdminUser, UserController.getUserStats);
 // INFORMATION ROUTES
 router.get('/user', authUser, UserController.getUserInformation);
 router.get('/pending_users', authAdminUser, UserController.getPendingUsers);
+router.get('/get_staff_statistics', authAdminUser, UserController.getStaffStatistics);
 
 // TUTORIAL ROUTES
 router.get('/get_all_tutorials', authAdminUser, TutorialController.getAllTutorials);

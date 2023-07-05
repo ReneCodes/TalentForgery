@@ -37,10 +37,11 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     });
 
     const tutorialsWatch = await getUserTutorials(user_id);
+    const not_watched = tutorialsWatch[0].length + tutorialsWatch[1].length;
 
     await Stats.create({
       user_id,
-      not_watched: tutorialsWatch.length
+      not_watched,
     })
 
     return role === 'admin' ? "Admin User created" : "User created";
@@ -196,6 +197,38 @@ const getUserStatsByEmail = async (email: string) => {
   return { ...stats.dataValues, tests_todo, questions_todo, to_watch };
 };
 
+const getAllStaffStatistics = async () => {
+
+  const allUsers = await User.findAll({ where: { role: 'user' } });
+
+  let questionsRight = 0;
+  let questionsWrong = 0;
+  let testsPassed = 0;
+  let testsFailed = 0;
+  let watched = 0;
+  let to_watch = 0;
+
+  allUsers.forEach(async (user: UserType) => {
+    const userStats = await getUserStatsByEmail(user.email);
+    questionsRight += userStats.correct_questions;
+    questionsWrong += userStats.wrong_questions;
+    testsPassed += userStats.passed;
+    testsFailed += userStats.failed;
+    watched += userStats.watched;
+    to_watch += userStats.to_watch;
+  });
+
+  return {
+    questionsRight,
+    questionsWrong,
+    testsPassed,
+    testsFailed,
+    watched,
+    to_watch
+  }
+
+};
+
 module.exports = {
   deleteAnUser,
   registerNewUser,
@@ -210,5 +243,6 @@ module.exports = {
   deleteOldProfilePicture,
   getAllOfTheUsers,
   getUserStatsByEmail,
-  getUserByNumber
+  getUserByNumber,
+  getAllStaffStatistics
 };

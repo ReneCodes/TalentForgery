@@ -10,7 +10,8 @@ const {
   updateUserInfo,
   deleteOldProfilePicture,
   getAllOfTheUsers,
-  getUserStatsByEmail
+  getUserStatsByEmail,
+  getAllStaffStatistics
 } = require('../models/UserModel');
 
 const jwt = require('jsonwebtoken');
@@ -235,6 +236,16 @@ const getUserStats = async (req: Request, res: Response) => {
   }
 };
 
+// GETS ALL OF THE STAFF STATS
+const getStaffStatistics = async (req: Request, res: Response) => {
+  try {
+    const data = await getAllStaffStatistics();
+    res.status(200).json(data);
+  } catch (error) {
+    res.status(500).json('Server failed');
+  }
+};
+
 module.exports = {
   deleteMyAccount,
   registerUser,
@@ -247,5 +258,6 @@ module.exports = {
   updateUser,
   logUserOut,
   getAllUsers,
-  getUserStats
+  getUserStats,
+  getStaffStatistics
 };
