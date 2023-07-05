@@ -9,6 +9,10 @@ import FaceIcon from '@mui/icons-material/Face';
 
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
+const percentage = (passed: number, failed: number) => {
+  return parseInt((passed / (passed + failed) * 100).toString());
+}
+
 function UserStatsCard(props: any) {
 
   const stats = props.stats;
@@ -20,6 +24,13 @@ function UserStatsCard(props: any) {
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
   const imageUrl = `${baseURL}images/profile_pictures/${user.profile_picture}`;
+
+  let totalsTests = percentage(stats.passed, stats.failed);
+  let totalsQuestions = percentage(stats.correct_questions, stats.wrong_questions);
+  let totalTutorials = percentage(stats.watched, stats.to_watch);
+
+  console.log(stats);
+
 
   return (
     <div>
@@ -50,7 +61,7 @@ function UserStatsCard(props: any) {
                   overflow: 'hidden', mt: 1, backgroundColor: '#65FFA3',
                   display: 'flex', justifyContent: 'center', alignItems: 'center',
                 }}>
-                  <Typography>55%</Typography>
+                  <Typography>{totalsTests}%</Typography>
                 </Box>
                 <Typography>Tests</Typography>
               </Box>
@@ -61,7 +72,7 @@ function UserStatsCard(props: any) {
                   overflow: 'hidden', mt: 1, backgroundColor: '#FF7575',
                   display: 'flex', justifyContent: 'center', alignItems: 'center',
                 }}>
-                  <Typography sx={{ margin: 'auto' }} >45%</Typography>
+                  <Typography sx={{ margin: 'auto' }} >{totalsQuestions}%</Typography>
                 </Box>
                 <Typography sx={{ margin: 'auto' }}>Questions</Typography>
               </Box>
@@ -72,7 +83,7 @@ function UserStatsCard(props: any) {
                   overflow: 'hidden', mt: 1, backgroundColor: '#65FFA3',
                   display: 'flex', justifyContent: 'center', alignItems: 'center',
                 }}>
-                  <Typography>55%</Typography>
+                  <Typography>{totalTutorials}%</Typography>
                 </Box>
                 <Typography>Tutorials</Typography>
               </Box>
@@ -103,7 +114,7 @@ function UserStatsCard(props: any) {
                 <ApartmentIcon />
                 <strong>Tags:</strong> {user.tags.map((tag: string) => {
                   return (
-                    <Box key={tag} sx={{backgroundColor: '#848484', py: 0.2, px: 1, borderRadius: 1}}>{tag}</Box>
+                    <Box key={tag} sx={{ backgroundColor: '#848484', py: 0.2, px: 1, borderRadius: 1 }}>{tag}</Box>
                   )
                 })}
               </Typography>

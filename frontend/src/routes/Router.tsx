@@ -13,6 +13,7 @@ import EmployeeInfo from '../Components/EmployeeInfo/EmployeeInfo';
 import PieChartComp from '../Components/PieChart/PieChart';
 import Create from '../Pages/Create';
 import AllUserStats from '../Pages/AllUserStats';
+import { Pending } from '@mui/icons-material';
 
 const info = {
 	firstName: 'jon',
@@ -28,6 +29,10 @@ export const Router = createBrowserRouter([
 	{
 		path: '/dashboard',
 		element: <Dashboard />,
+	},
+	{
+		path: '/pending',
+		element: <Pending />,
 	},
 	{
 		path: '/',

@@ -8,8 +8,7 @@ const EmployeePendingInfo = ({user}: any) => {
 	const {avatar_url_path} = userProfileStore();
 
 	// Destructuring User
-	const {dataValues, invited_by} = user;
-	const pendingUser = dataValues;
+	const pendingUser = user;
 	const {first_name, last_name, email, phone, department, profile_picture} = pendingUser;
 
 	// Profile Info
@@ -81,16 +80,6 @@ const EmployeePendingInfo = ({user}: any) => {
 							<Typography sx={styles.detail}>{email}</Typography>
 							<Divider />
 							<Typography sx={styles.helper}>Email</Typography>
-						</Paper>
-						<Paper
-							elevation={1}
-							square
-							sx={styles.paper}>
-							<Typography sx={styles.detail}>
-								{invited_by.first_name} {invited_by.last_name}
-							</Typography>
-							<Divider />
-							<Typography sx={styles.helper}>Invited By</Typography>
 						</Paper>
 					</Box>
 				</Stack>

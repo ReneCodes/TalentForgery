@@ -2,7 +2,7 @@ const request = require("supertest");
 const expect = require("chai").expect;
 const server = require("../dist/index");
 const crypto = require("crypto");
-const { User, Invites } = require("../dist/models/Schemas");
+const { User } = require("../dist/models/Schemas");
 
 afterAll((done) => {
   server.close(async () => {
@@ -16,7 +16,6 @@ afterAll((done) => {
 });
 
 const user_info = {
-  inviteID: "invalidID",
   first_name: "Bob",
   last_name: "Alfred",
   email: "admin@admin.com",
@@ -44,12 +43,12 @@ const expectedResponse = {
   personal_email: "123@123.com",
   phone: "123456789",
   department: "567-UFG",
+  profile_picture: null,
 };
 
 describe("Register Tests", () => {
   afterAll(async () => {
     await User.destroy({ where: {} });
-    await Invites.destroy({ where: {} });
   });
 
   it("Should not register without enough information", async () => {
@@ -71,27 +70,8 @@ describe("Register Tests", () => {
     expect(res.text).to.equal('"Not enough information provided"');
   });
 
-  it("Should not register with an invalid inviteID", async () => {
-    await User.create({
-      role: "pending",
-      ...second_user,
-      password: "$2b$10$2D3duqAFVODAacQmGgjMtuQxzefQ48ovZmnZzMycCIo4OE5l.G/Xm",
-      user_id: crypto.randomUUID(),
-    });
-
-    const res = await request(`http://localhost:${process.env.PORT}`)
-      .post("/register")
-      .send(JSON.stringify(user_info))
-      .set("Content-Type", "application/json")
-      .expect("Content-Type", "application/json; charset=utf-8");
-
-    expect(res.statusCode).equal(409);
-    expect(res.text).to.equal('"Invalid invite"');
-  });
-
   it("The first user registered becomes an admin", async () => {
     await User.destroy({ where: {} });
-    user_info.inviteID = "firstPerson";
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post("/register")
@@ -111,11 +91,6 @@ describe("Register Tests", () => {
       password: "$2b$10$2D3duqAFVODAacQmGgjMtuQxzefQ48ovZmnZzMycCIo4OE5l.G/Xm",
       user_id,
     });
-
-    const randomBytes = crypto.randomBytes(16);
-    const inviteID = randomBytes.toString("hex");
-    await Invites.create({ inviteID, user_created: user_id });
-    second_user.inviteID = inviteID;
 
     const res = await request(`http://localhost:${process.env.PORT}`)
       .post("/register")

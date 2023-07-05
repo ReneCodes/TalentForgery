@@ -1,10 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-
-
-import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
-import {NavigateFunction} from 'react-router-dom';
-import {SetStateAction} from 'react';
-import {navigateTo} from '../App';
+import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
+import { NavigateFunction } from 'react-router-dom';
+import { SetStateAction } from 'react';
+import { navigateTo } from '../App';
 import { QuestionType } from '../utils/types';
 
 function handleError(error: AxiosError) {
@@ -80,10 +78,6 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		}
 	});
 
-	const urlParts = window.location.pathname.split('/');
-	const inviteID = urlParts[urlParts.length - 1]; //TODO: needs to match to BE variable => invite
-	formData.append('inviteID', inviteID);
-
 	try {
 		await axios.post('/api/register', formData, {
 			headers: {
@@ -92,37 +86,13 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({ email, password }, navigate);
+		await loginUser({ email, password }, navigate);
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;
 	}
 
 	return errorMessage;
-}
-
-// INVITE / ACCEPT / REJECT / PENDING USER
-export async function getAdminInvite(setLinkText: any) {
-	try {
-		const invite: { data: string } = await axios.get('/api/invite');
-
-		// COPY INVITE TO THE CLIPBOARD
-		const inviteID = invite.data;
-		const pageURL = window.location.href.slice(0, -'dashboard'.length);
-
-		navigator.clipboard
-			.writeText(`${pageURL}register/${inviteID}`)
-
-			.then(() => {
-				setLinkText('Copied');
-				setTimeout(() => {
-					setLinkText('Copied');
-				}, 3000);
-			})
-			.catch(() => setLinkText('Failed'));
-	} catch (error: any) {
-		handleError(error);
-	}
 }
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
@@ -135,7 +105,7 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 		});
 
 		filterPendingPeople((currData: any[]) => {
-			const newArr = currData.filter((person) => person.dataValues.email !== email);
+			const newArr = currData.filter((person) => person.email !== email);
 			return newArr;
 		});
 	} catch (error: any) {
@@ -153,7 +123,7 @@ export async function acceptUser(email: string, tags: string[], filterPendingPeo
 		});
 
 		filterPendingPeople((currData: any[]) => {
-			const newArr = currData.filter((person) => person.dataValues.email !== email);
+			const newArr = currData.filter((person) => person.email !== email);
 			return newArr;
 		});
 	} catch (error: any) {
@@ -304,7 +274,6 @@ export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<
 	try {
 		const res = await axios.get<UpdateProfile>(`/api/user`);
 		await UpdateProfileInfo(res.data);
-		// console.log("QUESTIONS",res.data)
 		return res;
 	} catch (error: any) {
 		handleError(error);
@@ -324,17 +293,18 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 }
 
 export async function getUserStats(email: string) {
+	let res;
 	try {
 		const data = JSON.stringify({ email });
-		const res = await axios.post('/api/user_stats', data, {
+		res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
-		return res;
 	} catch (error: any) {
 		handleError(error);
 	}
+	return res;
 }
 
 export async function deleteAnUserAccount(email: string) {
@@ -345,6 +315,19 @@ export async function deleteAnUserAccount(email: string) {
 			data: data,
 			headers: { 'Content-Type': 'application/json' },
 		});
+	} catch (error: any) {
+		handleError(error);
+	}
+};
+
+export async function getStaffStatistics() {
+	try {
+		const res = await axios.get('/api/get_staff_statistics', {
+			headers: {
+				'Content-Type': 'application/json',
+			},
+		});
+		return res;
 	} catch (error: any) {
 		handleError(error);
 	}
@@ -368,13 +351,14 @@ export async function sendValidation(
 			data = JSON.stringify({ number: contact.number });
 		}
 
-		axios.post(`/api/${whereToSend}`, data, {
+		const res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
 	} catch (error: any) {
+
 		handleError(error);
-		setError((error as Error).message);
+		setError(error.response?.data);
 	}
 };
 
@@ -398,7 +382,7 @@ export async function validateCode(
 			data = JSON.stringify({ number: contact.number, code });
 		}
 
-		const response = axios.post(`/api/${whereToSend}`, data, {
+		const response = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
@@ -406,7 +390,7 @@ export async function validateCode(
 
 	} catch (error: any) {
 		handleError(error);
-		setError((error as Error).message);
+		setError(error.response?.data);
 	}
 
 	return res;

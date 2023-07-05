@@ -20,7 +20,7 @@ const validateEmail = async (req: Request, res: Response) => {
   if (!email) return res.status(400).json("Not enough information provided");
 
   const emailRegistered = await getUserByEmail(email);
-  if (emailRegistered) return res.status(409).json("Email already confirmed");
+  if (emailRegistered) return res.status(409).json("Email already registered");
 
   const emailWaiting = await checkContactWaiting(email);
   if (emailWaiting) return res.status(409).json("Email waiting to be confirmed");
@@ -98,7 +98,7 @@ const validateNumber = async (req: Request, res: Response) => {
   if (!number) return res.status(400).json("Not enough information provided");
 
   const numberRegistered = await getUserByNumber(number);
-  if (numberRegistered) return res.status(409).json("Number already confirmed");
+  if (numberRegistered) return res.status(409).json("Number already registered");
 
   const numberWaiting = await checkContactWaiting(number);
   if (numberWaiting) return res.status(409).json("Number waiting to be confirmed");

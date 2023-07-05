@@ -47,9 +47,14 @@ const Register = () => {
   const navigate: NavigateFunction = useNavigate();
   const { MinonLogin } = LoginAndOut();
 
+  const [verification, setVerification] = useState([
+    { email: true, value: '', verified: false },
+    { email: true, value: '', verified: false },
+    { email: false, value: '', verified: false },
+  ]);
+
   const [dataSaved, setDataSaved] = useState<RegisterFormValues | undefined>(undefined);
 
-  const [send, setSend] = useState<string[]>([]);
   const [showValidateCode, setShowValidateCode] = useState<boolean>(false);
 
   const registerForm = useForm<RegisterFormValues>({
@@ -85,16 +90,52 @@ const Register = () => {
     return true;
   };
 
+  const checkData = (formData: RegisterFormValues, index: number) => {
+    let valueInserted;
+    let isEmail;
+
+    if (index === 0) {
+      valueInserted = formData.email;
+      isEmail = true;
+    }
+    else if (index === 1) {
+      valueInserted = formData.personal_email;
+      isEmail = true;
+    }
+    else {
+      valueInserted = formData.phone;
+      isEmail = false;
+    }
+
+    return [valueInserted, isEmail];
+  }
+
   const handleRegisterClick = async (formData: RegisterFormValues) => {
-    setDataSaved({...formData});
+    setDataSaved({ ...formData });
     setShowValidateCode(true);
-    setSend([formData.email, formData.personal_email, formData.phone])
+
+    setVerification((currData: any) => {
+      const endArr: any = [];
+
+      currData.forEach((element: any, index: number) => {
+        const [valueInserted, isEmail] = checkData(formData, index);
+
+        endArr.push({
+          email: isEmail,
+          value: valueInserted,
+          verified: element.value === valueInserted && element.verified === true ? true : false,
+        });
+      });
+
+      return endArr;
+    });
+
   };
 
   const closeWindowAndRegister = async () => {
     closeValidateCode();
 
-    if(dataSaved){
+    if (dataSaved) {
       const formData = dataSaved;
       const checkPassword = handlePasswordCheck(
         formData.password,
@@ -138,11 +179,12 @@ const Register = () => {
     <Container maxWidth="md" sx={{ height: "100%" }}>
       {showValidateCode &&
         <CodesValidation
-          whoToSend={send}
           showValidateCode={showValidateCode}
           closeValidateCode={closeValidateCode}
           setShowValidateCode={setShowValidateCode}
           closeWindowAndRegister={closeWindowAndRegister}
+          verification={verification}
+          setVerification={setVerification}
         />
       }
       <Box

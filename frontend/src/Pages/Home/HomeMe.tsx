@@ -46,16 +46,6 @@ export const HomeMe = () => {
 						</Box>
 					))}
 			</Box>
-
-			{/* <Box sx={{}}>
-				{pendingPerson &&
-					pendingPerson.map((user) => (
-						<Box key={user.dataValues.profile_picture}>
-							<EmployeePendingCard user={user} />
-						</Box>
-					))}
-			</Box> */}
-
 			<Typography
 				variant="h4"
 				sx={[styles.headline, styles.yellow]}>

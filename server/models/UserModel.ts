@@ -32,16 +32,16 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     await User.create({
       role,
       ...providedInformation,
-      invited_by: providedInformation.invite,
       user_id,
       tags: [],
     });
 
     const tutorialsWatch = await getUserTutorials(user_id);
+    const not_watched = tutorialsWatch[0].length + tutorialsWatch[1].length;
 
     await Stats.create({
       user_id,
-      not_watched: tutorialsWatch.length
+      not_watched,
     })
 
     return role === 'admin' ? "Admin User created" : "User created";
@@ -102,24 +102,10 @@ const getUserInfo = async (user_id: UUID) => {
 const getUsersPending = async (): Promise<UserType[]> => {
   const usersPending: UserType[] = await User.findAll({
     where: { role: 'pending' },
-    attributes: ['role', 'first_name', 'last_name', 'email', 'department', 'profile_picture', 'invited_by'],
+    attributes: ['role', 'first_name', 'last_name', 'email', 'department', 'profile_picture'],
   });
 
-  const allPendingUsers: UserType[] = await Promise.all(
-    usersPending.map(async (user) => {
-      const invitedByUser = await User.findOne({
-        where: { user_id: user.invited_by },
-        attributes: ['first_name', 'last_name']
-      });
-
-      return {
-        ...user,
-        invited_by: invitedByUser
-      };
-    })
-  );
-
-  return allPendingUsers;
+  return usersPending;
 }
 
 const deleteUser = async (user_id: UUID) => {
@@ -204,11 +190,44 @@ const getUserStatsByEmail = async (email: string) => {
   const allQuestions = await Question.findAll({ where: {} });
   const totalTests = allTutorials.filter((tutorial: any) => tutorial.questions_id[0]);
 
-  const tests_todo = totalTests.length - stats.watched;
-  const questions_todo = allQuestions.length - (stats.correct_questions + stats.wrong_questions);
-  const to_watch = allTutorials.length - stats.watched;
+  const tests_todo = stats.watched - totalTests.length;
+  const questions_todo =  (stats.correct_questions + stats.wrong_questions) - (allQuestions.length > 0 ? allQuestions.length : 1);
+  const to_watch = stats.watched - allTutorials.length;
 
   return { ...stats.dataValues, tests_todo, questions_todo, to_watch };
+};
+
+const getAllStaffStatistics = async () => {
+
+  const allUsers = await User.findAll({ where: { role: 'user' } });
+
+  let questionsRight = 0;
+  let questionsWrong = 0;
+  let testsPassed = 0;
+  let testsFailed = 0;
+  let watched = 0;
+  let to_watch = 0;
+
+  allUsers.forEach(async (user: UserType) => {
+
+    const userStats = await getUserStatsByEmail(user.email);
+    questionsRight += userStats.correct_questions;
+    questionsWrong += userStats.wrong_questions;
+    testsPassed += userStats.passed;
+    testsFailed += userStats.failed;
+    watched += userStats.watched;
+    to_watch += userStats.not_watched;
+  });
+
+  return {
+    questionsRight,
+    questionsWrong,
+    testsPassed,
+    testsFailed,
+    watched,
+    to_watch
+  }
+
 };
 
 module.exports = {
@@ -225,5 +244,6 @@ module.exports = {
   deleteOldProfilePicture,
   getAllOfTheUsers,
   getUserStatsByEmail,
-  getUserByNumber
+  getUserByNumber,
+  getAllStaffStatistics
 };

@@ -1,19 +1,19 @@
 export type registeredUser = {
   // role: 'Admin' | 'User' | 'Pending',
-  first_name: String,
-  last_name: String,
-  email: String,
-  email_personal: String,
-  password: String,
-  phone: String,
-  departement: String,
-  invite: String,
-  customFileName: String,
+  first_name: string,
+  last_name: string,
+  email: string,
+  email_personal: string,
+  password: string,
+  phone: string,
+  departement: string,
+  invite: string,
+  customFileName: string,
 };
 
 export type loginUser = {
-  email: String,
-  password: String
+  email: string,
+  password: string
 }
 
 export type fileInput = {
@@ -24,15 +24,15 @@ export type fileInput = {
 }
 
 export type UserType = {
-  role: String,
-  first_name: String,
-  last_name: String,
-  email: String,
-  personal_email: String,
-  password: String,
-  phone: String,
-  department: String,
-  profile_picture: String,
-  user_id: String,
-  invited_by: String,
+  role: string,
+  first_name: string,
+  last_name: string,
+  email: string,
+  personal_email: string,
+  password: string,
+  phone: string,
+  department: string,
+  profile_picture: string,
+  user_id: string,
+  invited_by: string,
 };
