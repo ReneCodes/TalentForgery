@@ -16,6 +16,7 @@ const createCode = async () => {
 const validateEmail = async (req: Request, res: Response) => {
 
   const { email } = req.body;
+
   if (!email) return res.status(400).json("Not enough information provided");
 
   const emailRegistered = await getUserByEmail(email);
@@ -79,14 +80,14 @@ const confirmEmail = async (req: Request, res: Response) => {
   const { email, code } = req.body;
   if (!email || !code) return res.status(400).json("Not enough information provided");
 
-  const rightCode = await checkCode(email, code);
-  if (rightCode === 'Not Found') {
-    res.status(404).json(rightCode);
-  } else if (rightCode === 'Wrong Code') {
-    res.status(409).json(rightCode);
+  const isWriteCode = await checkCode(email, code);
+  if (isWriteCode === 'Not Found') {
+    res.status(404).json(isWriteCode);
+  } else if (isWriteCode === 'Wrong Code') {
+    res.status(400).json(isWriteCode);
   } else {
     await deleteCode(email);
-    return res.status(200).json(rightCode);
+    return res.status(200).json(isWriteCode);
   }
 
 };

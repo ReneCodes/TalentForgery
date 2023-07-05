@@ -12,7 +12,11 @@ import "./NewCreate.css";
 
 const filters = ["newest", "oldest"];
 
-const Filter: FC<{ onData: any }> = ({ onData }) => {
+
+
+
+const Filter: FC<{onData: (childData: string) => void}> = ({onData}) => {
+
   const [open, setOpen] = useState(false);
   const [filterOption, setFilterOption] = useState("newest");
 

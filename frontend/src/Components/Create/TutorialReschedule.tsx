@@ -2,7 +2,7 @@ import { Button, Dialog, DialogTitle, Divider } from "@mui/material";
 import { FC, useState} from "react";
 import { postTutorial } from "../../services/Api.service";
 import { DataType } from "../../utils/types";
-import QuestionList from "./NewQuestionList";
+import QuestionList from "./QuestionList";
 import Schedule from "./Schedule";
 import VideoPreview from "./VideoPreview";
 
@@ -25,7 +25,7 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
     onClose();
   };
 
-  const handleScheduleData = (data: {startDate: string, endDate: string}) => {
+  const handleScheduleData = (data: {startDate: Date, endDate: Date}) => {
     (async() => {
       try {
         const tutorial = await postTutorial({
@@ -37,8 +37,8 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
         setFormInfo((res) => {
           return {
             ...res,
-            access_date: data.startDate,
-            due_date: data.endDate,
+            access_date: `${data.startDate}`,
+            due_date: `${data.endDate}`
           }
         });
       } catch(err) {
@@ -65,7 +65,7 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
         </div>
         <div>
           <Divider />
-          <QuestionList questions={tutorial.question_ids} />
+          <QuestionList questions={tutorial.question_ids || tutorial.tutorial_id} />
         </div>
         <Divider />
         <div className='quiz_line schedule_line'>
