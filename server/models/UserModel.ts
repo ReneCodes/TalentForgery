@@ -190,9 +190,9 @@ const getUserStatsByEmail = async (email: string) => {
   const allQuestions = await Question.findAll({ where: {} });
   const totalTests = allTutorials.filter((tutorial: any) => tutorial.questions_id[0]);
 
-  const tests_todo = totalTests.length - stats.watched;
-  const questions_todo = allQuestions.length - (stats.correct_questions + stats.wrong_questions);
-  const to_watch = allTutorials.length - stats.watched;
+  const tests_todo = stats.watched - totalTests.length;
+  const questions_todo =  (stats.correct_questions + stats.wrong_questions) - (allQuestions.length > 0 ? allQuestions.length : 1);
+  const to_watch = stats.watched - allTutorials.length;
 
   return { ...stats.dataValues, tests_todo, questions_todo, to_watch };
 };
@@ -209,13 +209,15 @@ const getAllStaffStatistics = async () => {
   let to_watch = 0;
 
   allUsers.forEach(async (user: UserType) => {
+
     const userStats = await getUserStatsByEmail(user.email);
+    console.log(userStats);
     questionsRight += userStats.correct_questions;
     questionsWrong += userStats.wrong_questions;
     testsPassed += userStats.passed;
     testsFailed += userStats.failed;
     watched += userStats.watched;
-    to_watch += userStats.to_watch;
+    to_watch += userStats.not_watched;
   });
 
   return {

@@ -1,6 +1,17 @@
+.stats{
+  text-align: center;
+}
+
 .stats_row {
   display: flex;
-  justify-content: space-around;
+  justify-content: center;
+  gap: 100px;
+  margin: 20px auto;
+}
+
+.title{
+  margin: auto;
+  margin-right: 600px;
 }
 
 .stats_box {
@@ -17,4 +28,16 @@
   width: 80px;
   align-items: center;
   justify-content: center;
+}
+
+.green {
+  background-color: #65ffa3;
+}
+
+.red {
+  background-color: #ff7575;
+}
+
+.gray{
+  background-color: #848484;
 }

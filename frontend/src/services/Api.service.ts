@@ -1,8 +1,8 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
-import {NavigateFunction} from 'react-router-dom';
-import {SetStateAction} from 'react';
-import {navigateTo} from '../App';
+import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
+import { NavigateFunction } from 'react-router-dom';
+import { SetStateAction } from 'react';
+import { navigateTo } from '../App';
 import { QuestionType } from '../utils/types';
 
 function handleError(error: AxiosError) {
@@ -261,17 +261,18 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 }
 
 export async function getUserStats(email: string) {
+	let res;
 	try {
 		const data = JSON.stringify({ email });
-		const res = await axios.post('/api/user_stats', data, {
+		res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
 			},
 		});
-		return res;
 	} catch (error: any) {
 		handleError(error);
 	}
+	return res;
 }
 
 export async function deleteAnUserAccount(email: string) {

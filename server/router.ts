@@ -24,7 +24,7 @@ router.post("/accept_user", authAdminUser, UserController.acceptUser);
 router.post("/reject_user", authAdminUser, UserController.rejectUser);
 router.post("/update_user", authUser, UserController.updateUser);
 router.get("/users", authAdminUser, UserController.getAllUsers);
-router.post("/user_stats", authAdminUser, UserController.getUserStats);
+router.post("/user_stats", authUser, UserController.getUserStats);
 
 // INFORMATION ROUTES
 router.get('/user', authUser, UserController.getUserInformation);
