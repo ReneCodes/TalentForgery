@@ -4,30 +4,18 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FC, useEffect, useState } from 'react';
 import { QuestionType } from '../../utils/types';
-
-const mockQuestions = [
-  {
-    question: 'Where is steve?',
-    options: ['Detroit', 'Michigan', 'Orlando'],
-    answer: 'Detroit',
-  },
-  {
-    question: 'Ham or Cheese?',
-    options: ['Ham', 'Cheese'],
-    answer: 'Cheese',
-  },
-  {
-    question: 'Whats the best drink?',
-    options: ['Vodka', 'Beer', 'Cider'],
-    answer: 'Cider',
-  },
-];
+import { getAllDataBaseQuestions } from '../../services/Api.service';
 
 const ImportQuestion: FC<{onData: any}> = ({onData}) => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [question, setQuestion] = useState<QuestionType | undefined>(undefined);
 
-  useEffect(() => setQuestions(mockQuestions), []);
+  useEffect(() => {
+    (async() => {
+      const res = await getAllDataBaseQuestions();
+      setQuestions(res);
+    })()
+  }, []);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const questionString = event.target.value;
