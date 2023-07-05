@@ -12,6 +12,7 @@ import {
 	getPendingUsers,
 	getSingleUserProfileData,
 	getUsersTutorials,
+	logoutUser,
 } from '../../services/Api.service';
 
 export const AppHeader = () => {
