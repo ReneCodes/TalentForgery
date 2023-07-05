@@ -167,7 +167,8 @@
     "yauzl": "^2.10.0"
   },
   "devDependencies": {
-    "cypress": "^12.16.0"
+    "cypress": "^12.16.0",
+    "cypress-file-upload": "^5.0.8"
   },
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
