@@ -2,7 +2,7 @@ import axios, { AxiosError, AxiosResponse } from 'axios';
 
 import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
 import { NavigateFunction } from 'react-router-dom';
-import { SetStateAction, createContext, useContext } from 'react';
+import { SetStateAction} from 'react';
 import { navigateTo } from '../App';
 
 function handleError(error: AxiosError) {

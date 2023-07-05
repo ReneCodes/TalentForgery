@@ -13,10 +13,7 @@ const NewCreate = () => {
 useEffect(() => {
   (async () => {
     try {
-      const response = await getAllTutorials();
-      const tutorialList = response?.data; 
-      console.log(1, tutorialList);
-      setTutorials(tutorialList);
+      await getAllTutorials(setTutorials);
     } catch (err) {
       alert(err);
     }

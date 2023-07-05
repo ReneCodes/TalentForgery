@@ -139,3 +139,4 @@ export const TutorialStore = create<TutorialStore>((set) => ({
 	storeUserTutorials: (tutorialsArr) => set(() => ({userTutorials: tutorialsArr})),
 	storeAllTutorials: (tutorialsArr) => set(() => ({allTutorials: tutorialsArr})),
 }));
+
