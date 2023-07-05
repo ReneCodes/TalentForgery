@@ -46,7 +46,8 @@ export const CodesValidation = (props: any) => {
       emptyVariables();
       sendValidation({ email: sending }, 'email', setError);
     } else if (indexSend[0] === 2 && sending !== '') {
-      setWhereSend('phone')
+      setWhereSend('phone');
+      emptyVariables();
       sendValidation({ number: sending }, 'phone', setError);
     } else if (indexSend[0] < 2) {
       setIndexSend([indexSend[0] + 1]);
