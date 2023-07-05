@@ -25,7 +25,7 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
     onClose();
   };
 
-  const handleScheduleData = (data: {startDate: string, endDate: string}) => {
+  const handleScheduleData = (data: {startDate: Date, endDate: Date}) => {
     (async() => {
       try {
         const tutorial = await postTutorial({
@@ -37,8 +37,8 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
         setFormInfo((res) => {
           return {
             ...res,
-            access_date: data.startDate,
-            due_date: data.endDate,
+            access_date: `${data.startDate}`,
+            due_date: `${data.endDate}`
           }
         });
       } catch(err) {

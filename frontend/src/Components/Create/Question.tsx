@@ -1,9 +1,10 @@
 import { Card, FormControlLabel, Radio, RadioGroup, TextField, Button } from "@mui/material";
 import { SyntheticEvent, useState, FC, useEffect } from "react";
+import { QuestionType } from "../../utils/types";
 
 interface QuestionComp {
   getData: boolean,
-  onData: any
+  onData: (childData: QuestionType) => void
 }
 
 const Question: FC<QuestionComp> = ({getData, onData}) => {

@@ -33,3 +33,9 @@ export interface DataType {
 	access_date: string;
 	due_date: string;
 }
+
+export interface FormInfo {
+	title: string;
+	description: string;
+	tags: string[];
+}

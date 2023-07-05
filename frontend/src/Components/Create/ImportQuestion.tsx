@@ -6,7 +6,7 @@ import { FC, useEffect, useState } from 'react';
 import { QuestionType } from '../../utils/types';
 import { getAllDataBaseQuestions } from '../../services/Api.service';
 
-const ImportQuestion: FC<{onData: any}> = ({onData}) => {
+const ImportQuestion: FC<{onData: (childData: QuestionType) => void}> = ({onData}) => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [question, setQuestion] = useState<QuestionType | undefined>(undefined);
 

@@ -4,18 +4,11 @@ import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import ImagePreview from './ImagePreview';
-import { DataType } from '../../utils/types';
+import { DataType, FormInfo } from '../../utils/types';
 import Schedule from './Schedule';
 import { postTutorial } from '../../services/Api.service';
 
-interface FormInfo {
-	title: string;
-	description: string;
-	tags: string[];
-	length: string;
-}
-
-const CreateTutorial: FC<{onData: any}> = ({onData}) => {
+const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) => {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
@@ -123,7 +116,7 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
     handleClose();
   };
 
-  const handleScheduleData = (data: {startDate: string, endDate: string}) => {
+  const handleScheduleData = (data: {startDate: Date, endDate: Date}) => {
     (async() => {
       try {
         const tutorial = await postTutorial({
@@ -135,8 +128,8 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
         setFormInfo((res) => {
           return {
             ...res,
-            access_date: data.startDate,
-            due_date: data.endDate,
+            access_date: `${data.startDate}`,
+            due_date: `${data.endDate}`
           }
         });
       } catch(err) {
