@@ -64,6 +64,8 @@ async function createTutorial(req: any, res: Response) {
 			const [tutorial_id, questions_id] = await createTheTutorial(tutorialData, user_id);
 			res.status(201).json({ message: 'Tutorial created.', tutorial_id, questions_id });
 		} catch (error) {
+			console.log(error);
+
 			const errorMessage = (error as Error).message;
 			res.status(500).json('Failed to create tutorial.');
 		}

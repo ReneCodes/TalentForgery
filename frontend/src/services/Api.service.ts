@@ -146,6 +146,8 @@ export async function postTutorial(data: any) {
 		const formData = new FormData();
 
 		Object.entries(data).forEach(([key, value]: any) => {
+			if(value == undefined) value = null;
+
 			if (value instanceof FormData) {
 				const file: any = value.get('video') || value.get('image');
 				if (value.get('video')) key = 'video_url';
@@ -156,11 +158,6 @@ export async function postTutorial(data: any) {
 			} else {
 				formData.append(key, value);
 			}
-		});
-
-		console.log('Form Data:');
-		formData.forEach((value, key) => {
-			console.log(key, value);
 		});
 
 		const res = await axios.post('/api/create_tutorial', formData);
