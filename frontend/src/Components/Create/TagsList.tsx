@@ -52,7 +52,7 @@ export default function TagsList() {
 
 	return (
 		<div>
-			<FormControl sx={{m: 1, width: 300}}>
+			<FormControl sx={{m: 1, width: 250}}>
 				<InputLabel id="chip-tag">Select Tags</InputLabel>
 				<Select
 					labelId="chip-tag"

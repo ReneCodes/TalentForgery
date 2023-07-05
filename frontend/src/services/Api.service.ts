@@ -49,12 +49,12 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 	return errorMessage;
 }
 
-export async function logoutUser(navigate: NavigateFunction) {
+export async function logoutUser(navigate?: NavigateFunction) {
 	let errorMessage: string = '';
 
 	try {
 		const res = await axios.delete('/api/logout');
-		if (res) {
+		if (res && navigate) {
 			navigate('/');
 		}
 	} catch (error: any) {

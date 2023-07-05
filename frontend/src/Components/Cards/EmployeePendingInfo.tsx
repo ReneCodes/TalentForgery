@@ -87,8 +87,7 @@ const EmployeePendingInfo = ({user}: any) => {
 							square
 							sx={styles.paper}>
 							<Typography sx={styles.detail}>
-								{invited_by.first_name}{' '}
-								{invited_by.last_name}
+								{invited_by.first_name} {invited_by.last_name}
 							</Typography>
 							<Divider />
 							<Typography sx={styles.helper}>Invited By</Typography>
@@ -127,14 +126,18 @@ const styles = {
 	},
 	header: {
 		textAlign: 'left',
-		borderBottom:'2px solid',
-		borderColor:'secondary.main',
-		width:'fit-content',
-		pr:2
+		borderBottom: '2px solid',
+		borderColor: 'secondary.main',
+		width: 'fit-content',
+		pr: 2,
 	},
-	detail: {px: 1, fontSize: '20px'},
+	detail: {px: 1, fontSize: '20px', wordWrap: 'break-word'},
 	paper: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'end',
 		width: '100%',
+		height: '100%',
 		minWidth: '200px',
 		maxWidth: '350px',
 		p: 1,
@@ -152,7 +155,6 @@ const styles = {
 		border: 3,
 		borderColor: 'primary.main',
 		objectFit: 'cover',
-		objectPosition: '50% 50%',
 		m: 2,
 		alignSelf: 'center',
 	},

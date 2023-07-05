@@ -1,51 +1,51 @@
 import {Container, Box, Button, Typography, Dialog, IconButton, TextField} from '@mui/material';
-import {useState} from 'react';
-import {getAdminInvite, acceptUser, rejectUser} from '../services/Api.service';
+// import {useState} from 'react';
+// import { getAdminInvite, acceptUser,rejectUser } from '../services/Api.service';
 import {PendingUserStore, TutorialTagStore} from '../utils/zustand.store';
-import UserCard from '../Components/UserCard/UserCard';
-import useMediaQuery from '@mui/material/useMediaQuery';
+// import UserCard from '../Components/UserCard/UserCard';
+// import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from '../config/theme';
-import CloseIcon from '@mui/icons-material/Close';
-import DialogActions from '@mui/material/DialogActions';
-import DialogContent from '@mui/material/DialogContent';
-import DialogTitle from '@mui/material/DialogTitle';
-import EmployeePendingInfo from '../Components/Cards/EmployeePendingInfo';
-import {PendingPerson} from '../@types/Types';
+// import CloseIcon from '@mui/icons-material/Close';
+// import DialogActions from '@mui/material/DialogActions';
+// import DialogContent from '@mui/material/DialogContent';
+// import DialogTitle from '@mui/material/DialogTitle';
+// import EmployeePendingInfo from '../Components/Cards/EmployeePendingInfo';
+// import {PendingPerson} from '../@types/Types';
 import EmployeePendingCard from '../Components/Cards/EmployeePendingCard';
 
 const Dashboard = () => {
-	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
+	// const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
-	const [open, setOpen] = useState<boolean>(false);
-	const [error, setError] = useState<string>('');
-	const {selctedTags, storeSelectedTags} = TutorialTagStore();
+	// const [open, setOpen] = useState<boolean>(false);
+	// const [error, setError] = useState<string>('');
+	// const {selectedTags, storeSelectedTags} = TutorialTagStore();
 
-	const [user, setUser] = useState<any>({});
+	// const [user, setUser] = useState<any>({});
 
 	const {pendingPerson, filterPendingPeople} = PendingUserStore();
 
-	const handleClickOpen = (user: PendingPerson) => {
-		setUser(user);
-		setOpen(true);
-	};
+	// const handleClickOpen = (user: PendingPerson) => {
+	// 	setUser(user);
+	// 	setOpen(true);
+	// };
 
-	const handleClose = () => {
-		setOpen(false);
-	};
+	// const handleClose = () => {
+	// 	setOpen(false);
+	// };
 
-	const handleAccept = async () => {
-		if (selctedTags.length > 0) {
-			await acceptUser(user.dataValues.email, selctedTags, filterPendingPeople);
-			handleClose();
-		}
-		setError('Select at least on tag');
-	};
+	// const handleAccept = async () => {
+	// 	if (selectedTags.length > 0) {
+	// 		await acceptUser(user.dataValues.email, selectedTags, filterPendingPeople);
+	// 		handleClose();
+	// 	}
+	// 	setError('Select at least on tag');
+	// };
 
-	const handleReject = async () => {
-		storeSelectedTags([]);
-		await rejectUser(user.dataValues.email, filterPendingPeople);
-		handleClose();
-	};
+	// const handleReject = async () => {
+	// 	storeSelectedTags([]);
+	// 	await rejectUser(user.dataValues.email, filterPendingPeople);
+	// 	handleClose();
+	// };
 
 	return (
 		<Box
@@ -66,7 +66,7 @@ const Dashboard = () => {
 						<Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px', pt: 2}}>
 							<Typography
 								variant="h4"
-								sx={{m: 2, borderBottom: '2px solid', borderColor: 'primary.main', width: 'fit-content'}}>
+								sx={{m: 2, borderBottom: '2px solid', borderColor: 'primary.main', width: 'fit-content', pr: 3}}>
 								Total Pending Users: {pendingPerson.length}
 							</Typography>
 						</Box>
@@ -91,8 +91,14 @@ const Dashboard = () => {
 						))} */}
 					</Box>
 				) : (
-					<Box sx={{position: 'absolute'}}>
-						<Typography variant="h4">You have no users pending</Typography>
+					<Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
+						<Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px', pt: 2}}>
+							<Typography
+								variant="h4"
+								sx={{m: 2, borderBottom: '2px solid', borderColor: 'primary.main', width: 'fit-content'}}>
+								There are no users pending
+							</Typography>
+						</Box>
 					</Box>
 				)}
 			</Box>
