@@ -14,7 +14,7 @@ export interface contactInfo {
 }
 
 export interface QuestionType {
-	id?: string;
+	question_id?: string;
 	question: string;
 	options: string[];
 	answer: string;

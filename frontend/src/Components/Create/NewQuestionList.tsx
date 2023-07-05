@@ -27,10 +27,10 @@ const QuestionList: FC<QuestionListComp> = ({questions}) => {
   return <div>
     {Array.isArray(questionList) && questionList.map((question, key) => (
       <div className="reschedule_question" key={key}>
-        <Card>
+        <Card className="reschedule_question_card">
           <h2>{question.question.question}</h2>
           {question.question.options.map((option, key) => (
-            <h3 key={key}>{key}: {option}</h3>
+            <h3 key={key}>{key} : {option}</h3>
           ))}
           <h3>Answer: {question.question.answer}</h3>
         </Card>

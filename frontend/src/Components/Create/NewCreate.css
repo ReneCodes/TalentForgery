@@ -102,6 +102,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
 
 .tutorial_picture {
@@ -122,6 +123,7 @@
   width: 310px;
   display: flex;
   justify-content: end;
+  background-color: white;
 }
 
 .info_close {
@@ -132,7 +134,8 @@
 }
 
 .input_box {
-  width: 250px;
+  width: 310px;
+  margin: 20px;
 }
 
 .imported_question {
@@ -152,4 +155,8 @@
 
 .reschedule_question {
   margin: 20px;
+}
+
+.reschedule_question_card {
+  padding-left: 20px;
 }

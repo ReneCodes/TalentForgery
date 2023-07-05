@@ -20,7 +20,7 @@ const ImportQuestion: FC<{onData: any}> = ({onData}) => {
   const handleChange = (event: SelectChangeEvent<string>) => {
     const questionString = event.target.value;
     for (const obj of questions) {
-      if (obj.question === questionString) {
+      if (obj.question_id === questionString) {
         setQuestion(obj);
         onData(obj);
       }
@@ -34,12 +34,12 @@ const ImportQuestion: FC<{onData: any}> = ({onData}) => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={question?.question}
+          value={question?.question_id}
           label="Import"
           onChange={handleChange}
         >
           {questions.map((question, index) => (
-            <MenuItem key={index} value={question.question}>
+            <MenuItem key={index} value={question.question_id}>
               {question.question}
             </MenuItem>
           ))}
