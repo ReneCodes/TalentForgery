@@ -216,7 +216,7 @@ export async function getQuestions(body: any, setTutorialQuestions: any) {
 			// throw error;
 		}
 	}
-}
+};
 
 export async function sendFinishedTest(body: any) {
 	try {
@@ -229,10 +229,9 @@ export async function sendFinishedTest(body: any) {
 	}
 };
 
-export async function getAllDataBaseQuestions() {
+export async function getQuestionsByIds() {
 	try {
 		const res = await axios.get('/api/get_all_questions');
-
 		return res;
 	} catch (error: any) {
 		handleError(error)
