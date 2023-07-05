@@ -46,6 +46,7 @@ const expectedResponse = {
   personal_email: "123@123.com",
   phone: "123456789",
   role: "pending",
+  tags: null,
 };
 
 const expectedPendingUsers = {
@@ -54,7 +55,8 @@ const expectedPendingUsers = {
   email: "pending@pending.com",
   department: "567-UFG",
   profile_picture: null,
-  role: "pending"
+  role: "pending",
+  tags: null,
 }
 
 describe('Get user information Tests', () => {

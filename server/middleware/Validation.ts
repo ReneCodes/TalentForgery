@@ -9,7 +9,6 @@ const validateRegisterData = async (req: Request, res: Response) => {
     body('email').notEmpty(),
     body('password').notEmpty(),
     body('department').notEmpty(),
-    body('inviteID').notEmpty(),
   ];
 
   let allRight = true;
@@ -56,7 +55,6 @@ const validateTutorialData = async (req: Request, res: Response) => {
     const errors = validationResult(req);
     if (!errors.isEmpty()) {
       allRight = false;
-      console.log('Validation errors:', errors.array());
     }
   });
 

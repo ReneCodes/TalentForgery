@@ -43,6 +43,7 @@ const expectedResponse = {
   personal_email: "123@123.com",
   phone: "123456789",
   department: "567-UFG",
+  profile_picture: null,
 };
 
 describe("Register Tests", () => {

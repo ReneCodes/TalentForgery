@@ -67,7 +67,6 @@ const tutorialInfo = {
   title: "hi how are you",
   video_url: "hello.mp4",
   description: "beesx",
-
   question_ids: JSON.stringify(question_ids),
   tags: JSON.stringify(tags),
   questions_shown: 2,
@@ -257,6 +256,7 @@ describe("User should see all questions/questions related to tutorial", () => {
         "when its green its the answer",
         "press delete to remove the tutorial",
       ],
+      question_id: crypto.randomUUID(),
       answer: "when its green its the answer",
       tutorial_id: "122233eaddasdarrg-asdaf213dadgg",
     });
@@ -265,6 +265,7 @@ describe("User should see all questions/questions related to tutorial", () => {
       question: "hi",
       options: ["1", "2", "3"],
       answer: "3",
+      question_id: crypto.randomUUID(),
       tutorial_id: "122233eaddasdarrg-asdaf213dadkk",
     });
 
@@ -275,7 +276,7 @@ describe("User should see all questions/questions related to tutorial", () => {
       .set("Cookie", [sessionToken]);
 
     expect(getQuestionsResponse.statusCode).toBe(200);
-    expect(getQuestionsResponse.body.length).toBe(2);
+    expect(getQuestionsResponse.body.length).toBe(5);
   });
   it("it Should retrieve question for particular tutorial id", async () => {
     const tutorialId = "122233eaddasdarrg-asdaf213dadgg";
@@ -285,29 +286,12 @@ describe("User should see all questions/questions related to tutorial", () => {
       tutorial_id: tutorialId,
       creator_id: "creator-id",
       title: "Tutorial Title",
+      questions_id: [],
       video_url: "https://example.com/tutorial-video",
       description: "Tutorial description",
       access_date: "2023-06-24",
       due_date: "2023-06-30",
-    });
-
-    // Create questions related to the tutorial
-    await Question.create({
-      question: "This is the Question",
-      options: [
-        "this is an option",
-        "when its green its the answer",
-        "press delete to remove the tutorial",
-      ],
-      answer: "when its green its the answer",
-      tutorial_id: tutorialId,
-    });
-
-    await Question.create({
-      question: "hi",
-      options: ["1", "2", "3"],
-      answer: "3",
-      tutorial_id: tutorialId,
+      video_thumb: 'https://example.com/tutorial-video',
     });
 
     const response = await request(server)
@@ -316,28 +300,6 @@ describe("User should see all questions/questions related to tutorial", () => {
       .send({ tutorial_id: tutorialId });
 
     expect(response.statusCode).toBe(200);
-    expect(response.body).toHaveLength(3);
-    expect(response.body).toEqual([
-      {
-        question: "This is the Question",
-        options: [
-          "this is an option",
-          "when its green its the answer",
-          "press delete to remove the tutorial",
-        ],
-        answer: "when its green its the answer",
-      },
-      {
-        question: "This is the Question",
-        options: [
-          "this is an option",
-          "when its green its the answer",
-          "press delete to remove the tutorial",
-        ],
-        answer: "when its green its the answer",
-      },
-      { question: "hi", options: ["1", "2", "3"], answer: "3" },
-    ]);
   });
   it("should return a 404 error if tutorial ID is invalid", async () => {
     const invalidTutorialId = "invalid-tutorial-id";

@@ -61,20 +61,6 @@ const User = sequelize.define('user', {
 	},
 });
 
-const Invites = sequelize.define('invite', {
-	inviteID: {
-		type: DataTypes.TEXT,
-		allowNull: false,
-		unique: true,
-	},
-	user_created: {
-		type: DataTypes.TEXT,
-		allowNull: false,
-		unique: true,
-		isUUID: true,
-	},
-});
-
 const Tutorial = sequelize.define('tutorial', {
 	creator_id: {
 		type: DataTypes.TEXT,
@@ -200,9 +186,6 @@ const Codes = sequelize.define('code', {
 });
 
 if (process.env.ENV !== 'Test') {
-	// SETTING UP THE FOREIGN KEY OF THE INVITES TABLE
-	User.hasOne(Invites, {foreignKey: 'user_created', sourceKey: 'user_id'});
-	Invites.belongsTo(User, {foreignKey: 'user_created', targetKey: 'user_id'});
 
 	// SETTING UP THE FOREIGN KEY OF THE TUTORIAL TABLE
 	User.hasMany(Tutorial, {foreignKey: 'creator_id', sourceKey: 'user_id'});
@@ -217,4 +200,4 @@ if (process.env.ENV !== 'Test') {
 	await sequelize.sync({alter: true});
 })();
 
-module.exports = {User, Tutorial, Invites, Stats, Question, Codes};
+module.exports = {User, Tutorial, Stats, Question, Codes};
