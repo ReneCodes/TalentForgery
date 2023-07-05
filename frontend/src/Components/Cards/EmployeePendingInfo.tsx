@@ -81,19 +81,6 @@ const EmployeePendingInfo = ({user}: any) => {
 							<Divider />
 							<Typography sx={styles.helper}>Email</Typography>
 						</Paper>
-<<<<<<< HEAD
-=======
-						<Paper
-							elevation={1}
-							square
-							sx={styles.paper}>
-							<Typography sx={styles.detail}>
-								{invited_by.first_name} {invited_by.last_name}
-							</Typography>
-							<Divider />
-							<Typography sx={styles.helper}>Invited By</Typography>
-						</Paper>
->>>>>>> 9c482a3db2099c0adada5387439a716d10a36fe3
 					</Box>
 				</Stack>
 				<Divider />
