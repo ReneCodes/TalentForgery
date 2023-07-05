@@ -65,8 +65,6 @@ async function createTutorial(req: any, res: Response) {
 			res.status(201).json({ message: 'Tutorial created.', tutorial_id, questions_id });
 		} catch (error) {
 			const errorMessage = (error as Error).message;
-			console.log(errorMessage);
-
 			res.status(500).json('Failed to create tutorial.');
 		}
 	});
@@ -88,8 +86,7 @@ async function getTutorials(req: Request, res: Response) {
 		const tutorials = await getUserTutorials(user_id);
 		res.status(200).json(tutorials);
 	} catch (error) {
-		console.log((error as Error).message);
-		res.status(500).json('Failed to retrieve tutorial');
+		res.status(500).json('Server failed');
 	}
 };
 
@@ -103,7 +100,6 @@ async function getQuestions(req: Request, res: Response) {
 		res.status(200).json(questions);
 	} catch (error) {
 		const errorMessage = (error as Error).message;
-		console.log(errorMessage);
 
 		if (errorMessage === 'Invalid tutorial id') {
 			res.status(404).json(errorMessage);

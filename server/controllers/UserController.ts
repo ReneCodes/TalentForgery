@@ -194,7 +194,6 @@ const updateUser = async (req: any, res: Response, next: NextFunction) => {
       const data = await updateUserInfo(user_id, req.body, profile_picture);
       return res.status(201).json(data);
     } catch (error) {
-      console.log(error);
       res.status(500).json({ msg: 'Server Failed', error });
     }
   });

@@ -211,7 +211,6 @@ const getAllStaffStatistics = async () => {
   allUsers.forEach(async (user: UserType) => {
 
     const userStats = await getUserStatsByEmail(user.email);
-    console.log(userStats);
     questionsRight += userStats.correct_questions;
     questionsWrong += userStats.wrong_questions;
     testsPassed += userStats.passed;
