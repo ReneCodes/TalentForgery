@@ -101,7 +101,7 @@ export const PendingUserStore = create<PendingUser>((set) => ({
 // TUTORIAL TAG STORE
 interface TagsList {
 	defaultTags: string[];
-	selctedTags: string[];
+	selectedTags: string[];
 	storeSelectedTags: (tagsArr: string[]) => void;
 }
 export const TutorialTagStore = create<TagsList>((set) => ({
@@ -117,8 +117,8 @@ export const TutorialTagStore = create<TagsList>((set) => ({
 		'PROCUREMENT',
 		'WAREHOUSE',
 	],
-	selctedTags: [],
-	storeSelectedTags: (tagsArr) => set(() => ({selctedTags: tagsArr})),
+	selectedTags: [],
+	storeSelectedTags: (tagsArr) => set(() => ({selectedTags: tagsArr})),
 }));
 
 // TUTORIAL STORE
@@ -139,4 +139,3 @@ export const TutorialStore = create<TutorialStore>((set) => ({
 	storeUserTutorials: (tutorialsArr) => set(() => ({userTutorials: tutorialsArr})),
 	storeAllTutorials: (tutorialsArr) => set(() => ({allTutorials: tutorialsArr})),
 }));
-

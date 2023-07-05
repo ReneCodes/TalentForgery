@@ -47,12 +47,12 @@ const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed:
   let userPassedText = '';
 
   userPassedText = userPassed ?
-    `<div style="color: green;" >
-      <h3 style="font-size: 18px; font-weight: 400; margin: 0;" > Passed </h3>
+    `<div style="color: #2e7d32;" >
+      <h3 style="font-size: 18px; font-weight: 400; margin: 5px 0;" > Passed </h3>
      </div>
     ` :
-    `<div style="color: red;" >
-      <h3 style="font-size: 18px; font-weight: 400; margin: 0;" > Failed </h3>
+    `<div style="color: #c62828;" >
+      <h3 style="font-size: 18px; font-weight: 400; margin: 5px 0;" > Failed </h3>
      </div>
     `
 
@@ -62,24 +62,24 @@ const handleEmailData = async (testCorrection: TestCorrectionType[], userPassed:
     <tr>
       <td>
         <h2 style="font-size: 20px; font-weight: 400; margin: 0;"><strong>${question.question}</strong></h2>
-        <ul style="list-style-type: none; padding: 0; display: flex; flex-wrap: wrap;">
+        <ul style="list-style-type: circle">
         `;
 
     question.options.forEach((option) => {
       if (question.failed && question.userAnswer === option) {
         questionsString += `
-        <li style="color: red; margin-bottom:10px;">
-          <h3 style="font-size: 16px; font-weight: 400; margin: 0;">${option}</h3>
+        <li style="color: #c62828; margin-bottom:10px;">
+          <h3 style="font-size: 16px; font-weight: 400; margin: 0 5px;"> ${option} </h3>
         </li>`;
       } else if (option === question.rightAnswer) {
         questionsString += `
-        <li style="color: green; margin-bottom:10px;">
-          <h3 style="font-size: 16px; font-weight: 400; margin: 0;">${option}</h3>
+        <li style="color: #2e7d32; margin-bottom:10px;">
+          <h3 style="font-size: 16px; font-weight: 400; margin: 0 5px;"> ${option} </h3>
         </li>`;
       } else {
         questionsString += `
-        <li style="color: black; margin-bottom:10px;">
-          <h3 style="font-size: 16px; font-weight: 400; margin: 0;">${option}</h3>
+        <li style="color: #212121; margin-bottom:10px;">
+          <h3 style="font-size: 16px; font-weight: 400; margin:0  5px;"> ${option} </h3>
         </li>`;
       }
     });
@@ -128,7 +128,7 @@ const handleSendEmail = async (
     <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px;">
       <tr>
         <td style="width: 100px; padding: 20px;">
-          <div style="border: 2px solid black; width: 100px; height: 100px; border-radius: 50%; overflow: hidden;">
+          <div style="border: 2px solid #212121; width: 100px; height: 100px; border-radius: 50%; overflow: hidden;">
           <img style="object-fit: cover; width: 100%; height: 100%;" src="cid:profilePicture">
           </div>
         </td>
@@ -150,7 +150,7 @@ const handleSendEmail = async (
       </tr>
     </table>
 
-    <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; padding: 20px; border: 2px solid black; border-radius: 10px;">
+    <table style="width: 100%; max-width: 1000px; margin: 0 auto; padding: 20px; padding: 20px; border: 2px solid #5b5b5b; border-radius: 5px;">
     ${tutorial.questionsString}
     </table>
 

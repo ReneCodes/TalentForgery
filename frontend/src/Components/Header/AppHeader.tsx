@@ -10,6 +10,7 @@ import {
 	getPendingUsers,
 	getSingleUserProfileData,
 	getUsersTutorials,
+	logoutUser,
 } from '../../services/Api.service';
 
 export const AppHeader = () => {
@@ -24,11 +25,11 @@ export const AppHeader = () => {
 	}, []);
 
 	async function initalLoad() {
-		console.log('INITIAL LOAD');
+		// console.log('INITIAL LOAD');
 		await getSingleUserProfileData(UpdateProfileInfo);
 		await getUsersTutorials(storeUserTutorials);
 		const role = await getUserRole();
-		console.log('ROLE:', role);
+		// console.log('ROLE:', role);
 		if (role === 'admin') {
 			await getPendingUsers(storePendingPeople);
 			await getAllTutorials(storeAllTutorials);
@@ -36,6 +37,15 @@ export const AppHeader = () => {
 	}
 
 	const {MinonLogout} = LoginAndOut();
+
+	async function handleLogout() {
+		logoutUser();
+		MinonLogout();
+		// const logoutAnwser = await logoutUser();
+		// if (logoutAnwser) {
+		// 	MinonLogout();
+		// }
+	}
 
 	function handleNavbar() {
 		if (breakpoint) {
@@ -94,7 +104,7 @@ export const AppHeader = () => {
 						arrow>
 						<IconButton
 							aria-label="Logout"
-							onClick={MinonLogout}
+							onClick={handleLogout}
 							color="inherit">
 							<LogoutIcon />
 						</IconButton>

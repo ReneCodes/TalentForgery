@@ -12,6 +12,7 @@ pids
 
 # testing
 coverage
+cypress.config*
 
 # Dependency directories
 node_modules

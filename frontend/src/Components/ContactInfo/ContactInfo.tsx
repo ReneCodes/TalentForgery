@@ -2,7 +2,6 @@ import {FC} from 'react';
 import {Container, Typography, Box, Paper, Divider, Stack, Avatar, Button} from '@mui/material';
 
 import {userProfileStore} from '../../utils/zustand.store';
-import theme from '../../config/theme';
 import EmployeeProfileForm from '../Cards/EmployeeProfileForm';
 
 const ContactInfo: FC = () => {
@@ -11,8 +10,6 @@ const ContactInfo: FC = () => {
 	// Profile Info
 	const {first_name, last_name, email, personal_email, phone, department, profile_picture} = localProfileInfo;
 	const localProfileAvatar = `${avatar_url_path}${profile_picture}`;
-	// Theme
-	const {gray} = theme.palette;
 
 	return (
 		<Container>
@@ -23,9 +20,11 @@ const ContactInfo: FC = () => {
 					<Avatar
 						sx={{
 							display: {xs: 'block', sm: 'none'},
-							width: '120px',
+							width: '130px',
 							height: 'auto',
-							m: 2,
+							maxHeight: '130px',
+							objectFit: 'cover',
+							m: 'auto',
 							alignSelf: 'center',
 							border: '2px solid',
 							borderColor: 'primary.main',
@@ -127,11 +126,9 @@ const styles = {
 		gap: 4,
 		flexDirection: {xs: 'column', sm: 'row'},
 		justifiedContent: 'space-between',
-		alignItems: 'center',
 		overflow: 'auto',
 		padding: '10px',
-
-		maxWidth: '500px',
+		maxWidth: '100%',
 
 		['::-webkit-scrollbar ']: {
 			display: 'none',
@@ -140,9 +137,13 @@ const styles = {
 	header: {
 		textAlign: {xs: 'center', sm: 'left'},
 	},
-	detail: {px: 1, fontSize: '20px'},
+	detail: {px: 1, fontSize: '20px', wordWrap: 'break-word'},
 	paper: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'end',
 		width: '100%',
+		height: '100%',
 		minWidth: '200px',
 		maxWidth: '350px',
 		p: 1,
@@ -155,9 +156,10 @@ const styles = {
 	avatar: {
 		display: {xs: 'none', sm: 'block', md: 'block'},
 		width: '100%',
-		maxWidth: '120px',
+		maxWidth: '130px',
 		height: 'auto',
-		maxHeight: '120px',
+		maxHeight: '130px',
+		objectFit: 'cover',
 		border: 3,
 		borderColor: 'primary.main',
 	},

@@ -17,28 +17,6 @@ import {TutorialStore} from '../../../utils/zustand.store';
 import {getQuestions} from '../../../services/Api.service';
 import {YellowTooltip, BlackTooltip} from '../../Tooltips/CustomTooltips';
 
-// TODO: get the TS Prop Type right
-
-// {
-// 	"tutorial_id": "2425c212-eafd-4fdb-bcbf-bd986f62c543",
-// 	"title": "Chemical Brothers",
-// 	"video_url": "16884961792711688496179271people55s.mp4",
-// 	"questions_id": [
-// 			"9bb2f29e-2098-4a41-9193-01ffcafc83cb",
-// 			"ed9c5391-2684-4d28-8bc8-3e91a018f4ac",
-// 			"7ab3657b-80fa-49cd-ae66-81664c2cb269"
-// 	],
-// 	"description": "People Managment",
-// 	"questions_shown": 2,
-// 	"access_date": "Tue, 4 Jul 2023 23:00:00 GMT",
-// 	"tags": [
-// 			"HR",
-// 			"FIRE"
-// 	],
-// 	"due_date": "Thu, 6 Jul 2023 23:00:00 GMT",
-// 	"video_thumb": "16884961793301688496179330people_thumb.png"
-// }
-
 const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	// Zustand Stores
 	const {video_thumb_base_url} = TutorialStore();
@@ -56,7 +34,6 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	// console.log('videoData', videoData);
 
 	const createCurrentDate = async () => {
-		console.log('check Time');
 		const milliseconds = Date.now();
 		setCurrentDateInMs(milliseconds);
 	};
@@ -79,9 +56,6 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	function fetchQuestions() {
 		getQuestions({tutorial_id}, setTutorialQuestions);
 	}
-
-	// TODO: CALC ACCESS ALLOWANCE
-	function allowedAccess() {}
 
 	return (
 		<Card sx={{maxWidth: 345, minWidth: 300, position: 'relative', mb: 2}}>

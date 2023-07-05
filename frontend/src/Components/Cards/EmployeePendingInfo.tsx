@@ -22,18 +22,7 @@ const EmployeePendingInfo = ({user}: any) => {
 					spacing={2}
 					sx={{maxWidth: '500px', mb: 4}}>
 					<Avatar
-						sx={{
-							display: 'block',
-							width: '130px',
-							height: 'auto',
-							maxHeight: '130px',
-							objectFit: 'cover',
-							objectPosition: '50% 50%',
-							m: 2,
-							alignSelf: 'center',
-							border: '2px solid',
-							borderColor: 'primary.main',
-						}}
+						sx={styles.avatar}
 						alt="profile image"
 						src={profile_picture ? localProfileAvatar : '../src/assets/default_user.png'}></Avatar>
 					<Typography
@@ -73,7 +62,7 @@ const EmployeePendingInfo = ({user}: any) => {
 							square
 							sx={styles.paper}>
 							<Typography sx={styles.detail}>
-								{phone ? phone : <span style={{color: 'gray.300'}}>none</span>}
+								{phone ? phone : <span style={{color: 'lightgrey'}}>none</span>}
 							</Typography>
 							<Divider />
 							<Typography sx={styles.helper}>Phone</Typography>
@@ -98,8 +87,7 @@ const EmployeePendingInfo = ({user}: any) => {
 							square
 							sx={styles.paper}>
 							<Typography sx={styles.detail}>
-								{invited_by.first_name}
-								{invited_by.last_name}
+								{invited_by.first_name} {invited_by.last_name}
 							</Typography>
 							<Divider />
 							<Typography sx={styles.helper}>Invited By</Typography>
@@ -138,10 +126,18 @@ const styles = {
 	},
 	header: {
 		textAlign: 'left',
+		borderBottom: '2px solid',
+		borderColor: 'secondary.main',
+		width: 'fit-content',
+		pr: 2,
 	},
-	detail: {px: 1, fontSize: '20px'},
+	detail: {px: 1, fontSize: '20px', wordWrap: 'break-word'},
 	paper: {
+		display: 'flex',
+		flexDirection: 'column',
+		justifyContent: 'end',
 		width: '100%',
+		height: '100%',
 		minWidth: '200px',
 		maxWidth: '350px',
 		p: 1,
@@ -153,12 +149,14 @@ const styles = {
 	},
 	avatar: {
 		display: 'block',
-		width: '100%',
-		maxWidth: '120px',
+		width: '130px',
 		height: 'auto',
-		maxHeight: '120px',
+		maxHeight: '130px',
 		border: 3,
 		borderColor: 'primary.main',
+		objectFit: 'cover',
+		m: 2,
+		alignSelf: 'center',
 	},
 	update: {
 		display: 'flex',
