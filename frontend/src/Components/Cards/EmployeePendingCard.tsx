@@ -22,8 +22,7 @@ export default function EmployeePendingCard({user}: any) {
 	const {selectedTags, storeSelectedTags} = TutorialTagStore();
 
 	// Destructuring User
-	const {dataValues, invited_by} = user;
-	const pendingUser = dataValues;
+	const pendingUser = user;
 	const {first_name, last_name, profile_picture, email} = pendingUser;
 
 	const remoteProfileAvatar = `${avatar_url_path}${profile_picture}`;
@@ -68,11 +67,6 @@ export default function EmployeePendingCard({user}: any) {
 						<Box sx={{color: 'gray.900'}}>
 							<Typography variant="h6">
 								{first_name} {last_name}
-							</Typography>
-							<Typography
-								variant="caption"
-								sx={{fontSize: '12px', color: 'gray.700'}}>
-								Invited By: {invited_by.first_name}{' '}
 							</Typography>
 						</Box>
 
