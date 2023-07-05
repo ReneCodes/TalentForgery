@@ -62,7 +62,7 @@ export const HomeMe = () => {
 			</Typography>
 			<Box sx={styles.noBar}>
 				{scheduledTutorials.length > 0 &&
-					scheduledTutorials.slice(0, 2).map((videoData: SmallVideoData['videoData']) => (
+					scheduledTutorials.slice(0, 4).map((videoData: SmallVideoData['videoData']) => (
 						<Box key={Math.floor(Math.random() * 99999999)}>
 							<TimedTutorialCard videoData={videoData} />
 						</Box>
@@ -75,9 +75,13 @@ export const HomeMe = () => {
 /** @type {import("@mui/material").SxProps} */
 const styles = {
 	noBar: {
-		display: {xs: 'column', sm: 'flex'},
+		display: 'flex',
+		flexDirection: {xs: 'column', sm: 'row'},
+		alignItems: 'center',
 		gap: 2,
 		mb: 4,
+		m: 'auto',
+		width: '100%',
 		overflow: 'auto',
 		whiteSpace: 'nowrap',
 		padding: '10px',

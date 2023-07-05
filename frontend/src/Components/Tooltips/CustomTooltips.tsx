@@ -34,6 +34,7 @@ const Blue = styled(({className, ...props}: TooltipProps) => (
 		fontWeight: 'bold',
 	},
 }));
+
 const White = styled(({className, ...props}: TooltipProps) => (
 	<Tooltip
 		{...props}
@@ -46,6 +47,24 @@ const White = styled(({className, ...props}: TooltipProps) => (
 	},
 	[`& .${tooltipClasses.tooltip}`]: {
 		backgroundColor: theme.palette.white.main,
+		color: theme.palette.gray[900],
+		fontWeight: 'bold',
+	},
+}));
+
+const Black = styled(({className, ...props}: TooltipProps) => (
+	<Tooltip
+		{...props}
+		// arrow
+		classes={{popper: className}}
+	/>
+))(({theme}) => ({
+	[`& .${tooltipClasses.arrow}`]: {
+		color: theme.palette.gray[900],
+	},
+	[`& .${tooltipClasses.tooltip}`]: {
+		backgroundColor: theme.palette.gray[900],
+		color: theme.palette.secondary.main,
 		fontWeight: 'bold',
 	},
 }));
@@ -68,6 +87,7 @@ export const BlueTooltip = ({children, ...props}: any) => {
 		</Blue>
 	);
 };
+
 export const WhiteTooltip = ({children, ...props}: any) => {
 	return (
 		<White
@@ -75,5 +95,15 @@ export const WhiteTooltip = ({children, ...props}: any) => {
 			{...props}>
 			{children}
 		</White>
+	);
+};
+
+export const BlackTooltip = ({children, ...props}: any) => {
+	return (
+		<Black
+			enterDelay={1000}
+			{...props}>
+			{children}
+		</Black>
 	);
 };
