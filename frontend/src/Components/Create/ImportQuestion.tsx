@@ -4,35 +4,23 @@ import FormControl from '@mui/material/FormControl';
 import Select, { SelectChangeEvent } from '@mui/material/Select';
 import { FC, useEffect, useState } from 'react';
 import { QuestionType } from '../../utils/types';
+import { getAllDataBaseQuestions } from '../../services/Api.service';
 
-const mockQuestions = [
-  {
-    question: 'Where is steve?',
-    options: ['Detroit', 'Michigan', 'Orlando'],
-    answer: 'Detroit',
-  },
-  {
-    question: 'Ham or Cheese?',
-    options: ['Ham', 'Cheese'],
-    answer: 'Cheese',
-  },
-  {
-    question: 'Whats the best drink?',
-    options: ['Vodka', 'Beer', 'Cider'],
-    answer: 'Cider',
-  },
-];
-
-const ImportQuestion: FC<{onData: any}> = ({onData}) => {
+const ImportQuestion: FC<{onData: (childData: QuestionType) => void}> = ({onData}) => {
   const [questions, setQuestions] = useState<QuestionType[]>([]);
   const [question, setQuestion] = useState<QuestionType | undefined>(undefined);
 
-  useEffect(() => setQuestions(mockQuestions), []);
+  useEffect(() => {
+    (async() => {
+      const res = await getAllDataBaseQuestions();
+      setQuestions(res);
+    })()
+  }, []);
 
   const handleChange = (event: SelectChangeEvent<string>) => {
     const questionString = event.target.value;
     for (const obj of questions) {
-      if (obj.question === questionString) {
+      if (obj.question_id === questionString) {
         setQuestion(obj);
         onData(obj);
       }
@@ -46,12 +34,12 @@ const ImportQuestion: FC<{onData: any}> = ({onData}) => {
         <Select
           labelId="demo-simple-select-label"
           id="demo-simple-select"
-          value={question?.question}
+          value={question?.question_id}
           label="Import"
           onChange={handleChange}
         >
           {questions.map((question, index) => (
-            <MenuItem key={index} value={question.question}>
+            <MenuItem key={index} value={question.question_id}>
               {question.question}
             </MenuItem>
           ))}

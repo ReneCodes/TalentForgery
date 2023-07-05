@@ -11,9 +11,9 @@ const ImportedQuestions: FC<{questions: QuestionType[]}> = ({questions}) => {
         <h3>{question.question}</h3>
         </div>
           {question.options.map((option, key) => (
-            <h4 key={key}>{option}</h4>
+            <p key={key}>{option}</p>
           ))}
-          <h3>Answer: {question.answer}</h3>
+          <p>Answer: {question.answer}</p>
       </Card>
     </div>
     ))}

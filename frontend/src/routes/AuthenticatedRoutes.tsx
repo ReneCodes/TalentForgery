@@ -4,7 +4,7 @@ import Stats from '../Components/Stats/Stats';
 import ContactInfo from '../Components/ContactInfo/ContactInfo';
 // import Create from '../Pages/Create';
 import Dashboard from '../Pages/Dashboard';
-import NewCreate from '../Pages/NewCreate';
+import NewCreate from '../Pages/Create';
 // import ErrorPage from '../Pages/ErrorPage';
 import AllUserStats from '../Pages/AllUserStats';
 import { userProfileStore } from '../utils/zustand.store';

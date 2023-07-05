@@ -1,9 +1,11 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
-import { NavigateFunction } from 'react-router-dom';
-import { SetStateAction } from 'react';
-import { navigateTo } from '../App';
+
+import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
+import {NavigateFunction} from 'react-router-dom';
+import {SetStateAction} from 'react';
+import {navigateTo} from '../App';
+import { QuestionType } from '../utils/types';
 
 function handleError(error: AxiosError) {
 	switch (error.response?.status) {
@@ -227,13 +229,15 @@ export async function sendFinishedTest(body: any) {
 	}
 }
 
-export async function getAllDataBaseQuestions() {
+export async function getAllDataBaseQuestions(): Promise<QuestionType[]> {
 	try {
 		const res = await axios.get('/api/get_all_questions');
+		console.log(res);
 
-		return res;
+		return res.data;
 	} catch (error: any) {
 		handleError(error);
+		throw error;
 	}
 }
 
