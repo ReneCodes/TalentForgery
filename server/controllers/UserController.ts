@@ -18,7 +18,6 @@ const multer = require('multer');
 import { NextFunction, Request, Response } from 'express';
 import { fileInput } from '../types/user';
 const { validateRegisterData, validateLoginData, validateUserDelete } = require('../middleware/Validation');
-const { checkInvite } = require('../models/InviteModel');
 const { getUserByEmail } = require('../models/UserModel');
 const fs = require('fs');
 
@@ -49,15 +48,8 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     }
 
     const { first_name, last_name, email, personal_email,
-      password, phone, department, inviteID
+      password, phone, department
     } = req.body;
-
-    const invite = await checkInvite(inviteID);
-
-    if (!invite) {
-      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
-      return res.status(409).json('Invalid invite')
-    };
 
     const userExists = await getUserByEmail(email);
     if (userExists) {
@@ -69,7 +61,7 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
       const profile_picture = req.file ? req.file.filename : null;
       const data = await registerNewUser({
         first_name, last_name, email, personal_email, password,
-        phone, department, invite: invite.user_created, profile_picture
+        phone, department, profile_picture
       });
       return res.status(201).json(data);
     } catch (error) {

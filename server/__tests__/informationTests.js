@@ -18,7 +18,6 @@ afterAll((done) => {
 });
 
 const user_info = {
-  inviteID: 'invalidID',
   first_name: "Bob",
   last_name: "Alfred",
   email: "admin@admin.com",

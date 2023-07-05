@@ -15,7 +15,6 @@ afterAll((done) => {
 });
 
 const user1_info = {
-  inviteID: "testInviteID",
   first_name: "Test1",
   last_name: "Test1",
   email: "test@gmail.com",
@@ -27,7 +26,6 @@ const user1_info = {
 };
 
 const user2_info = {
-  inviteID: "test2InviteID",
   first_name: "Test2",
   last_name: "Test2",
   email: "test2@gmail.com",

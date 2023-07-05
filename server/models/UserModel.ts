@@ -32,7 +32,6 @@ const registerNewUser = async (providedInformation: registeredUser) => {
     await User.create({
       role,
       ...providedInformation,
-      invited_by: providedInformation.invite,
       user_id,
       tags: [],
     });
@@ -102,24 +101,10 @@ const getUserInfo = async (user_id: UUID) => {
 const getUsersPending = async (): Promise<UserType[]> => {
   const usersPending: UserType[] = await User.findAll({
     where: { role: 'pending' },
-    attributes: ['role', 'first_name', 'last_name', 'email', 'department', 'profile_picture', 'invited_by'],
+    attributes: ['role', 'first_name', 'last_name', 'email', 'department', 'profile_picture'],
   });
 
-  const allPendingUsers: UserType[] = await Promise.all(
-    usersPending.map(async (user) => {
-      const invitedByUser = await User.findOne({
-        where: { user_id: user.invited_by },
-        attributes: ['first_name', 'last_name']
-      });
-
-      return {
-        ...user,
-        invited_by: invitedByUser
-      };
-    })
-  );
-
-  return allPendingUsers;
+  return usersPending;
 }
 
 const deleteUser = async (user_id: UUID) => {

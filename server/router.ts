@@ -1,7 +1,6 @@
 const router = require('express').Router();
 
 const UserController = require('./controllers/UserController');
-const InviteController = require('./controllers/InviteController');
 const TutorialController = require("./controllers/TutorialControllers");
 const TestController = require('./controllers/TestController');
 const ValidateInformation = require('./controllers/ValidateInformation');
@@ -28,7 +27,6 @@ router.get("/users", authAdminUser, UserController.getAllUsers);
 router.post("/user_stats", authAdminUser, UserController.getUserStats);
 
 // INFORMATION ROUTES
-router.get('/invite', authAdminUser, InviteController.getInvite);
 router.get('/user', authUser, UserController.getUserInformation);
 router.get('/pending_users', authAdminUser, UserController.getPendingUsers);
 

@@ -1,6 +1,4 @@
 import axios, { AxiosError, AxiosResponse } from 'axios';
-
-
 import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
 import {NavigateFunction} from 'react-router-dom';
 import {SetStateAction} from 'react';
@@ -60,10 +58,6 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		}
 	});
 
-	const urlParts = window.location.pathname.split('/');
-	const inviteID = urlParts[urlParts.length - 1]; //TODO: needs to match to BE variable => invite
-	formData.append('inviteID', inviteID);
-
 	try {
 		await axios.post('/api/register', formData, {
 			headers: {
@@ -79,30 +73,6 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 	}
 
 	return errorMessage;
-}
-
-// INVITE / ACCEPT / REJECT / PENDING USER
-export async function getAdminInvite(setLinkText: any) {
-	try {
-		const invite: { data: string } = await axios.get('/api/invite');
-
-		// COPY INVITE TO THE CLIPBOARD
-		const inviteID = invite.data;
-		const pageURL = window.location.href.slice(0, -'dashboard'.length);
-
-		navigator.clipboard
-			.writeText(`${pageURL}register/${inviteID}`)
-
-			.then(() => {
-				setLinkText('Copied');
-				setTimeout(() => {
-					setLinkText('Copied');
-				}, 3000);
-			})
-			.catch(() => setLinkText('Failed'));
-	} catch (error: any) {
-		handleError(error);
-	}
 }
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
