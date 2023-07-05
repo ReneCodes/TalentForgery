@@ -36,7 +36,27 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 
 	try {
 		const res = await axios.post('/api/login', formData);
-		navigate('/dashboard');
+		if (res.data) {
+			navigate('/');
+		} else {
+			navigate('/login');
+		}
+	} catch (error: any) {
+		handleError(error);
+		errorMessage = error.response.data;
+	}
+
+	return errorMessage;
+}
+
+export async function logoutUser(navigate: NavigateFunction) {
+	let errorMessage: string = '';
+
+	try {
+		const res = await axios.delete('/api/logout');
+		if (res) {
+			navigate('/');
+		}
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;
@@ -219,6 +239,17 @@ export async function getQuestions(body: any, setTutorialQuestions: any) {
 export async function sendFinishedTest(body: any) {
 	try {
 		const res = await axios.post('/api/handle_test_done', body);
+		console.log(res.data);
+		return res;
+	} catch (error: any) {
+		console.error(error.response.data, '<= No Test');
+		// throw error;
+	}
+}
+
+export async function markTutorialAsDone(body: any) {
+	try {
+		const res = await axios.post('/api/mark_as_watched', body);
 		console.log(res.data);
 		return res;
 	} catch (error: any) {
