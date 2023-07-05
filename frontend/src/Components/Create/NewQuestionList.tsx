@@ -1,4 +1,5 @@
-import { FC } from "react";
+import { FC, useEffect, useState } from "react";
+import { getQuestionsByIds } from "../../services/Api.service";
 import { QuestionType } from "../../utils/types";
 
 interface QuestionListComp {
@@ -6,8 +7,20 @@ interface QuestionListComp {
 }
 
 const QuestionList: FC<QuestionListComp> = ({questions}) => {
+  const [questionList, setQuestionList] = useState(questions);
+
+  useEffect(() => {
+    console.log(questions[0] && typeof questions[0] === 'string');
+    if(questions[0] && typeof questions[0] === 'string') {
+      (async() => {
+        const resposne = await getQuestionsByIds(questions);
+        // @ts-ignore
+        if (resposne) setQuestionList(resposne);
+      })()
+    }
+  }, [questions])
   return <div>
-    {questions.map((question, key) => (
+    {questionList.map((question, key) => (
       <div key={key}>
         <h2>{question.question}</h2>
         {question.options.map((option, key) => (

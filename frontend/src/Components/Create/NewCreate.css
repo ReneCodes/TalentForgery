@@ -115,11 +115,37 @@
 .info_info {
   width: 250px;
   margin-left: 20px;
-  margin-bottom: 120px;
+  margin-bottom: 80px;
 }
 
 .check_button {
   width: 310px;
   display: flex;
   justify-content: end;
+}
+
+.info_close {
+  display: flex;
+  justify-content: center;
+  margin-top: 10px;
+  margin-bottom: 10px;
+}
+
+.input_box {
+  width: 250px;
+}
+
+.imported_question {
+  margin-left: 20px;
+  margin-top: 20px;
+}
+
+.tutorail_wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tutorial_card {
+  margin-right: 10px;
+  margin-bottom: 10px;
 }

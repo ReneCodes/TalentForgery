@@ -1,13 +1,16 @@
-import { ChangeEvent, useEffect, useState } from 'react';
+import { ChangeEvent, FC, useEffect, useState } from 'react';
 import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import Question from './NewQuestion';
-import { QuestionType } from '../../utils/types';
+import { DataType, QuestionType } from '../../utils/types';
 import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';
 import ImagePreview from './ImagePreview';
+import ImportQuestion from './ImportQuestion';
+import ImportedQuestions from './ImportedQuestions';
+import { postTutorial } from '../../services/Api.service';
 
 interface FormInfo {
 	title: string;
@@ -15,18 +18,7 @@ interface FormInfo {
 	tags: string[];
 }
 
-interface DataType {
-	title: string;
-	video_url: any;
-  image_url: any;
-	description: string;
-	question_ids: QuestionType[];
-	questions_shown: number;
-	access_date: string;
-	due_date: string;
-}
-
-const CreateWithQuiz = () => {
+const CreateWithQuiz: FC<{onData: any}> = ({onData}) => {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
@@ -36,20 +28,25 @@ const CreateWithQuiz = () => {
   const [questionNumber, setQuestionNumber] = useState(1);
   const [getData, setGetData] = useState(false);
   const [questions, setQuestions] = useState<QuestionType[]>([])
+  const [imported, setImported] = useState<QuestionType[]>([]);
   const [length, setLength] = useState('');
   const [formInfo, setFormInfo] = useState<DataType>({
     title: '',
-		video_url: {} as File,
-    image_url: {} as File,
 		description: '',
 		question_ids: [],
 		questions_shown: 0,
 		access_date: '',
 		due_date: '',
+    tags: [],
+		video_url: {} as File,
+    image_url: {} as File,
 	});
 
-  useEffect(() => console.log(formInfo), [formInfo]);
-  useEffect(() => console.log(questions), [questions]);
+  useEffect(() => {
+    if(formInfo.access_date) {
+      onData(formInfo)
+    }
+  }, [formInfo]);
 
   const handleClickOpen = () => {
     setOpen(true);
@@ -68,18 +65,27 @@ const CreateWithQuiz = () => {
     handleClose();
   };
 
-  const handleScheduleData = (data: {startDate: string, endDate: string}) => {
+  const handleScheduleData = async (data: { startDate: string, endDate: string }) => {
     if (parseInt(length) > questions.length) {
-      alert('too few questions')
+      alert('Too few questions');
     } else {
-      setFormInfo((res) => {
-        return {
+      try {
+        const tutorial = await postTutorial({
+          ...formInfo,
+          access_date: data.startDate,
+          due_date: data.endDate,
+          question_ids: questions
+        });
+        console.log(tutorial);
+        setFormInfo((res) => ({
           ...res,
           access_date: data.startDate,
           due_date: data.endDate,
           question_ids: questions
-        }
-      });
+        }));
+      } catch (err) {
+        alert(err);
+      }
     }
   };
 
@@ -97,7 +103,7 @@ const CreateWithQuiz = () => {
           title: childData.title,
           description: childData.description,
           tags: childData.tags,
-          length,
+          questions_shown: parseInt(length),
           video_url: videoData,
           image_url: imageData
         }
@@ -158,6 +164,28 @@ const CreateWithQuiz = () => {
     handleScheduleOpen();
   }
 
+  const handleImport = (childData: QuestionType) => {
+    let boo = true;
+    for (const question of imported) {
+      if(question.question === childData.question) {
+        boo = false;
+      }
+    }
+    if(boo) {
+      setImported((res) => [...res, childData])
+    }
+
+    boo = true;
+    for (const question of questions) {
+      if(question.question === childData.question) {
+        boo = false;
+      }
+    }
+    if(boo) {
+      setQuestions((res) => [...res, childData])
+    }
+  }
+
   return (
     <div>
         <div className='filter_label'>
@@ -189,6 +217,9 @@ const CreateWithQuiz = () => {
           </div>
         </div>
         <Divider />
+        <ImportQuestion onData={handleImport} />
+        <ImportedQuestions questions={imported} />
+
         {[...Array(questionNumber)].map((_, index) => (
           <div className='question_card' key={index}><Question getData={getData} onData={handleDataFromQuestions} /></div>
         ))}

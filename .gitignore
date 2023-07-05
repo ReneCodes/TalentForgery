@@ -23,3 +23,6 @@ dist
 .env*
 private
 Temp*
+
+images
+videos

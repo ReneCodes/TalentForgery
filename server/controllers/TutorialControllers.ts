@@ -7,6 +7,7 @@ const { validateTutorialData, validateTutorialId } = require('../middleware/Vali
 const fs = require('fs');
 
 import { Request, Response } from 'express';
+import { fileInput } from '../types/user';
 
 const multer = require('multer');
 
@@ -24,9 +25,9 @@ const storage = multer.diskStorage({
 	},
 });
 
-
 const upload = multer({ storage });
 
+const upload = multer({ storage });
 async function createTutorial(req: any, res: Response) {
 	const sessionToken = req.cookies.session_token;
 	const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;

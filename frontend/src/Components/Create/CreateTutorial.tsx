@@ -4,25 +4,15 @@ import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
 import ImagePreview from './ImagePreview';
-import { QuestionType } from '../../utils/types';
+import { DataType } from '../../utils/types';
 import Schedule from './Schedule';
+import { postTutorial } from '../../services/Api.service';
 
 interface FormInfo {
 	title: string;
 	description: string;
 	tags: string[];
 	length: string;
-}
-
-interface DataType {
-	title: string;
-	video_url: any;
-  image_url: any;
-	description: string;
-	question_ids: QuestionType[];
-	questions_shown: number;
-	access_date: string;
-	due_date: string;
 }
 
 const CreateTutorial: FC<{onData: any}> = ({onData}) => {
@@ -42,6 +32,7 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
 		questions_shown: 0,
 		access_date: '',
 		due_date: '',
+    tags: []
 	});
 
   useEffect(() => {
@@ -133,13 +124,25 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
   };
 
   const handleScheduleData = (data: {startDate: string, endDate: string}) => {
-    setFormInfo((res) => {
-      return {
-        ...res,
-        access_date: data.startDate,
-        due_date: data.endDate,
+    (async() => {
+      try {
+        const tutorial = await postTutorial({
+          ...formInfo,
+          access_date: data.startDate,
+          due_date: data.endDate
+        });
+        console.log(tutorial);
+        setFormInfo((res) => {
+          return {
+            ...res,
+            access_date: data.startDate,
+            due_date: data.endDate,
+          }
+        });
+      } catch(err) {
+        alert(err);
       }
-    });
+    })();
   }
 
   return (
