@@ -20,7 +20,7 @@ export default function EmployeeProfileForm() {
 	const [readOnly, setReadOnly] = React.useState(true);
 	const [file, setFile] = React.useState<File>({} as File);
 	const [updateError, setUpdateError] = React.useState('');
-	// Collor Theme
+	// Color Theme
 	const {secondary, gray, white, red, green} = theme.palette;
 
 	// React hook Form
@@ -95,7 +95,15 @@ export default function EmployeeProfileForm() {
 				aria-label="update profile"
 				variant="contained"
 				onClick={handleClickOpen}
-				fullWidth>
+				fullWidth
+				sx={{
+					backgroundColor: secondary.main,
+					color: gray[900],
+					':hover': {
+						backgroundColor: secondary[900],
+						color: gray[900],
+					},
+				}}>
 				Update Profile
 			</Button>
 			<Dialog

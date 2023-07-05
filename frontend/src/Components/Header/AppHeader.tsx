@@ -3,7 +3,7 @@ import React, {useEffect} from 'react';
 import {AppBar, Box, IconButton, Toolbar, Typography} from '@mui/material';
 import WindowIcon from '@mui/icons-material/Window';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {LoginAndOut, NavbarStore, PendingUserStore, userProfileStore} from '../../utils/zustand.store';
+import {LoginAndOut, NavbarStore, PendingUserStore, TutorialStore, userProfileStore} from '../../utils/zustand.store';
 import {YellowTooltip} from '../Tooltips/CustomTooltips';
 import {
 	getAllTutorials,
@@ -13,27 +13,26 @@ import {
 } from '../../services/Api.service';
 
 export const AppHeader = () => {
-	const {localProfileInfo, UpdateProfileInfo} = userProfileStore();
-	const {pendingPerson, storePendingPeople} = PendingUserStore();
+	const {UpdateProfileInfo, getUserRole} = userProfileStore();
+	const {storePendingPeople} = PendingUserStore();
+	const {storeUserTutorials, storeAllTutorials} = TutorialStore();
 	// console.log('APP HEADER pendingPerson', pendingPerson);
 	const {collapsed, toggled, breakpoint, isCollapsed, isToggled} = NavbarStore();
 
 	useEffect(() => {
 		initalLoad();
 	}, []);
-	useEffect(() => {
-		// console.log('APP HEADER pendingPerson', pendingPerson);
-		// console.log('APP HEADER localProfileInfo', localProfileInfo);
-		// console.log('APP HEADER Users Tutorials', 'STORE not ready');
-		// console.log('APP HEADER All Tutorials', 'STORE not ready');
-	}, [localProfileInfo, pendingPerson]);
 
 	async function initalLoad() {
 		console.log('INITIAL LOAD');
-		await getUsersTutorials();
-		await getAllTutorials();
 		await getSingleUserProfileData(UpdateProfileInfo);
-		await getPendingUsers(storePendingPeople);
+		await getUsersTutorials(storeUserTutorials);
+		const role = await getUserRole();
+		console.log('ROLE:', role);
+		if (role === 'admin') {
+			await getPendingUsers(storePendingPeople);
+			await getAllTutorials(storeAllTutorials);
+		}
 	}
 
 	const {MinonLogout} = LoginAndOut();

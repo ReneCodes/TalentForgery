@@ -4,9 +4,15 @@ import theme from '../../../config/theme';
 // icons
 import {Box, DialogActions, DialogContent} from '@mui/material';
 import React from 'react';
+import {TutorialStore} from '../../../utils/zustand.store';
 
 const TimedTotorialVideo: React.FC<any> = ({videoData, setVideoToWatch, setQuizzToDo}) => {
+	// Color Theme
 	const {secondary, gray} = theme.palette;
+	// Zustand Store
+	const {video_base_url} = TutorialStore();
+
+	// console.log('In Video', videoData);
 
 	const handleVideoDone = () => {
 		setVideoToWatch(false);
@@ -25,7 +31,7 @@ const TimedTotorialVideo: React.FC<any> = ({videoData, setVideoToWatch, setQuizz
 						controls
 						className="watchTutorial_video">
 						<source
-							src={videoData.video_url}
+							src={`${video_base_url}${videoData.video_url}`}
 							type="video/mp4"></source>
 						Your Browser does not support this video tag
 					</video>
