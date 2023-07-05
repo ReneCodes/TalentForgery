@@ -44,7 +44,6 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
 
   const handleDataFromForm = (childData: FormInfo) => {
     if (!childData.title || !childData.description) {
-      console.log(childData.title,childData.description)
       alert('form information missing');
       setGetData(false);
     } else if (!videoSubmit || !imageSubmit) {
@@ -67,7 +66,7 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
 		const file = event.target.files?.[0];
-		
+
 		if (file) {
 			const fileSize = file.size / (1024 * 1024);
 			if (fileSize > 50) {
@@ -171,8 +170,8 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
           <Button className='button_width' variant='contained' onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
-      <Schedule 
-        open={scheduleOpen}  
+      <Schedule
+        open={scheduleOpen}
         onClose={handleScheduleClose}
         onData={handleScheduleData}
       />

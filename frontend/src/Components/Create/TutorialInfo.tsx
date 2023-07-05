@@ -10,6 +10,8 @@ interface TutorialInfoProps {
 }
 
 const TutorialInfo: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
+  console.log(tutorial, 'TUTORIAL');
+
   return (
     <div>
       <Dialog onClose={onClose} open={open}>
@@ -19,7 +21,7 @@ const TutorialInfo: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
             <h2>{tutorial.title}</h2>
             <h3>{tutorial.description}</h3>
             <ul>
-              {tutorial.tags.map((tag, key) => (
+              {tutorial.tags?.map((tag, key) => (
                 <li key={key}>{tag}</li>
               ))}
             </ul>

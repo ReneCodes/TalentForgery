@@ -185,8 +185,6 @@ export async function getUsersTutorials(storeUserTutorials: any) {
 export async function getAllTutorials(storeAllTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_all_tutorials');
-
-		//console.log('get All Tutorials', res.data);
 		await storeAllTutorials(res.data);
 		return res;
 	} catch (error: any) {

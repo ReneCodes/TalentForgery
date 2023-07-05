@@ -56,7 +56,7 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
             <h2>{tutorial.title}</h2>
             <h3>{tutorial.description}</h3>
             <ul>
-              {tutorial.tags.map((tag, key) => (
+              {tutorial.tags?.map((tag, key) => (
                 <li key={key}>{tag}</li>
               ))}
             </ul>
@@ -73,8 +73,8 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
           <Button variant='contained' onClick={handleScheduleOpen}>Schedule</Button>
         </div>
       </Dialog>
-      <Schedule 
-        open={scheduleOpen}  
+      <Schedule
+        open={scheduleOpen}
         onClose={handleScheduleClose}
         onData={handleScheduleData}
       />
