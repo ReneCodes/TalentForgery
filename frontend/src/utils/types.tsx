@@ -23,13 +23,10 @@ export interface QuestionType {
 export interface VideoDataT {
 	videoData: {
 		title: string;
-		source: string;
-		thumbnail?: string;
+		video_url: string;
+		video_thumb?: string;
 		description: string;
 		topic: string;
-		watched: boolean;
-		has_form: boolean;
-		from_done: boolean;
 	};
 }
 
@@ -45,6 +42,7 @@ export interface DataType {
   image_url: any;
 	video_thumb?: string;
 	tags: string[];
+	image_url: any;
 	description: string;
 	question_ids: QuestionType[];
 	questions_shown: number;

@@ -4,38 +4,16 @@ import {useEffect, useState} from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
 import theme from '../../../config/theme';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
+import {sendFinishedTest} from '../../../services/Api.service';
 
 interface TestQuestionComp {
-	id: number;
-	question: string;
-	options: string[];
-	answer: string;
-	choice: string;
+	question: {
+		question: string;
+		options: string[];
+		answer: string;
+		question_id: string;
+	};
 }
-
-const mockQuestions: TestQuestionComp[] = [
-	{
-		id: 3,
-		question: 'At which location can we be sure that they have plenty bananas?',
-		options: ['Detroit', 'Michigan', 'Orlando'],
-		answer: 'Detroit',
-		choice: '',
-	},
-	{
-		id: 4,
-		question: 'Ham or Cheese?',
-		options: ['Ham', 'Cheese'],
-		answer: 'Cheese',
-		choice: '',
-	},
-	{
-		id: 5,
-		question: 'Whats the best drink?',
-		options: ['Vodka', 'Beer', 'Cider'],
-		answer: 'Cider',
-		choice: '',
-	},
-];
 
 // interface QuizzListProps {
 // 	setQuizzDone: React.Dispatch<React.SetStateAction<boolean>>;
@@ -44,48 +22,43 @@ const mockQuestions: TestQuestionComp[] = [
 
 type QuizzAnswer = {
 	tutorial_id: string;
-	user_id: string;
-	answer: string[];
+	answers: string[];
 	question_ids: number[];
 };
 
-const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo}) => {
-	const [index, setIndex] = useState(0);
+const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo, tutorialQuestions, videoData}) => {
 	const [questions, setQuestions] = useState<TestQuestionComp[]>([]);
+	const [userAnswer, setUserAnswer] = useState<string[]>([]);
+	const [index, setIndex] = useState(0);
+	const tempAnswer = new Array(1);
 
-	// TODO: Load questions once the Tutorial is started into the Zustand Store
+	const {tutorial_id, questions_id} = videoData;
+
 	useEffect(() => {
-		setQuestions(mockQuestions);
+		setQuestions(tutorialQuestions);
 	}, []);
 
 	const handleAnswer = (e: SyntheticEvent<Element, Event>) => {
 		const target = e.target as HTMLInputElement;
-		questions[index].choice += target.value as string;
+		tempAnswer[0] = target.value as string;
 	};
 
 	const nextQuestion = () => {
-		if (questions[index].choice) setIndex(index + 1);
+		if (tempAnswer[0]) {
+			setIndex(index + 1);
+			setUserAnswer([...userAnswer, tempAnswer[0]]);
+			if (index === questions.length - 1) handleQuizzDone();
+		}
 	};
 
-	const handleQuizzDone = () => {
-		if (index === questions.length - 1 && questions.length !== 0 && questions[index].choice) {
-			const quizzAnswers: QuizzAnswer = {
-				tutorial_id: '3456789098',
-				user_id: '234567890987',
-				answer: [],
-				question_ids: [],
+	const handleQuizzDone = async () => {
+		if (userAnswer.length !== 0) {
+			const quizzAnswersBody: QuizzAnswer = {
+				tutorial_id,
+				answers: userAnswer,
+				question_ids: questions_id,
 			};
-
-			const ids = [] as number[];
-			const choices = [] as string[];
-			for (const question of questions) {
-				ids.push(question.id);
-				choices.push(question.choice);
-			}
-			quizzAnswers.answer = choices;
-			quizzAnswers.question_ids = ids;
-
-			console.log(quizzAnswers);
+			sendFinishedTest(quizzAnswersBody);
 
 			setQuizzToDo(false);
 			setQuizzDone(true);
@@ -94,10 +67,10 @@ const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo}) => {
 
 	return (
 		<Card sx={styles.checklist_box}>
-			<h2>{questions[index]?.question}</h2>
+			<h2>{questions[index]?.question.question}</h2>
 			<FormControl>
 				<RadioGroup>
-					{questions[index]?.options.map((option) => (
+					{questions[index]?.question.options.map((option) => (
 						<FormControlLabel
 							key={option}
 							value={option}
@@ -113,7 +86,7 @@ const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo}) => {
 				<Button
 					sx={styles.btn_done}
 					variant="contained"
-					onClick={handleQuizzDone}
+					onClick={nextQuestion}
 					endIcon={<AssignmentTurnedInIcon />}>
 					Finish Quiz
 				</Button>

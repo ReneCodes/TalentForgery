@@ -1,8 +1,26 @@
-import axios, {AxiosResponse} from 'axios';
+import axios, { AxiosError, AxiosResponse } from 'axios';
 
-import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
-import {NavigateFunction} from 'react-router-dom';
-import {SetStateAction} from 'react';
+import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
+import { NavigateFunction } from 'react-router-dom';
+import { SetStateAction, createContext, useContext } from 'react';
+import { navigateTo } from '../App';
+
+function handleError(error: AxiosError) {
+
+	switch (error.response?.status) {
+		case 403:
+			navigateTo('/unauthorized');
+			break;
+		case 404:
+			navigateTo('/not_found');
+			break;
+		case 500:
+			navigateTo('/server_down');
+			break;
+		default:
+			return error.response?.data;
+		}
+}
 
 // LOGIN / AUTH / CREATE  USER
 export async function authUser(navigate: NavigateFunction, callback?: any) {
@@ -10,25 +28,23 @@ export async function authUser(navigate: NavigateFunction, callback?: any) {
 		await axios.get('/api/auth_user');
 		if (callback) callback();
 	} catch (error: any) {
-		navigate('/login');
+		handleError(error);
 	}
-}
+};
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
 	let errorMessage: string = '';
-	await axios
-		.post('/api/login', formData)
-		.then((response) => {
-			navigate('/dashboard');
-			console.log('LOGIN RES: ', JSON.stringify(response.data));
-		})
-		.catch((error) => {
-			console.log('Error login', error.response);
-			errorMessage = error.response.data;
-		});
+
+	try {
+		const res = await axios.post('/api/login', formData)
+		navigate('/dashboard');
+	} catch (error: any) {
+		handleError(error);
+		errorMessage = error.response.data;
+	}
 
 	return errorMessage;
-}
+};
 
 export async function registerUser(userData: RegisterFormValues, navigate: NavigateFunction) {
 	let errorMessage: string = '';
@@ -55,17 +71,19 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({email, password}, navigate);
+		loginUser({ email, password }, navigate);
 	} catch (error: any) {
+		handleError(error);
 		errorMessage = error.response.data;
 	}
 
 	return errorMessage;
-}
+};
+
 // INVITE / ACCEPT / REJECT / PENDING USER
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: {data: string} = await axios.get('/api/invite');
+		const invite: { data: string } = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
@@ -82,13 +100,13 @@ export async function getAdminInvite(setLinkText: any) {
 			})
 			.catch(() => setLinkText('Failed'));
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error);
 	}
-}
+};
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({email});
+		const data = JSON.stringify({ email });
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -100,13 +118,13 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 			return newArr;
 		});
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error);
 	}
-}
+};
 
 export async function acceptUser(email: string, tags: string[], filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({email, tags});
+		const data = JSON.stringify({ email, tags });
 		await axios.post('/api/accept_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -118,18 +136,18 @@ export async function acceptUser(email: string, tags: string[], filterPendingPeo
 			return newArr;
 		});
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error)
 	}
-}
+};
 
 export async function getPendingUsers(storePendingPeople: any) {
 	try {
 		const res = await axios.get('/api/pending_users');
 		storePendingPeople(res.data);
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error);
 	}
-}
+};
 
 // TUTORIAL
 export async function postTutorial(data: any) {
@@ -158,52 +176,70 @@ export async function postTutorial(data: any) {
 
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error);
 	}
-}
+};
 
-export async function getUsersTutorials() {
+export async function getUsersTutorials(storeUserTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_tutorials');
 		console.log('get Users Tutorials', res.data);
+		storeUserTutorials(res.data);
 		return res;
 	} catch (error: any) {
-		alert(error.response.data + 'GET USER TUTORIALS');
+		handleError(error)
 	}
-}
+};
 
-export async function getAllTutorials() {
+export async function getAllTutorials(storeAllTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_all_tutorials');
-		console.log('get All Tutorials', res.data);
 
+		//console.log('get All Tutorials', res.data);
+		await storeAllTutorials(res.data);
 		return res;
 	} catch (error: any) {
-		alert(error.response.data + 'GET ALL TUTORIALS');
+		handleError(error)
+
+	}
+};
+
+export async function getQuestions(body: any, setTutorialQuestions: any) {
+	if (body.tutorial_id) {
+		// console.log('SEND ID', body);
+		try {
+			const res = await axios.post('/api/questions', body);
+			setTutorialQuestions(res.data);
+			return res;
+		} catch (error: any) {
+			console.error(error.response.data, '<= No Questions');
+			// throw error;
+		}
 	}
 }
 
-export async function getQuestions() {
+export async function sendFinishedTest(body: any) {
 	try {
-		const res = await axios.get('/api/questions');
-
+		const res = await axios.post('/api/handle_test_done', body);
+		console.log(res.data);
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		console.error(error.response.data, '<= No Test');
+		// throw error;
 	}
-}
+};
 
-export async function getQuestionsByIds(idArr: any[]) {
+export async function getAllDataBaseQuestions() {
 	try {
-		const res = await axios.get(`/api/questions/${idArr}`);
+		const res = await axios.get('/api/get_all_questions');
 
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error)
 	}
-}
+};
 
-// UPDATE / STATS / ALL / USER PROFILE
+// UPDATE / STATS / ALL / USER /DELETE PROFILE
 export async function updateProfileData(profileData: UpdateProfile) {
 	const formData = new FormData();
 
@@ -222,38 +258,40 @@ export async function updateProfileData(profileData: UpdateProfile) {
 				'Content-Type': 'multipart/form-data',
 			},
 		});
-		console.log('API-updateProfileData', res);
 		return res;
 	} catch (error: any) {
-		console.log('Error updating Profile', error.toJSON());
+		handleError(error)
 		return error;
+		// throw error;
 	}
-}
+};
 
 export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<AxiosResponse<UpdateProfile>> {
 	try {
 		const res = await axios.get<UpdateProfile>(`/api/user`);
-		UpdateProfileInfo(res.data);
+		await UpdateProfileInfo(res.data);
+		// console.log("QUESTIONS",res.data)
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error)
 		throw error;
 	}
-}
+};
 
 export async function getAllUsers(setUsers: SetStateAction<any>) {
 	try {
 		const res: any = await axios.get<UpdateProfile>(`/api/users`);
 		setUsers([...res.data]);
+		return res.data;
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error)
 		throw error;
 	}
-}
+};
 
 export async function getUserStats(email: string) {
 	try {
-		const data = JSON.stringify({email});
+		const data = JSON.stringify({ email });
 		const res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -261,6 +299,21 @@ export async function getUserStats(email: string) {
 		});
 		return res;
 	} catch (error: any) {
-		alert(error.response.data);
+		handleError(error)
 	}
-}
+};
+
+export async function deleteAnUserAccount(email: string) {
+	try {
+		const data = JSON.stringify({ user_delete: email });
+
+		axios.delete('/api/an_user', {
+			data: data,
+			headers: { 'Content-Type': 'application/json' }
+		})
+
+	} catch (error: any) {
+		handleError(error)
+	}
+};
+

@@ -12,6 +12,7 @@ import Stats from '../Components/Stats/Stats';
 import EmployeeInfo from '../Components/EmployeeInfo/EmployeeInfo';
 import PieChartComp from '../Components/PieChart/PieChart';
 import Create from '../Pages/Create';
+import AllUserStats from '../Pages/AllUserStats';
 
 const info = {
 	firstName: 'jon',
@@ -25,7 +26,7 @@ const info = {
 
 export const Router = createBrowserRouter([
 	{
-		path: '/Dashboard',
+		path: '/dashboard',
 		element: <Dashboard />,
 	},
 	{
@@ -56,28 +57,12 @@ export const Router = createBrowserRouter([
 		element: <ContactInfo />,
 	},
 	{
+		path: '/user_stats',
+		element: <AllUserStats />,
+	},
+	{
 		path: '/stats',
 		element: <Stats />,
-	},
-	{
-		path: '/staff',
-		element: (
-			<EmployeeInfo
-				contactInfo={info}
-				taskArr={['fire', 'water', 'earth', 'air']}
-			/>
-		),
-	},
-	{
-		path: '/piechart',
-		element: (
-			<PieChartComp
-				width={120}
-				passed={63}
-				todo={17}
-				failed={13}
-			/>
-		),
 	},
 	{
 		path: '/create',

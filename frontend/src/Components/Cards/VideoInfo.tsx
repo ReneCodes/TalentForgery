@@ -6,13 +6,14 @@ import DialogContent from '@mui/material/DialogContent';
 import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
-import {useTheme} from '@mui/material/styles';
+import theme from '../../config/theme';
 // types
 import {VideoDataT} from '../../utils/types';
 
 export default function VideoInfo({videoData}: VideoDataT) {
+	// Color Theme
+	const {gray, white} = theme.palette;
 	const [open, setOpen] = React.useState(false);
-	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 	const {title, description} = videoData;
 
@@ -36,9 +37,10 @@ export default function VideoInfo({videoData}: VideoDataT) {
 				fullScreen={fullScreen}
 				open={open}
 				onClose={handleClose}
-				aria-labelledby="responsive-dialog-title">
+				aria-labelledby="tutorial details"
+				sx={{textAlign: 'center'}}>
 				<DialogTitle
-					id="responsive-dialog-title"
+					id="tutorial details"
 					variant="h4">
 					{title}
 				</DialogTitle>
@@ -49,7 +51,14 @@ export default function VideoInfo({videoData}: VideoDataT) {
 					<Button
 						autoFocus
 						aria-label="close"
-						onClick={handleClose}>
+						onClick={handleClose}
+						sx={{
+							backgroundColor: gray[700],
+							color: white.main,
+							':hover': {
+								backgroundColor: gray[900],
+							},
+						}}>
 						Close
 					</Button>
 				</DialogActions>

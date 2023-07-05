@@ -11,8 +11,8 @@ const app = express();
 const PORT = process.env.PORT || 8080;
 
 const corsConfig = {
-  origin: `http://localhost:${process.env.FRONT_END_PORT}`, // put in .env
-  credentials: true,
+	origin: `http://localhost:${process.env.FRONT_END_PORT}`, // put in .env
+	credentials: true,
 };
 
 app.use(cors(corsConfig));

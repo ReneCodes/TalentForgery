@@ -14,6 +14,7 @@ import {Box, Card, DialogActions, DialogContent, DialogContentText, DialogTitle}
 import TimedTotorialVideo from './TimedTotorialVideo';
 import TimedQuizzList from './TimedQuizzList';
 
+// Dialog Visual Transistion
 const Transition = React.forwardRef(function Transition(
 	props: TransitionProps & {
 		children: React.ReactElement;
@@ -29,15 +30,17 @@ const Transition = React.forwardRef(function Transition(
 	);
 });
 
-const TimedWatchTutorial: React.FC<any> = ({videoData}) => {
+const TimedWatchTutorial: React.FC<any> = ({videoData, tutorialQuestions}) => {
+	// Color Theme
 	const {primary, white, red, green, secondary, gray} = theme.palette;
+	// local States
 	const [open, setOpen] = React.useState(false);
 	const [openAlert, setOpenAlert] = React.useState(false);
 	const [videoToWatch, setVideoToWatch] = React.useState(true);
 	const [quizzToDo, setQuizzToDo] = React.useState(false);
 	const [quizzDone, setQuizzDone] = React.useState(false);
 
-	const handleClickOpen = () => {
+	const handleClickOpen = async () => {
 		setOpen(true);
 	};
 
@@ -74,7 +77,7 @@ const TimedWatchTutorial: React.FC<any> = ({videoData}) => {
 			<Dialog
 				fullScreen
 				open={open}
-				onClose={handleClose}
+				onClose={handleAlertOpen}
 				TransitionComponent={Transition}>
 				<AppBar sx={{position: 'relative', backgroundColor: primary.main}}>
 					<Toolbar>
@@ -94,16 +97,14 @@ const TimedWatchTutorial: React.FC<any> = ({videoData}) => {
 						<Dialog
 							open={openAlert}
 							onClose={handleAlertClose}
-							aria-labelledby="alert-dialog-title"
+							aria-labelledby="abort-tutorial"
 							aria-describedby="alert-dialog-description">
-							<DialogTitle id="alert-dialog-title">Aborting Tutorial</DialogTitle>
+							<DialogTitle id="abort-tutorial">Alert Aborting Tutorial</DialogTitle>
 							<DialogContent>
 								<DialogContentText id="alert-dialog-description">
 									You are about to about the ufinished tutorial and will lose all progress.
 								</DialogContentText>
-								<DialogContentText id="alert-dialog-description">
-									Are you sure you want to abort tutorial?
-								</DialogContentText>
+								<DialogContentText>Are you sure you want to abort tutorial?</DialogContentText>
 							</DialogContent>
 							<DialogActions>
 								<Button
@@ -153,6 +154,8 @@ const TimedWatchTutorial: React.FC<any> = ({videoData}) => {
 						<TimedQuizzList
 							setQuizzDone={setQuizzDone}
 							setQuizzToDo={setQuizzToDo}
+							tutorialQuestions={tutorialQuestions}
+							videoData={videoData}
 						/>
 					</Box>
 				)}

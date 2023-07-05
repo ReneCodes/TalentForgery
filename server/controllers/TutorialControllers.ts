@@ -25,6 +25,7 @@ const storage = multer.diskStorage({
 	},
 });
 
+const upload = multer({ storage });
 
 const upload = multer({ storage });
 async function createTutorial(req: any, res: Response) {
@@ -34,7 +35,7 @@ async function createTutorial(req: any, res: Response) {
 	await upload.fields([
 		{ name: 'video_url', maxCount: 1 },
 		{ name: 'video_thumb', maxCount: 1 },
-	])(req, res, async (err: Error) => {		
+	])(req, res, async (err: Error) => {
 		const informationIsRight = await validateTutorialData(req, res);
 		if (!informationIsRight) {
 			req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
