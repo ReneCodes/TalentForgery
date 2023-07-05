@@ -36,7 +36,7 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 
 	try {
 		const res = await axios.post('/api/login', formData);
-		navigate('/dashboard');
+		navigate('/');
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;

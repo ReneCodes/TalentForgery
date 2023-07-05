@@ -1,10 +1,12 @@
 // @ts-ignore
-import React, {useEffect} from 'react';
-import {AppBar, Box, IconButton, Toolbar, Typography} from '@mui/material';
+import React, { useEffect } from 'react';
+import { AppBar, Box, IconButton, Toolbar, Typography } from '@mui/material';
 import WindowIcon from '@mui/icons-material/Window';
 import LogoutIcon from '@mui/icons-material/Logout';
-import {LoginAndOut, NavbarStore, PendingUserStore, TutorialStore, userProfileStore} from '../../utils/zustand.store';
-import {YellowTooltip} from '../Tooltips/CustomTooltips';
+import { LoginAndOut, NavbarStore, PendingUserStore, TutorialStore, userProfileStore } from '../../utils/zustand.store';
+import { YellowTooltip } from '../Tooltips/CustomTooltips';
+import { navigateTo } from '../../App';
+
 import {
 	getAllTutorials,
 	getPendingUsers,
@@ -13,29 +15,31 @@ import {
 } from '../../services/Api.service';
 
 export const AppHeader = () => {
-	const {UpdateProfileInfo, getUserRole} = userProfileStore();
-	const {storePendingPeople} = PendingUserStore();
-	const {storeUserTutorials, storeAllTutorials} = TutorialStore();
-	// console.log('APP HEADER pendingPerson', pendingPerson);
-	const {collapsed, toggled, breakpoint, isCollapsed, isToggled} = NavbarStore();
+	const { UpdateProfileInfo, getUserRole } = userProfileStore();
+	const { storePendingPeople } = PendingUserStore();
+	const { storeUserTutorials, storeAllTutorials } = TutorialStore();
+	const { collapsed, toggled, breakpoint, isCollapsed, isToggled } = NavbarStore();
 
 	useEffect(() => {
 		initalLoad();
 	}, []);
 
 	async function initalLoad() {
-		console.log('INITIAL LOAD');
 		await getSingleUserProfileData(UpdateProfileInfo);
-		await getUsersTutorials(storeUserTutorials);
-		const role = await getUserRole();
-		console.log('ROLE:', role);
-		if (role === 'admin') {
-			await getPendingUsers(storePendingPeople);
-			await getAllTutorials(storeAllTutorials);
+		const isPending = await getUserRole();
+		if (isPending !== 'pending') {
+			await getUsersTutorials(storeUserTutorials);
+			const role = await getUserRole();
+			if (role === 'admin') {
+				await getPendingUsers(storePendingPeople);
+				await getAllTutorials(storeAllTutorials);
+			}
+		} else{
+			navigateTo('/pending');
 		}
 	}
 
-	const {MinonLogout} = LoginAndOut();
+	const { MinonLogout } = LoginAndOut();
 
 	function handleNavbar() {
 		if (breakpoint) {
@@ -76,7 +80,7 @@ export const AppHeader = () => {
 					<Box />
 					<Typography
 						variant="overline"
-						sx={{cursor: 'default'}}>
+						sx={{ cursor: 'default' }}>
 						Minon Mentor
 					</Typography>
 				</Box>

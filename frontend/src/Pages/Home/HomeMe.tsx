@@ -36,25 +36,6 @@ export const HomeMe = () => {
 						</Box>
 					))}
 			</Box>
-
-			{/* <Box sx={{}}>
-				{pendingPerson &&
-					pendingPerson.map((user) => (
-						<Box key={user.dataValues.profile_picture}>
-							<EmployeePendingCard user={user} />
-						</Box>
-					))}
-			</Box> */}
-
-			{/* TODO: INSERT TimedTutorials */}
-			{/* <Box sx={styles.noBar}>
-					{mockVideoArray.length > 0 &&
-						mockVideoArray.map((videoData: TutorialVideoDataType) => (
-							<Box key={Math.floor(Math.random() * 99999)}>
-								<WatchTutorial videoData={videoData} />
-							</Box>
-						))}
-				</Box> */}
 			<Typography
 				variant="h4"
 				sx={{m: 2, borderBottom: '2px solid red', borderColor: 'secondary.main', width: 'fit-content'}}>
