@@ -1,12 +1,11 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
+import axios, {AxiosError, AxiosResponse} from 'axios';
 
-import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
-import { NavigateFunction } from 'react-router-dom';
-import { SetStateAction} from 'react';
-import { navigateTo } from '../App';
+import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
+import {NavigateFunction} from 'react-router-dom';
+import {SetStateAction} from 'react';
+import {navigateTo} from '../App';
 
 function handleError(error: AxiosError) {
-
 	switch (error.response?.status) {
 		case 403:
 			navigateTo('/unauthorized');
@@ -19,7 +18,7 @@ function handleError(error: AxiosError) {
 			break;
 		default:
 			return error.response?.data;
-		}
+	}
 }
 
 // LOGIN / AUTH / CREATE  USER
@@ -30,13 +29,13 @@ export async function authUser(navigate: NavigateFunction, callback?: any) {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
 	let errorMessage: string = '';
 
 	try {
-		const res = await axios.post('/api/login', formData)
+		const res = await axios.post('/api/login', formData);
 		navigate('/dashboard');
 	} catch (error: any) {
 		handleError(error);
@@ -44,7 +43,7 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 	}
 
 	return errorMessage;
-};
+}
 
 export async function registerUser(userData: RegisterFormValues, navigate: NavigateFunction) {
 	let errorMessage: string = '';
@@ -71,19 +70,19 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({ email, password }, navigate);
+		loginUser({email, password}, navigate);
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;
 	}
 
 	return errorMessage;
-};
+}
 
 // INVITE / ACCEPT / REJECT / PENDING USER
 export async function getAdminInvite(setLinkText: any) {
 	try {
-		const invite: { data: string } = await axios.get('/api/invite');
+		const invite: {data: string} = await axios.get('/api/invite');
 
 		// COPY INVITE TO THE CLIPBOARD
 		const inviteID = invite.data;
@@ -102,11 +101,11 @@ export async function getAdminInvite(setLinkText: any) {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -120,11 +119,11 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 export async function acceptUser(email: string, tags: string[], filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({ email, tags });
+		const data = JSON.stringify({email, tags});
 		await axios.post('/api/accept_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -136,9 +135,9 @@ export async function acceptUser(email: string, tags: string[], filterPendingPeo
 			return newArr;
 		});
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 	}
-};
+}
 
 export async function getPendingUsers(storePendingPeople: any) {
 	try {
@@ -147,7 +146,7 @@ export async function getPendingUsers(storePendingPeople: any) {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 // TUTORIAL
 export async function postTutorial(data: any) {
@@ -178,7 +177,7 @@ export async function postTutorial(data: any) {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 export async function getUsersTutorials(storeUserTutorials: any) {
 	try {
@@ -187,9 +186,9 @@ export async function getUsersTutorials(storeUserTutorials: any) {
 		storeUserTutorials(res.data);
 		return res;
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 	}
-};
+}
 
 export async function getAllTutorials(storeAllTutorials: any) {
 	try {
@@ -199,10 +198,9 @@ export async function getAllTutorials(storeAllTutorials: any) {
 		await storeAllTutorials(res.data);
 		return res;
 	} catch (error: any) {
-		handleError(error)
-
+		handleError(error);
 	}
-};
+}
 
 export async function getQuestions(body: any, setTutorialQuestions: any) {
 	if (body.tutorial_id) {
@@ -227,7 +225,7 @@ export async function sendFinishedTest(body: any) {
 		console.error(error.response.data, '<= No Test');
 		// throw error;
 	}
-};
+}
 
 export async function getAllDataBaseQuestions() {
 	try {
@@ -235,9 +233,9 @@ export async function getAllDataBaseQuestions() {
 
 		return res;
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 	}
-};
+}
 
 // UPDATE / STATS / ALL / USER /DELETE PROFILE
 export async function updateProfileData(profileData: UpdateProfile) {
@@ -260,11 +258,11 @@ export async function updateProfileData(profileData: UpdateProfile) {
 		});
 		return res;
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 		return error;
 		// throw error;
 	}
-};
+}
 
 export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<AxiosResponse<UpdateProfile>> {
 	try {
@@ -273,10 +271,10 @@ export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<
 		// console.log("QUESTIONS",res.data)
 		return res;
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 		throw error;
 	}
-};
+}
 
 export async function getAllUsers(setUsers: SetStateAction<any>) {
 	try {
@@ -284,14 +282,14 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 		setUsers([...res.data]);
 		return res.data;
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 		throw error;
 	}
-};
+}
 
 export async function getUserStats(email: string) {
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		const res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -299,21 +297,19 @@ export async function getUserStats(email: string) {
 		});
 		return res;
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 	}
-};
+}
 
 export async function deleteAnUserAccount(email: string) {
 	try {
-		const data = JSON.stringify({ user_delete: email });
+		const data = JSON.stringify({user_delete: email});
 
 		axios.delete('/api/an_user', {
 			data: data,
-			headers: { 'Content-Type': 'application/json' }
-		})
-
+			headers: {'Content-Type': 'application/json'},
+		});
 	} catch (error: any) {
-		handleError(error)
+		handleError(error);
 	}
-};
-
+}

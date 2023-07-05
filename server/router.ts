@@ -41,6 +41,8 @@ router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial
 router.post('/questions', authUser, TutorialController.getQuestions);
 router.post('/mark_as_watched', authUser, TutorialController.markTutorial);
 
+router.delete('/tutorial', authAdminUser, TutorialController.deleteTutorial);
+
 // TEST ROUTES
 router.post('/handle_test_done', authUser, TestController.handleTest);
 
