@@ -1,14 +1,11 @@
 import Button from '@mui/material/Button';
 import Typography from '@mui/material/Typography';
-import theme from '../../../config/theme';
 // icons
 import {Box, DialogActions, DialogContent} from '@mui/material';
 import React from 'react';
 import {TutorialStore} from '../../../utils/zustand.store';
 
 const TimedTotorialVideo: React.FC<any> = ({videoData, setVideoToWatch, setQuizzToDo}) => {
-	// Color Theme
-	const {secondary, gray} = theme.palette;
 	// Zustand Store
 	const {video_base_url} = TutorialStore();
 
@@ -43,12 +40,12 @@ const TimedTotorialVideo: React.FC<any> = ({videoData, setVideoToWatch, setQuizz
 					<Button
 						variant="contained"
 						sx={{
-							backgroundColor: secondary.main,
-							color: gray[900],
+							backgroundColor: 'secondary.main',
+							color: 'gray.900',
 							py: 1,
 							px: 3,
 							':hover': {
-								backgroundColor: secondary[900],
+								backgroundColor: 'secondary.900',
 							},
 						}}
 						onClick={handleVideoDone}

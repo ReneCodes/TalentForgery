@@ -1,8 +1,8 @@
-import { Container, Box, Button, Typography, Dialog, IconButton, TextField } from '@mui/material';
-import { useState } from 'react';
-import { getAdminInvite, acceptUser, rejectUser } from '../services/Api.service';
-import { PendingUserStore, TutorialTagStore } from '../utils/zustand.store';
-import UserCard from "../Components/UserCard/UserCard";
+import {Container, Box, Button, Typography, Dialog, IconButton, TextField} from '@mui/material';
+import {useState} from 'react';
+import {getAdminInvite, acceptUser, rejectUser} from '../services/Api.service';
+import {PendingUserStore, TutorialTagStore} from '../utils/zustand.store';
+import UserCard from '../Components/UserCard/UserCard';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from '../config/theme';
 import CloseIcon from '@mui/icons-material/Close';
@@ -10,20 +10,19 @@ import DialogActions from '@mui/material/DialogActions';
 import DialogContent from '@mui/material/DialogContent';
 import DialogTitle from '@mui/material/DialogTitle';
 import EmployeePendingInfo from '../Components/Cards/EmployeePendingInfo';
-import { PendingPerson } from '../@types/Types';
+import {PendingPerson} from '../@types/Types';
+import EmployeePendingCard from '../Components/Cards/EmployeePendingCard';
 
 const Dashboard = () => {
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
 
 	const [open, setOpen] = useState<boolean>(false);
 	const [error, setError] = useState<string>('');
-	const { selctedTags, storeSelectedTags } = TutorialTagStore();
+	const {selctedTags, storeSelectedTags} = TutorialTagStore();
 
 	const [user, setUser] = useState<any>({});
 
-
-	const { pendingPerson, filterPendingPeople } = PendingUserStore();
-	const { gray, white, primary, secondary, red } = theme.palette;
+	const {pendingPerson, filterPendingPeople} = PendingUserStore();
 
 	const handleClickOpen = (user: PendingPerson) => {
 		setUser(user);
@@ -48,10 +47,8 @@ const Dashboard = () => {
 		handleClose();
 	};
 
-
 	return (
-
-		<Container
+		<Box
 			sx={{
 				minHeight: '100%',
 				height: 'max-content',
@@ -60,40 +57,52 @@ const Dashboard = () => {
 				gap: 4,
 				flexDirection: 'column',
 				justifyContent: 'start',
-				position: 'relative'
+				position: 'relative',
+				alignItems: {xs: 'center', sm: 'flex-start'},
 			}}>
-
-
-			<Box sx={{ display: 'flex', flexWrap: 'wrap', gap: '20px' }}>
-				{pendingPerson[0] ?
+			<Box sx={{display: 'flex', flexWrap: 'wrap', gap: '20px', p: 0}}>
+				{pendingPerson[0] ? (
 					<Box sx={{display: 'flex', flexDirection: 'column', gap: 1}}>
-						<Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px' }}>
-							<Typography variant="h5">Total Pending Users: {pendingPerson.length}</Typography>
+						<Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px', pt: 2}}>
+							<Typography
+								variant="h4"
+								sx={{m: 2, borderBottom: '2px solid', borderColor: 'primary.main', width: 'fit-content'}}>
+								Total Pending Users: {pendingPerson.length}
+							</Typography>
 						</Box>
-						{pendingPerson.map((user) => (
+						<Box sx={{m: 2}}>
+							{pendingPerson &&
+								pendingPerson.map((user) => (
+									<Box key={user.dataValues.profile_picture}>
+										<EmployeePendingCard user={user} />
+									</Box>
+								))}
+						</Box>
+						{/* {pendingPerson.map((user) => (
 							<Box key={user.dataValues.profile_picture}>
-								<UserCard first_name={user.dataValues.first_name} last_name={user.dataValues.last_name}
-									email={'Invited by: ' + user.invited_by.first_name} profile_picture={user.dataValues.profile_picture}
+								<UserCard
+									first_name={user.dataValues.first_name}
+									last_name={user.dataValues.last_name}
+									email={'Invited by: ' + user.invited_by.first_name}
+									profile_picture={user.dataValues.profile_picture}
 									callback={() => handleClickOpen(user)}
 								/>
 							</Box>
-						))}
-					</Box> :
-					<Box sx={{ position: 'absolute' }}>
-						<Typography variant='h4'>
-							You have no users pending
-						</Typography>
+						))} */}
 					</Box>
-				}
+				) : (
+					<Box sx={{position: 'absolute'}}>
+						<Typography variant="h4">You have no users pending</Typography>
+					</Box>
+				)}
 			</Box>
 
-
-			<Dialog
+			{/* <Dialog
 				fullScreen={fullScreen}
 				open={open}
 				onClose={handleClose}
 				aria-labelledby="responsive-dialog-title">
-				<Box sx={{ position: 'relative' }}>
+				<Box sx={{position: 'relative'}}>
 					<IconButton
 						edge="start"
 						color="inherit"
@@ -117,18 +126,18 @@ const Dashboard = () => {
 				</Box>
 				<DialogTitle
 					id="responsive-dialog-title"
-					sx={{ textAlign: 'center' }}>
+					sx={{textAlign: 'center'}}>
 					{
 						<Typography
 							variant="overline"
-							sx={{ fontSize: '24px' }}>
-							Pending User
+							sx={{fontSize: '24px'}}>
+							Pending Userrrrrr
 						</Typography>
 					}
 				</DialogTitle>
 				<DialogContent>{<EmployeePendingInfo user={user} />}</DialogContent>
-				<DialogActions sx={{ borderTop: '1px solid' }}>
-					<Typography sx={{ color: red[900], mr: 3 }}>{error}</Typography>
+				<DialogActions sx={{borderTop: '1px solid'}}>
+					<Typography sx={{color: red[900], mr: 3}}>{error}</Typography>
 					<Button
 						variant="outlined"
 						autoFocus
@@ -144,10 +153,8 @@ const Dashboard = () => {
 						Accept
 					</Button>
 				</DialogActions>
-			</Dialog>
-
-
-		</Container >
+			</Dialog> */}
+		</Box>
 	);
 };
 

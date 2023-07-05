@@ -2,7 +2,6 @@ import {SyntheticEvent} from 'react';
 import {Button, Card, FormControl, FormControlLabel, Radio, RadioGroup} from '@mui/material';
 import {useEffect, useState} from 'react';
 import ArrowForwardIosIcon from '@mui/icons-material/ArrowForwardIos';
-import theme from '../../../config/theme';
 import AssignmentTurnedInIcon from '@mui/icons-material/AssignmentTurnedIn';
 import {sendFinishedTest} from '../../../services/Api.service';
 
@@ -120,17 +119,17 @@ const styles = {
 		p: 3,
 	},
 	btn_next: {
-		backgroundColor: theme.palette.secondary.main,
-		color: theme.palette.gray[900],
+		backgroundColor: 'secondary.main',
+		color: 'gray.900',
 		':hover': {
-			backgroundColor: theme.palette.secondary[900],
+			backgroundColor: 'secondary.900',
 		},
 	},
 	btn_done: {
-		backgroundColor: theme.palette.green[800],
-		color: theme.palette.gray[900],
+		backgroundColor: 'green.800',
+		color: 'white.main',
 		':hover': {
-			backgroundColor: theme.palette.green[900],
+			backgroundColor: 'green.900',
 		},
 	},
 };

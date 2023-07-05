@@ -1,8 +1,6 @@
-import {FC} from 'react';
-import {Container, Typography, Box, Paper, Divider, Stack, Avatar, Button, colors} from '@mui/material';
+import {Container, Typography, Box, Paper, Divider, Stack, Avatar} from '@mui/material';
 
 import {userProfileStore} from '../../utils/zustand.store';
-import theme from '../../config/theme';
 import TagsList from '../Create/TagsList';
 
 const EmployeePendingInfo = ({user}: any) => {
@@ -16,8 +14,6 @@ const EmployeePendingInfo = ({user}: any) => {
 
 	// Profile Info
 	const localProfileAvatar = `${avatar_url_path}${profile_picture}`;
-	// Theme
-	const {gray} = theme.palette;
 
 	return (
 		<Container>
@@ -76,7 +72,9 @@ const EmployeePendingInfo = ({user}: any) => {
 							elevation={1}
 							square
 							sx={styles.paper}>
-							<Typography sx={styles.detail}>{phone ? phone : <span style={{color: gray[300]}}>none</span>}</Typography>
+							<Typography sx={styles.detail}>
+								{phone ? phone : <span style={{color: 'gray.300'}}>none</span>}
+							</Typography>
 							<Divider />
 							<Typography sx={styles.helper}>Phone</Typography>
 						</Paper>

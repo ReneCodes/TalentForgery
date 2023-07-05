@@ -125,6 +125,7 @@ export const TutorialTagStore = create<TagsList>((set) => ({
 // import {VideoDataT} from './types';
 interface TutorialStore {
 	video_base_url: string;
+	video_thumb_base_url: string;
 	userTutorials: any[];
 	allTutorials: any[];
 	storeUserTutorials: (tutorialsArr: any[]) => void;
@@ -132,6 +133,7 @@ interface TutorialStore {
 }
 export const TutorialStore = create<TutorialStore>((set) => ({
 	video_base_url: 'http://localhost:3001/videos/',
+	video_thumb_base_url: 'http://localhost:3001/images/thumbnails/',
 	userTutorials: [[{}], [{}]],
 	allTutorials: [{}],
 	storeUserTutorials: (tutorialsArr) => set(() => ({userTutorials: tutorialsArr})),
