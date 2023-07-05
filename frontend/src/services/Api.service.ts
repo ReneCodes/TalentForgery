@@ -66,7 +66,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		loginUser({ email, password }, navigate);
+		await loginUser({ email, password }, navigate);
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;
@@ -85,7 +85,7 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 		});
 
 		filterPendingPeople((currData: any[]) => {
-			const newArr = currData.filter((person) => person.dataValues.email !== email);
+			const newArr = currData.filter((person) => person.email !== email);
 			return newArr;
 		});
 	} catch (error: any) {
@@ -103,7 +103,7 @@ export async function acceptUser(email: string, tags: string[], filterPendingPeo
 		});
 
 		filterPendingPeople((currData: any[]) => {
-			const newArr = currData.filter((person) => person.dataValues.email !== email);
+			const newArr = currData.filter((person) => person.email !== email);
 			return newArr;
 		});
 	} catch (error: any) {
@@ -242,7 +242,6 @@ export async function getSingleUserProfileData(UpdateProfileInfo: any): Promise<
 	try {
 		const res = await axios.get<UpdateProfile>(`/api/user`);
 		await UpdateProfileInfo(res.data);
-		// console.log("QUESTIONS",res.data)
 		return res;
 	} catch (error: any) {
 		handleError(error);
@@ -348,4 +347,14 @@ export async function validateCode(
 	}
 
 	return res;
+};
+
+// LOGOUT
+export async function logout() {
+	try {
+		await axios.delete('/api/logout');
+		navigateTo('/');
+	} catch (error: any) {
+		handleError(error);
+	}
 };

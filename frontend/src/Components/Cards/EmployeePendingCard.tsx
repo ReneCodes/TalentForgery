@@ -45,6 +45,7 @@ export default function EmployeePendingCard({ user }: any) {
 		}
 		setError('Select at least on tag');
 	};
+
 	const handleReject = async () => {
 		storeSelectedTags([]);
 		await rejectUser(email, filterPendingPeople);

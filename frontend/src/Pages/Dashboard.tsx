@@ -1,17 +1,10 @@
-import { Container, Box, Button, Typography, Dialog, IconButton, TextField } from '@mui/material';
-import { useState } from 'react';
-import { acceptUser, rejectUser } from '../services/Api.service';
-import { PendingUserStore, TutorialTagStore } from '../utils/zustand.store';
-import UserCard from '../Components/UserCard/UserCard';
-import useMediaQuery from '@mui/material/useMediaQuery';
-import theme from '../config/theme';
+import { Box,Typography, } from '@mui/material';
+import { PendingUserStore } from '../utils/zustand.store';
 import EmployeePendingCard from '../Components/Cards/EmployeePendingCard';
 
 const Dashboard = () => {
 
 	const { pendingPerson } = PendingUserStore();
-	console.log(pendingPerson, 'PENDING PERSON');
-
 
 	return (
 		<Box
