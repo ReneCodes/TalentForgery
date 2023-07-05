@@ -4,8 +4,16 @@ const UserController = require('./controllers/UserController');
 const InviteController = require('./controllers/InviteController');
 const TutorialController = require("./controllers/TutorialControllers");
 const TestController = require('./controllers/TestController');
+const ValidateInformation = require('./controllers/ValidateInformation');
 
 const { authUser, authAdminUser, userExists } = require('./middleware/AuthMiddleware');
+
+// VALIDATION ROUTES
+router.post("/validate_email", ValidateInformation.validateEmail);
+router.post("/validate_number", ValidateInformation.validateNumber);
+
+router.post("/confirm_email", ValidateInformation.confirmEmail);
+router.post("/confirm_number", ValidateInformation.confirmNumber);
 
 // AUTHENTICATION ROUTES
 router.post("/register", UserController.registerUser);
@@ -31,6 +39,7 @@ router.get('/get_all_questions', authUser, TutorialController.getAllQuestions);
 
 router.post('/create_tutorial', authAdminUser, TutorialController.createTutorial);
 router.post('/questions', authUser, TutorialController.getQuestions);
+router.post('/mark_as_watched', authUser, TutorialController.markTutorial);
 
 // TEST ROUTES
 router.post('/handle_test_done', authUser, TestController.handleTest);

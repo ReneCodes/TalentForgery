@@ -8,15 +8,15 @@ import NewCreate from '../Pages/NewCreate';
 // import ErrorPage from '../Pages/ErrorPage';
 import AllUserStats from '../Pages/AllUserStats';
 import { userProfileStore } from '../utils/zustand.store';
-
+import Unauthorized from '../Pages/Unauthorized';
+import ServerDown from '../Pages/serverDown';
 export const AuthenticatedRoutes = () => {
 
 	const profile = userProfileStore();
-	console.log();
-
 
 	return (
 		<Routes>
+
 			<Route
 				path="/"
 				element={<HomeMe />}
@@ -47,6 +47,22 @@ export const AuthenticatedRoutes = () => {
 					</>
 				)
 			}
+			<Route
+				path="/unauthorized"
+				element={<Unauthorized />}
+			/>
+			<Route
+				path="/not_found"
+				element={<ServerDown />}
+			/>
+			<Route
+				path="/server_down"
+				element={<ServerDown />}
+			/>
+			<Route
+				path="/*"
+				element={<ServerDown />}
+			/>
 		</Routes>
 	);
 };

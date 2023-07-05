@@ -40,6 +40,11 @@ const User = sequelize.define('user', {
 		type: DataTypes.TEXT,
 		allowNull: false,
 	},
+	tutorials_watched: {
+		type: DataTypes.ARRAY(DataTypes.STRING),
+		allowNull: false,
+		defaultValue: [],
+	},
 	invited_by: {
 		type: DataTypes.TEXT,
 		allowNull: true,
@@ -179,6 +184,21 @@ const Question = sequelize.define('question', {
 	},
 });
 
+const Codes = sequelize.define('code', {
+	contact: {
+		type: DataTypes.TEXT,
+		allowNull: false,
+	},
+	code: {
+		type: DataTypes.TEXT,
+		allowNull: false
+	},
+	confirm: {
+		type: DataTypes.TEXT,
+		allowNull: false,
+	},
+});
+
 if (process.env.ENV !== 'Test') {
 	// SETTING UP THE FOREIGN KEY OF THE INVITES TABLE
 	User.hasOne(Invites, {foreignKey: 'user_created', sourceKey: 'user_id'});
@@ -197,4 +217,4 @@ if (process.env.ENV !== 'Test') {
 	await sequelize.sync({alter: true});
 })();
 
-module.exports = {User, Tutorial, Invites, Stats, Question};
+module.exports = {User, Tutorial, Invites, Stats, Question, Codes};
