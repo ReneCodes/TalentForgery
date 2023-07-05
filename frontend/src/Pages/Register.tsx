@@ -86,9 +86,10 @@ const Register = () => {
   };
 
   const handleRegisterClick = async (formData: RegisterFormValues) => {
-    setDataSaved({...formData});
-    setShowValidateCode(true);
-    setSend([formData.email, formData.personal_email, formData.phone])
+    await setDataSaved({...formData});
+    // setShowValidateCode(true);
+    // setSend([formData.email, formData.personal_email, formData.phone])
+    closeWindowAndRegister();
   };
 
   const closeWindowAndRegister = async () => {

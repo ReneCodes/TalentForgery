@@ -18,12 +18,11 @@ export default function EmployeePendingCard({ user }: any) {
 
 	// Zustand Store
 	const { avatar_url_path } = userProfileStore();
-	const { pendingPerson, filterPendingPeople } = PendingUserStore();
+	const { filterPendingPeople } = PendingUserStore();
 	const { selctedTags, storeSelectedTags } = TutorialTagStore();
 
 	// Destructuring User
-	const { dataValues, invited_by } = user;
-	const pendingUser = dataValues;
+	const pendingUser = user;
 	const { first_name, last_name, profile_picture, email } = pendingUser;
 
 	// Theme
@@ -41,8 +40,6 @@ export default function EmployeePendingCard({ user }: any) {
 	};
 
 	const handleAccept = async () => {
-		// console.log('Accept', email, filterPendingPeople, acceptUser);
-		// const tags = ['hello', 'world'];
 		if (selctedTags.length > 0) {
 			await acceptUser(email, selctedTags, filterPendingPeople);
 		}
@@ -52,11 +49,6 @@ export default function EmployeePendingCard({ user }: any) {
 		storeSelectedTags([]);
 		await rejectUser(email, filterPendingPeople);
 	};
-
-	// TODO: Delete for production
-	// React.useEffect(() => {
-	// 	console.log('UseEffect PENDING', pendingPerson);
-	// }, [pendingPerson]);
 
 	return (
 		<div>
@@ -69,11 +61,6 @@ export default function EmployeePendingCard({ user }: any) {
 						<Box sx={{ color: gray[900] }}>
 							<Typography variant="h6">
 								{first_name} {last_name}
-							</Typography>
-							<Typography
-								variant="caption"
-								sx={{ fontSize: '12px', color: gray[700] }}>
-								Invited By: {invited_by.first_name}{' '}
 							</Typography>
 						</Box>
 
