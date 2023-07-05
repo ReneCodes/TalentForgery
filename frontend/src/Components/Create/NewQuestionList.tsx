@@ -3,32 +3,39 @@ import { getQuestions } from "../../services/Api.service";
 import { QuestionType } from "../../utils/types";
 
 interface QuestionListComp {
-  questions: QuestionType[]
+  questions: QuestionType[] | {question: QuestionType}[]
 }
 
 const QuestionList: FC<QuestionListComp> = ({questions}) => {
-  const [questionList, setQuestionList] = useState(questions);
+  const [questionList, setQuestionList] = useState<{question: QuestionType}[]>([]);
+
+  useEffect(() => console.log(questionList), [questionList]);
 
   useEffect(() => {
-    console.log(questions[0] && typeof questions[0] === 'string');
     if(questions[0] && typeof questions[0] === 'string') {
+      console.log(questions);
       (async() => {
-        // TODO tutorial id not question ids
-        await getQuestions(questions, setQuestionList);
+        await getQuestions({tutorial_id: questions}, setQuestionList);
       })()
+    } else if (questionList === []) {
+      //@ts-ignore
+      setQuestionList(questions.map((question) => ({ question: question.question })));
     }
   }, [questions])
+
   return <div>
-    {questionList.map((question, key) => (
+    {Array.isArray(questionList) && questionList.map((question, key) => (
       <div key={key}>
-        <h2>{question.question}</h2>
-        {question.options.map((option, key) => (
+        <h2>{question.question.question}</h2>
+        {question.question.options.map((option, key) => (
           <h3 key={key}>{key}: {option}</h3>
         ))}
-        <h3>Answer: {question.answer}</h3>
+        <h3>Answer: {question.question.answer}</h3>
       </div>
     ))}
   </div>
 }
 
 export default QuestionList;
+
+// setQuestionList(questions.map((question) => ({ question: question })));

@@ -21,6 +21,7 @@ export interface QuestionType {
 }
 
 export interface DataType {
+	tutorial_id?: string;
 	title: string;
 	video_url: any;
   image_url?: any;

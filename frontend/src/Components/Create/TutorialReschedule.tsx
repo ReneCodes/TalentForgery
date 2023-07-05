@@ -65,7 +65,7 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
         </div>
         <div>
           <Divider />
-          <QuestionList questions={tutorial.question_ids} />
+          <QuestionList questions={tutorial.question_ids || tutorial.tutorial_id} />
         </div>
         <Divider />
         <div className='quiz_line schedule_line'>
