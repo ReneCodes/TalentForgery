@@ -18,7 +18,6 @@ function AllUserStats() {
   const [showStats, setShowStats] = useState(false);
   const [search, setSearch] = useState<string>('');
 
-<<<<<<< HEAD
   const [staffStats, setStaffStats] = useState<{
     questionsRight: number,
     questionsWrong: number,
@@ -50,20 +49,6 @@ function AllUserStats() {
     setUserStats(res.data);
     setUserForStats(user);
     setShowStats(true);
-=======
-	useEffect(() => {
-		(async () => {
-			const data = await getAllUsers(setUsersSearched);
-			setUsers(data);
-		})();
-	}, []);
-
-	async function enableUserStats(user: User) {
-		const res: any = await getUserStats(user.email);
-		setUserStats(res.data);
-		setUserForStats(user);
-		setShowStats(true);
->>>>>>> 9c482a3db2099c0adada5387439a716d10a36fe3
   };
 
   async function deleteAccount() {
