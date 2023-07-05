@@ -71,7 +71,7 @@ const validateEmail = async (req: Request, res: Response) => {
   </html>
   `;
 
-  sendEmail(html, email);
+  sendEmail(html, email, 'Confirm email Minon Mentor');
   return res.status(200).json("Check your email");
 };
 
