@@ -8,7 +8,7 @@ import { LocalizationProvider } from '@mui/x-date-pickers/LocalizationProvider';
 import { DateTimePicker } from '@mui/x-date-pickers/DateTimePicker';
 
 interface ScheduleComp {
-  onData: any;
+  onData: (childData: {startDate: Date, endDate: Date}) => void
   open: boolean;
   onClose: () => void;
 }

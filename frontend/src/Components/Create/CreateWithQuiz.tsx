@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
-import Question from './NewQuestion';
+import Question from './Question';
 import { DataType, QuestionType } from '../../utils/types';
 import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';
@@ -18,7 +18,7 @@ interface FormInfo {
 	tags: string[];
 }
 
-const CreateWithQuiz: FC<{onData: any}> = ({onData}) => {
+const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) => {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
@@ -65,22 +65,22 @@ const CreateWithQuiz: FC<{onData: any}> = ({onData}) => {
     handleClose();
   };
 
-  const handleScheduleData = async (data: { startDate: string, endDate: string }) => {
+  const handleScheduleData = async (data: { startDate: Date, endDate: Date }) => {
     if (parseInt(length) > questions.length) {
       alert('Too few questions');
     } else {
       try {
         const tutorial = await postTutorial({
           ...formInfo,
-          access_date: data.startDate,
-          due_date: data.endDate,
+          access_date: `${data.startDate}`,
+          due_date: `${data.endDate}`,
           question_ids: questions
         });
         console.log(tutorial);
         setFormInfo((res) => ({
           ...res,
-          access_date: data.startDate,
-          due_date: data.endDate,
+          access_date: `${data.startDate}`,
+          due_date: `${data.endDate}`,
           question_ids: questions
         }));
       } catch (err) {
