@@ -3,7 +3,7 @@ import Button from '@mui/material/Button';
 import Dialog from '@mui/material/Dialog';
 import TutorialForm from './TutorialForm';
 import VideoPreview from './VideoPreview';
-import Question from './NewQuestion';
+import Question from './Question';
 import { DataType, QuestionType } from '../../utils/types';
 import { Divider, TextField } from '@mui/material';
 import Schedule from './Schedule';

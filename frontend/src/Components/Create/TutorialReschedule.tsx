@@ -2,7 +2,7 @@ import { Button, Dialog, DialogTitle, Divider } from "@mui/material";
 import { FC, useState} from "react";
 import { postTutorial } from "../../services/Api.service";
 import { DataType } from "../../utils/types";
-import QuestionList from "./NewQuestionList";
+import QuestionList from "./QuestionList";
 import Schedule from "./Schedule";
 import VideoPreview from "./VideoPreview";
 
