@@ -5,20 +5,6 @@ import theme from '../../config/theme';
 import { ChangeEvent, useEffect, useState } from "react";
 import { sendValidation, validateCode } from "../../services/Api.service";
 
-
-type RegisterFormValues = {
-  profile_image: File;
-  first_name: string;
-  last_name: string;
-  email: string;
-  department: string;
-  password: string;
-  confirmPassword: string;
-  personal_email: string;
-  phone: string;
-};
-
-
 export const CodesValidation = (props: any) => {
 
   const {
@@ -83,7 +69,11 @@ export const CodesValidation = (props: any) => {
 
   async function confirmCode() {
 
-    if (indexSend[0] === 0 || indexSend[0] === 1) {
+    if (error === 'Email already registered') {
+      setError('Change the email');
+    } else if (error === 'Number already registered') {
+      setError('Change the phone number');
+    } else if (indexSend[0] === 0 || indexSend[0] === 1) {
 
       const codeValidated: any = await validateCode({ email: sending }, value, whereSend, setError);
       if (codeValidated?.data === 'Right Code') {
@@ -122,34 +112,38 @@ export const CodesValidation = (props: any) => {
         onClose={closeValidateCode}
         aria-labelledby="responsive-dialog-title"
       >
+        <Box sx={{
+          position: 'relative',
+          width: '500px', height: '400px', display: 'flex', justifyContent: 'center', alignItems: 'center'
+        }}>
+          <DialogContent sx={{ backgroundColor: '#ffffff', p: '0', textAlign: 'center' }} >
+            <Button sx={{ position: 'absolute', right: 0, top: 5, color: 'black' }} onClick={closeValidateCode} >X</Button>
 
-        <DialogContent sx={{ position: 'relative', backgroundColor: '#ffffff', p: '30px 90px', textAlign: 'center' }} >
-          <Button sx={{ position: 'absolute', right: 0, top: 5, color: 'black' }} onClick={closeValidateCode} >X</Button>
-
-          <Box>
-            <Box mb={2}>
-              <Typography variant="h5">Check your {whereSend}</Typography>
-              <Typography variant="h6">{sending}</Typography>
+            <Box>
+              <Box mb={2}>
+                <Typography variant="h5">Check your {whereSend}</Typography>
+                <Typography variant="h6">{sending}</Typography>
+              </Box>
+              <TextField value={value} onChange={handleChange}
+                inputProps={{
+                  maxLength: 4,
+                  pattern: '\\d*',
+                  style: { fontSize: '30px' },
+                }} sx={{ width: '100px', border: 1 }} />
             </Box>
-            <TextField value={value} onChange={handleChange}
-              inputProps={{
-                maxLength: 4,
-                pattern: '\\d*',
-                style: { fontSize: '30px' },
-              }} sx={{ width: '100px', border: 1 }} />
-          </Box>
 
-          <Typography variant="h5" color='#290000' my={2}>
-            {error}
-          </Typography>
-          <Button sx={{
-            position: 'relative', margin: 'auto', color: '#ffffff', p: 1, mt: 1,
-            backgroundColor: '#0a4e24', ':hover': { backgroundColor: '#05a341' }
-          }} onClick={confirmCode} >
-            Confirm Code
-          </Button>
+            <Typography variant="h5" color='#290000' my={2}>
+              {error}
+            </Typography>
+            <Button sx={{
+              position: 'relative', margin: 'auto', color: '#ffffff', p: 1, mt: 1,
+              backgroundColor: '#0a4e24', ':hover': { backgroundColor: '#05a341' }
+            }} onClick={confirmCode} >
+              Confirm Code
+            </Button>
 
-        </DialogContent>
+          </DialogContent>
+        </Box>
       </Dialog>
     </div>
   );

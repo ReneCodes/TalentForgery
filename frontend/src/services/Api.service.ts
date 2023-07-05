@@ -305,13 +305,14 @@ export async function sendValidation(
 			data = JSON.stringify({ number: contact.number });
 		}
 
-		axios.post(`/api/${whereToSend}`, data, {
+		const res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
 	} catch (error: any) {
+
 		handleError(error);
-		setError((error as Error).message);
+		setError(error.response?.data);
 	}
 };
 
@@ -335,7 +336,7 @@ export async function validateCode(
 			data = JSON.stringify({ number: contact.number, code });
 		}
 
-		const response = axios.post(`/api/${whereToSend}`, data, {
+		const response = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
@@ -343,7 +344,7 @@ export async function validateCode(
 
 	} catch (error: any) {
 		handleError(error);
-		setError((error as Error).message);
+		setError(error.response?.data);
 	}
 
 	return res;
