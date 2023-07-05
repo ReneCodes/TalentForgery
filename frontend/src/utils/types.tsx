@@ -23,10 +23,9 @@ export interface QuestionType {
 export interface DataType {
 	title: string;
 	video_url: any;
-  image_url: any;
+  image_url?: any;
 	video_thumb?: string;
 	tags: string[];
-	image_url: any;
 	description: string;
 	question_ids: QuestionType[];
 	questions_shown: number;
