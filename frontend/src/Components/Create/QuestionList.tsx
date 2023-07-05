@@ -18,7 +18,7 @@ const QuestionList: FC<QuestionListComp> = ({questions}) => {
       (async() => {
         await getQuestions({tutorial_id: questions}, setQuestionList);
       })()
-    } else if (questionList === []) {
+    } else if (questionList.length === 0) {
       //@ts-ignore
       setQuestionList(questions.map((question) => ({ question: question.question })));
     }

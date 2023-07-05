@@ -35,8 +35,28 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 	let errorMessage: string = '';
 
 	try {
-		await axios.post('/api/login', formData);
-		navigate('/');
+		const res = await axios.post('/api/login', formData);
+		if (res.data) {
+			navigate('/');
+		} else {
+			navigate('/login');
+		}
+	} catch (error: any) {
+		handleError(error);
+		errorMessage = error.response.data;
+	}
+
+	return errorMessage;
+}
+
+export async function logoutUser(navigate?: NavigateFunction) {
+	let errorMessage: string = '';
+
+	try {
+		const res = await axios.delete('/api/logout');
+		if (res && navigate) {
+			navigate('/');
+		}
 	} catch (error: any) {
 		handleError(error);
 		errorMessage = error.response.data;
@@ -199,7 +219,19 @@ export async function sendFinishedTest(body: any) {
 	}
 }
 
+export async function markTutorialAsDone(body: any) {
+	try {
+		const res = await axios.post('/api/mark_as_watched', body);
+		console.log(res.data);
+		return res;
+	} catch (error: any) {
+		console.error(error.response.data, '<= No Test');
+		// throw error;
+	}
+}
+
 export async function getAllDataBaseQuestions(): Promise<QuestionType[]> {
+
 	try {
 		const res = await axios.get('/api/get_all_questions');
 		console.log(res);
@@ -362,14 +394,4 @@ export async function validateCode(
 	}
 
 	return res;
-};
-
-// LOGOUT
-export async function logout() {
-	try {
-		await axios.delete('/api/logout');
-		navigateTo('/');
-	} catch (error: any) {
-		handleError(error);
-	}
 };

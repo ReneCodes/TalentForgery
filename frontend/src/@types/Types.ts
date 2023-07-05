@@ -58,7 +58,7 @@ export interface SmallVideoData {
 		description: string;
 		questions_shown: string;
 		access_date: string;
-		tags: null;
+		tags?: null | string[];
 		due_date: string;
 	};
 }

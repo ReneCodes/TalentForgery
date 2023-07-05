@@ -41,6 +41,15 @@ export const AppHeader = () => {
 
 	const { MinonLogout } = LoginAndOut();
 
+	async function handleLogout() {
+		logoutUser();
+		MinonLogout();
+		// const logoutAnwser = await logoutUser();
+		// if (logoutAnwser) {
+		// 	MinonLogout();
+		// }
+	}
+
 	function handleNavbar() {
 		if (breakpoint) {
 			isCollapsed(!collapsed);
@@ -98,7 +107,7 @@ export const AppHeader = () => {
 						arrow>
 						<IconButton
 							aria-label="Logout"
-							onClick={MinonLogout}
+							onClick={handleLogout}
 							color="inherit">
 							<LogoutIcon />
 						</IconButton>

@@ -1,9 +1,10 @@
 const Pending = () => {
-  return(
-    <>
-    <h3>You are pending, a staff will accept you as fast as possible</h3>
-    </>
-  )
+  return (
+    <div>
+      <h1>Pending Page</h1>
+      <p>Your request is pending. Please wait for it to be processed.</p>
+    </div>
+  );
 };
 
 export default Pending;
