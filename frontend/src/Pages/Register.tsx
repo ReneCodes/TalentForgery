@@ -23,6 +23,7 @@ import { Navigate } from "react-router";
 import { registerUser } from "../services/Api.service";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { LoginAndOut } from "../utils/zustand.store";
+import { CodesValidation } from "../Components/CodesValidation/CodesValidation";
 
 // import './register.css';
 
@@ -45,6 +46,11 @@ const Register = () => {
   const [file, setFile] = useState<File>({} as File);
   const navigate: NavigateFunction = useNavigate();
   const { MinonLogin } = LoginAndOut();
+
+  const [dataSaved, setDataSaved] = useState<RegisterFormValues | undefined>(undefined);
+
+  const [send, setSend] = useState<string[]>([]);
+  const [showValidateCode, setShowValidateCode] = useState<boolean>(false);
 
   const registerForm = useForm<RegisterFormValues>({
     defaultValues: {
@@ -79,29 +85,40 @@ const Register = () => {
     return true;
   };
 
-  const handleRegister = async (formData: RegisterFormValues) => {
-    const checkPassword = handlePasswordCheck(
-      formData.password,
-      formData.confirmPassword
-    );
+  const handleRegisterClick = async (formData: RegisterFormValues) => {
+    setDataSaved({...formData});
+    setShowValidateCode(true);
+    setSend([formData.email, formData.personal_email, formData.phone])
+  };
 
-    if (checkPassword) {
-      const registerAnswer = await registerUser(formData, navigate);
-      if (registerAnswer) setRegisterError(registerAnswer);
-      else {
-        MinonLogin();
-        reset({
-          profile_image: {} as File,
-          first_name: "",
-          last_name: "",
-          email: "",
-          department: "",
-          personal_email: "",
-          password: "",
-          confirmPassword: "",
-          phone: "",
-        });
-        <Navigate to={"/home"} />;
+  const closeWindowAndRegister = async () => {
+    closeValidateCode();
+
+    if(dataSaved){
+      const formData = dataSaved;
+      const checkPassword = handlePasswordCheck(
+        formData.password,
+        formData.confirmPassword
+      );
+
+      if (checkPassword) {
+        const registerAnswer = await registerUser(formData, navigate);
+        if (registerAnswer) setRegisterError(registerAnswer);
+        else {
+          MinonLogin();
+          reset({
+            profile_image: {} as File,
+            first_name: "",
+            last_name: "",
+            email: "",
+            department: "",
+            personal_email: "",
+            password: "",
+            confirmPassword: "",
+            phone: "",
+          });
+          <Navigate to={"/home"} />;
+        }
       }
     }
   };
@@ -113,8 +130,21 @@ const Register = () => {
     }
   };
 
+  const closeValidateCode = () => {
+    setShowValidateCode(false);
+  };
+
   return (
     <Container maxWidth="md" sx={{ height: "100%" }}>
+      {showValidateCode &&
+        <CodesValidation
+          whoToSend={send}
+          showValidateCode={showValidateCode}
+          closeValidateCode={closeValidateCode}
+          setShowValidateCode={setShowValidateCode}
+          closeWindowAndRegister={closeWindowAndRegister}
+        />
+      }
       <Box
         sx={{
           display: "flex",
@@ -203,7 +233,7 @@ const Register = () => {
           )}
         </Box>
 
-        <form onSubmit={handleSubmit(handleRegister)} className="page">
+        <form onSubmit={handleSubmit(handleRegisterClick)} className="page">
           <Stack
             spacing={1}
             width={"100%"}

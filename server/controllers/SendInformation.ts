@@ -22,8 +22,8 @@ const sendEmail = async (html: string, user_sent: string, subject: string, profi
 
   const mailOptions = {
     from: process.env.EMAIL_ACCOUNT,
-    // to: user_sent,
-    to: process.env.EMAIL_ACCOUNT,
+    to: user_sent,
+    // to: process.env.EMAIL_ACCOUNT,
     subject,
     html: html,
     attachments: profileInfo

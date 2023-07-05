@@ -14,13 +14,14 @@ export interface contactInfo {
 }
 
 export interface QuestionType {
-	id?: string;
+	question_id?: string;
 	question: string;
 	options: string[];
 	answer: string;
 }
 
 export interface DataType {
+	tutorial_id?: string;
 	title: string;
 	video_url: any;
   image_url?: any;
@@ -31,4 +32,10 @@ export interface DataType {
 	questions_shown: number;
 	access_date: string;
 	due_date: string;
+}
+
+export interface FormInfo {
+	title: string;
+	description: string;
+	tags: string[];
 }

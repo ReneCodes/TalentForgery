@@ -56,6 +56,7 @@
 
 .calendars {
   margin: 50px;
+  margin-top: 10px;
 }
 
 .image_preview {
@@ -74,7 +75,7 @@
 }
 
 .schedule_line{
-  margin: 20px 80px;
+  margin: 20px 10%;
 }
 
 .question_add {
@@ -102,6 +103,7 @@
   display: flex;
   flex-direction: column;
   align-items: center;
+  cursor: pointer;
 }
 
 .tutorial_picture {
@@ -122,6 +124,7 @@
   width: 310px;
   display: flex;
   justify-content: end;
+  background-color: white;
 }
 
 .info_close {
@@ -132,7 +135,8 @@
 }
 
 .input_box {
-  width: 250px;
+  width: 310px;
+  margin: 20px;
 }
 
 .imported_question {
@@ -148,4 +152,16 @@
 .tutorial_card {
   margin-right: 10px;
   margin-bottom: 10px;
+}
+
+.reschedule_question {
+  margin: 20px;
+}
+
+.reschedule_question_card {
+  padding-left: 20px;
+}
+
+.button_width {
+  min-width: 120px;
 }

@@ -1,11 +1,12 @@
 import TextField from '@mui/material/TextField';
 import { useState, FC, useEffect } from 'react';
+import { FormInfo } from '../../utils/types';
 import { TutorialTagStore } from '../../utils/zustand.store';
 import TagsList from './TagsList';
 
 interface TutorialFormComp {
   getData: boolean,
-  onData: any
+  onData: (childData: FormInfo) => void
 }
 
 const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
