@@ -63,11 +63,10 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
           </div>
           <VideoPreview showPreview={true} videoData={tutorial.video_url} />
         </div>
-        {tutorial.question_ids?.length > 0 && <div>
+        <div>
           <Divider />
           <QuestionList questions={tutorial.question_ids} />
-          </div>
-        }
+        </div>
         <Divider />
         <div className='quiz_line schedule_line'>
           <Button variant='contained' onClick={onClose}>Cancel</Button>

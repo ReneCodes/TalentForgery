@@ -12,13 +12,11 @@ const TutorialList: FC<{tutorials: DataType[], filterName: string}> = ({tutorial
     setTutorialList(filteredList);
   }, [tutorials, filterName]);
 
-  useEffect(() => console.log(tutorialList), [tutorialList]);
-
-  return <>
+  return <div className="tutorail_wrap">
     {tutorialList.map((tutorial, key) => (
-      <div key={key}><TutorialCard tutorial={tutorial}/></div>
+      <div className="tutorial_card" key={key}><TutorialCard tutorial={tutorial}/></div>
     ))}
-  </>
+  </div>
 }
 
 export default TutorialList;

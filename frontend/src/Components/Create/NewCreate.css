@@ -139,3 +139,13 @@
   margin-left: 20px;
   margin-top: 20px;
 }
+
+.tutorail_wrap {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.tutorial_card {
+  margin-right: 10px;
+  margin-bottom: 10px;
+}

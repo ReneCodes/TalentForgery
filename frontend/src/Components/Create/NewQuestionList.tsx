@@ -10,6 +10,7 @@ const QuestionList: FC<QuestionListComp> = ({questions}) => {
   const [questionList, setQuestionList] = useState(questions);
 
   useEffect(() => {
+    console.log(questions[0] && typeof questions[0] === 'string');
     if(questions[0] && typeof questions[0] === 'string') {
       (async() => {
         const resposne = await getQuestionsByIds(questions);
