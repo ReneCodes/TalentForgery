@@ -1,6 +1,7 @@
 import { createdTutorial } from '../types/tutorial';
 const jwt = require('jsonwebtoken');
-const { createTheTutorial, getAllTheTutorials, getUserTutorials, markTutorialAsWatched } = require('../models/TutorialModel');
+const { createTheTutorial, getAllTheTutorials, getUserTutorials,
+	markTutorialAsWatched, destroyAnTutorial } = require('../models/TutorialModel');
 
 const { getTutorialQuestions, getTheQuestions } = require('../models/QuestionsModel');
 const { validateTutorialData, validateTutorialId } = require('../middleware/Validation');
@@ -24,8 +25,6 @@ const storage = multer.diskStorage({
 		cb(null, Date.now() + customFileName);
 	},
 });
-
-const upload = multer({ storage });
 
 const upload = multer({ storage });
 async function createTutorial(req: any, res: Response) {
@@ -124,7 +123,7 @@ async function getAllQuestions(req: Request, res: Response) {
 async function markTutorial(req: Request, res: Response) {
 	try {
 		const { tutorial_id } = req.body;
-		if(!tutorial_id) return res.status(400).json('Not enough information provided');
+		if (!tutorial_id) return res.status(400).json('Not enough information provided');
 
 		const sessionToken = req.cookies.session_token;
 		const user_id = jwt.verify(sessionToken, process.env.SECRET).user_id;
@@ -132,8 +131,19 @@ async function markTutorial(req: Request, res: Response) {
 		res.status(200).json('Marked');
 
 	} catch (error) {
-		console.log(error);
+		res.status(500).json('Server failed');
+	}
+};
 
+async function deleteTutorial(req: Request, res: Response) {
+	try {
+		const { tutorial_id } = req.body;
+		if (!tutorial_id) return res.status(400).json('Not enough information provided');
+
+		await destroyAnTutorial(tutorial_id);
+		res.status(200).json('Deleted');
+
+	} catch (error) {
 		res.status(500).json('Server failed');
 	}
 };
@@ -144,4 +154,5 @@ module.exports = {
 	getAllQuestions,
 	getTutorials,
 	markTutorial,
+	deleteTutorial
 };

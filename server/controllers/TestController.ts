@@ -158,7 +158,7 @@ const handleSendEmail = async (
   </html>
   `;
 
-  sendEmail(html, user.userEmail, profilePictureData);
+  sendEmail(html, user.userEmail, 'Minon Mentor Tests Result', profilePictureData);
 };
 
 module.exports = { handleTest };

@@ -12,7 +12,7 @@ const accountSid = process.env.TWILLIO_ACCOUNT_SID;
 const authToken = process.env.TWILLIO_AUTH_TOKEN;
 const client = require('twilio')(accountSid, authToken);
 
-const sendEmail = async (html: string, user_sent: string, profilePictureData?: any) => {
+const sendEmail = async (html: string, user_sent: string, subject: string, profilePictureData?: any) => {
 
   let profileInfo = profilePictureData ? [{
     filename: 'profile_picture.jpg',
@@ -24,7 +24,7 @@ const sendEmail = async (html: string, user_sent: string, profilePictureData?: a
     from: process.env.EMAIL_ACCOUNT,
     // to: user_sent,
     to: process.env.EMAIL_ACCOUNT,
-    subject: "Nodemailer Test",
+    subject,
     html: html,
     attachments: profileInfo
   };
