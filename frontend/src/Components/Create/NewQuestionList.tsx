@@ -1,3 +1,4 @@
+import { Card } from "@mui/material";
 import { FC, useEffect, useState } from "react";
 import { getQuestions } from "../../services/Api.service";
 import { QuestionType } from "../../utils/types";
@@ -25,12 +26,14 @@ const QuestionList: FC<QuestionListComp> = ({questions}) => {
 
   return <div>
     {Array.isArray(questionList) && questionList.map((question, key) => (
-      <div key={key}>
-        <h2>{question.question.question}</h2>
-        {question.question.options.map((option, key) => (
-          <h3 key={key}>{key}: {option}</h3>
-        ))}
-        <h3>Answer: {question.question.answer}</h3>
+      <div className="reschedule_question" key={key}>
+        <Card>
+          <h2>{question.question.question}</h2>
+          {question.question.options.map((option, key) => (
+            <h3 key={key}>{key}: {option}</h3>
+          ))}
+          <h3>Answer: {question.question.answer}</h3>
+        </Card>
       </div>
     ))}
   </div>
