@@ -174,8 +174,8 @@ const CreateTutorial: FC<{onData: any}> = ({onData}) => {
           </div>
         </div>
         <div className='quiz_line schedule_line'>
-          <Button variant='contained' onClick={handleClose}>Cancel</Button>
-          <Button variant='contained' onClick={handleSubmit}>Schedule</Button>
+          <Button className='button_width' variant='contained' onClick={handleClose}>Cancel</Button>
+          <Button className='button_width' variant='contained' onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
       <Schedule 

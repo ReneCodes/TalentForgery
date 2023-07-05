@@ -74,7 +74,7 @@
 }
 
 .schedule_line{
-  margin: 20px 80px;
+  margin: 20px 10%;
 }
 
 .question_add {
@@ -159,4 +159,8 @@
 
 .reschedule_question_card {
   padding-left: 20px;
+}
+
+.button_width {
+  min-width: 120px;
 }
