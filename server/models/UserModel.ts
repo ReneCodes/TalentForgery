@@ -5,6 +5,7 @@ const crypto = require("crypto");
 const bcrypt = require("bcrypt");
 const { promisify } = require("util");
 const hashAsync = promisify(bcrypt.hash);
+const { getUserTutorials } = require('./TutorialModel');
 const { User, Stats, Question, Tutorial } = require('./Schemas');
 
 const getUserByEmail = async (email: string) => {
@@ -36,8 +37,11 @@ const registerNewUser = async (providedInformation: registeredUser) => {
       tags: [],
     });
 
+    const tutorialsWatch = await getUserTutorials(user_id);
+
     await Stats.create({
       user_id,
+      not_watched: tutorialsWatch.length
     })
 
     return role === 'admin' ? "Admin User created" : "User created";
@@ -204,7 +208,7 @@ const getUserStatsByEmail = async (email: string) => {
   const questions_todo = allQuestions.length - (stats.correct_questions + stats.wrong_questions);
   const to_watch = allTutorials.length - stats.watched;
 
-  return {...stats.dataValues, tests_todo, questions_todo, to_watch};
+  return { ...stats.dataValues, tests_todo, questions_todo, to_watch };
 };
 
 module.exports = {
