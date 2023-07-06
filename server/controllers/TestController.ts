@@ -3,8 +3,9 @@ const jwt = require('jsonwebtoken');
 const { correctQuestions } = require("../models/QuestionsModel");
 const { updateUserStats } = require('../models/StatsModel');
 const { getUserInfo } = require('../models/UserModel');
-const {sendEmail} = require('./SendInformation');
+const { sendEmail } = require('./SendInformation');
 const { validateTestDone } = require('../middleware/Validation');
+const { Tutorial } = require('../models/Schemas');
 const fs = require('fs');
 const path = require('path');
 
@@ -24,19 +25,23 @@ const handleTest = async (req: Request, res: Response) => {
     const [testCorrection, userPassed, totalRight, totalWrong] = await correctQuestions(answers, question_ids);
 
     await updateUserStats(user_id, userPassed, totalRight, totalWrong);
+    const tutorial = await Tutorial.findOne({ where: { tutorial_id } });
     const [questionsString, userPassedText] = await handleEmailData(testCorrection, userPassed);
 
     const userInfo = await getUserInfo(user_id);
     const userEmail = userInfo.email;
     const profile_picture = userInfo.profile_picture;
+
     await handleSendEmail(
       { userPassedText, totalRight, totalWrong },
       { userEmail, profile_picture },
-      { questionsString, title: 'How to peel a banana', description: 'The description will go here'}
+      { questionsString, title: tutorial.title, description: tutorial.description }
     );
 
     return res.status(200).json('Check your email');
   } catch (error) {
+    console.log(error);
+
     res.status(500).json('Server Failed');
   }
 };
@@ -97,9 +102,9 @@ const handleSendEmail = async (
 ) => {
 
   let profilePicturePath;
-  if(user.profile_picture) {
+  if (user.profile_picture) {
     profilePicturePath = `images/profile_pictures/${user.profile_picture}`;
-  } else{
+  } else {
     profilePicturePath = `images/profile_pictures/default_user.png`;
   }
   const profilePictureData = fs.readFileSync(path.resolve(profilePicturePath));
@@ -120,7 +125,7 @@ const handleSendEmail = async (
           <h2 style="font-size: 20px; font-weight: 400; margin: 0;">Minon Mentor</h2>
         </td>
         <td style="padding: 9px 20px; text-align: right;">
-        <h4 style="font-size: 14px; font-weight: 400; margin: 0;">04/07/2023</h4>
+        <h4 style="font-size: 14px; font-weight: 400; margin: 0;">06/07/2023</h4>
       </td>
       </tr>
     </table>

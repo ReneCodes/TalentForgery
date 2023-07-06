@@ -13,18 +13,18 @@ import ImportedQuestions from './ImportedQuestions';
 import { postTutorial } from '../../services/Api.service';
 
 interface FormInfo {
-	title: string;
-	description: string;
-	tags: string[];
+  title: string;
+  description: string;
+  tags: string[];
 }
 
-const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) => {
+const CreateWithQuiz: FC<{ onData: (childData: DataType) => void }> = ({ onData }) => {
   const [open, setOpen] = useState(false);
   const [scheduleOpen, setScheduleOpen] = useState(false);
   const [videoSubmit, setVideoSubmit] = useState(false);
-	const [videoData, setVideoData] = useState(new FormData());
+  const [videoData, setVideoData] = useState(new FormData());
   const [imageSubmit, setImageSubmit] = useState(false);
-	const [imageData, setImageData] = useState(new FormData());
+  const [imageData, setImageData] = useState(new FormData());
   const [questionNumber, setQuestionNumber] = useState(1);
   const [getData, setGetData] = useState(false);
   const [questions, setQuestions] = useState<QuestionType[]>([])
@@ -32,18 +32,18 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
   const [length, setLength] = useState('');
   const [formInfo, setFormInfo] = useState<DataType>({
     title: '',
-		description: '',
-		question_ids: [],
-		questions_shown: 0,
-		access_date: '',
-		due_date: '',
+    description: '',
+    question_ids: [],
+    questions_shown: 0,
+    access_date: '',
+    due_date: '',
     tags: [],
-		video_url: {} as File,
+    video_url: {} as File,
     image_url: {} as File,
-	});
+  });
 
   useEffect(() => {
-    if(formInfo.access_date) {
+    if (formInfo.access_date) {
       onData(formInfo)
     }
   }, [formInfo]);
@@ -70,13 +70,13 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
       alert('Too few questions');
     } else {
       try {
+
         const tutorial = await postTutorial({
           ...formInfo,
           access_date: `${data.startDate}`,
           due_date: `${data.endDate}`,
           question_ids: questions
         });
-        console.log(tutorial);
         setFormInfo((res) => ({
           ...res,
           access_date: `${data.startDate}`,
@@ -110,39 +110,42 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
         }
       });
     }
-	};
+  };
 
   const handleDataFromQuestions = (childData: QuestionType) => {
     if (childData.question && childData.answer && childData.options.length !== 0) {
-      setQuestions((res) => [...res, childData]);
+      setQuestions((res) => {
+        if (!Array.isArray(childData)) return [...res, childData];
+        else return res;
+      });
     }
   }
 
   const handleFileUpload = (event: ChangeEvent<HTMLInputElement>) => {
-		const file = event.target.files?.[0];
-		
-		if (file) {
-			const fileSize = file.size / (1024 * 1024);
-			if (fileSize > 50) {
-				alert('file is to large, the limit is 50mb');
-				setVideoSubmit(false);
-			} else {
-				setVideoSubmit(true);
-				const formatedFile = new FormData();
-				formatedFile.append('video', file);
-				setVideoData(formatedFile);
-			}
-		} else {
-			setVideoSubmit(false);
-		}
-	};
+    const file = event.target.files?.[0];
+
+    if (file) {
+      const fileSize = file.size / (1024 * 1024);
+      if (fileSize > 50) {
+        alert('file is to large, the limit is 50mb');
+        setVideoSubmit(false);
+      } else {
+        setVideoSubmit(true);
+        const formatedFile = new FormData();
+        formatedFile.append('video', file);
+        setVideoData(formatedFile);
+      }
+    } else {
+      setVideoSubmit(false);
+    }
+  };
 
   const handleImageUpload = (event: ChangeEvent<HTMLInputElement>) => {
     const file = event.target.files?.[0];
 
-    if(file) {
+    if (file) {
       const fileSize = file.size / (1024 * 1024)
-      if(fileSize > 10) {
+      if (fileSize > 10) {
         alert('file size to large, the limit is 10mb');
         setImageSubmit(false);
       } else {
@@ -157,7 +160,7 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
   }
 
   const handleAddQuestion = () => {
-    setQuestionNumber((res) => res+1)
+    setQuestionNumber((res) => res + 1)
   }
 
   const handleSubmit = () => {
@@ -167,28 +170,28 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
   const handleImport = (childData: QuestionType) => {
     let boo = true;
     for (const question of imported) {
-      if(question.question === childData.question) {
+      if (question.question === childData.question) {
         boo = false;
       }
     }
-    if(boo) {
+    if (boo) {
       setImported((res) => [...res, childData])
     }
 
     boo = true;
     for (const question of questions) {
-      if(question.question === childData.question) {
+      if (question.question === childData.question) {
         boo = false;
       }
     }
-    if(boo) {
+    if (boo) {
       setQuestions((res) => [...res, childData])
     }
   }
 
   return (
     <div>
-        <div className='filter_label'>
+      <div className='filter_label'>
         <Button variant="contained" onClick={handleClickOpen}>
           Tutorial With Quiz
         </Button>
@@ -200,7 +203,7 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
         <div className='create_tutorial'>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
           <div>
-          <h3 className='title_upload'>Video Upload</h3>
+            <h3 className='title_upload'>Video Upload</h3>
             <input
               type="file"
               accept=".mp4"
@@ -226,7 +229,7 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
           <div className='question_card' key={index}><Question getData={getData} onData={handleDataFromQuestions} /></div>
         ))}
         <div className='quiz_line'>
-          <TextField 
+          <TextField
             label='quiz length'
             value={length}
             type='number'
@@ -240,8 +243,8 @@ const CreateWithQuiz: FC<{onData: (childData: DataType) => void}> = ({onData}) =
           <Button variant="contained" onClick={handleSubmit}>Schedule</Button>
         </div>
       </Dialog>
-      <Schedule 
-        open={scheduleOpen}  
+      <Schedule
+        open={scheduleOpen}
         onClose={handleScheduleClose}
         onData={handleScheduleData}
       />
