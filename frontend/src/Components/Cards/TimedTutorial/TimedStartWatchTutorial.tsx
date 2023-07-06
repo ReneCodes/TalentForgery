@@ -15,6 +15,7 @@ import {SmallVideoData} from '../../../@types/Types';
 // icons
 import CloseIcon from '@mui/icons-material/Close';
 import {YellowTooltip} from '../../Tooltips/CustomTooltips';
+import {markTutorialAsDone} from '../../../services/Api.service';
 
 // Dialog Visual Transistion
 const Transition = React.forwardRef(function Transition(
@@ -46,8 +47,12 @@ interface TimedWatchTutorialProps {
 	tutorialQuestions: TutorialQuestions[];
 	accessTime: string | undefined;
 	accessDate: string | undefined;
+	niceDueDate: string | undefined;
+	niceDueTime: string | undefined;
 	currentDateInMs: number | undefined;
+	dueDateInMs: number | undefined;
 	accessDateInMs: number | undefined;
+
 	createCurrentDate: () => void;
 }
 
@@ -56,7 +61,10 @@ const TimedStartWatchTutorial: React.FC<TimedWatchTutorialProps> = ({
 	tutorialQuestions,
 	accessDate,
 	accessTime,
+	niceDueDate,
+	niceDueTime,
 	currentDateInMs,
+	dueDateInMs,
 	accessDateInMs,
 	createCurrentDate,
 }) => {
@@ -66,6 +74,8 @@ const TimedStartWatchTutorial: React.FC<TimedWatchTutorialProps> = ({
 	const [videoToWatch, setVideoToWatch] = React.useState(true);
 	const [quizzToDo, setQuizzToDo] = React.useState(false);
 	const [quizzDone, setQuizzDone] = React.useState(false);
+
+	const {tutorial_id} = videoData;
 
 	const handleClickOpen = async () => {
 		setOpen(true);
@@ -86,6 +96,9 @@ const TimedStartWatchTutorial: React.FC<TimedWatchTutorialProps> = ({
 		handleClose();
 		setOpenAlert(false);
 	};
+	const markAsDone = () => {
+		markTutorialAsDone({tutorial_id});
+	};
 
 	// console.log('new render');
 	// console.log('currentDateTime', currentDateTime);
@@ -102,6 +115,21 @@ const TimedStartWatchTutorial: React.FC<TimedWatchTutorialProps> = ({
 					onClick={handleClickOpen}>
 					Start Tutorial
 				</Button>
+			) : dueDateInMs && currentDateInMs && dueDateInMs <= currentDateInMs ? (
+				<YellowTooltip
+					title="Click to Remove Card"
+					placement="bottom"
+					describeChild
+					arrow>
+					<Button
+						variant="contained"
+						aria-label="no access yet"
+						onClick={markAsDone}
+						sx={styles.over_due}>
+						<Typography>{`Missed Deadline`}</Typography>
+						<Typography>{`${niceDueDate} - ${niceDueTime}`}</Typography>
+					</Button>
+				</YellowTooltip>
 			) : (
 				<YellowTooltip
 					title="Click to Check Time"
@@ -265,6 +293,15 @@ const styles = {
 		color: 'white.main',
 		':hover': {
 			backgroundColor: 'red.900',
+		},
+	},
+	over_due: {
+		display: 'flex',
+		flexDirection: 'column',
+		backgroundColor: 'red.900',
+		color: 'white.main',
+		':hover': {
+			backgroundColor: 'gray.900',
 		},
 	},
 };

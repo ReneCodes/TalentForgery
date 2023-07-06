@@ -1,4 +1,3 @@
-import {DataType} from './types';
 import {SmallVideoData} from '../@types/Types';
 
 export const sortAccessDate = (filterType: string, arr: SmallVideoData['videoData'][]) => {

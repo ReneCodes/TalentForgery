@@ -31,7 +31,7 @@ const Dashboard = () => {
 						<Box sx={{ m: 2 }}>
 							{pendingPerson &&
 								pendingPerson.map((user: any) => (
-									<Box key={user.profile_picture}>
+									<Box key={user.profile_picture} sx={{mb:2}}>
 										<EmployeePendingCard user={user} />
 									</Box>
 								))}
