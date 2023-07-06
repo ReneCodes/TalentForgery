@@ -46,8 +46,13 @@ const Stats = () => {
   }, []);
 
   const percentage = (passed: number, failed: number) => {
-    return parseInt((passed / (passed + failed) * 100).toString());
+    if(passed > 0 || failed > 0){
+      return parseInt((passed / (passed + failed) * 100).toString());
+    } else {
+      return 100
+    }
   }
+
 
   return (
     <div className='stats'>

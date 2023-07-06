@@ -28,7 +28,7 @@ const Dashboard = () => {
 								Total Pending Users: {pendingPerson.length}
 							</Typography>
 						</Box>
-						<Box sx={{ m: 2 }}>
+						<Box sx={{ m: 2, display: 'flex', flexWrap: 'wrap', gap: '40px' }}>
 							{pendingPerson &&
 								pendingPerson.map((user: any) => (
 									<Box key={user.profile_picture} sx={{mb:2}}>

@@ -10,6 +10,7 @@ import AllUserStats from '../Pages/AllUserStats';
 import { userProfileStore } from '../utils/zustand.store';
 import Unauthorized from '../Pages/Unauthorized';
 import ServerDown from '../Pages/serverDown';
+import NotFound from '../Pages/NotFound';
 export const AuthenticatedRoutes = () => {
 
 	const profile = userProfileStore();
@@ -53,7 +54,7 @@ export const AuthenticatedRoutes = () => {
 			/>
 			<Route
 				path="/not_found"
-				element={<ServerDown />}
+				element={<NotFound />}
 			/>
 			<Route
 				path="/server_down"
@@ -61,7 +62,7 @@ export const AuthenticatedRoutes = () => {
 			/>
 			<Route
 				path="/*"
-				element={<ServerDown />}
+				element={<NotFound />}
 			/>
 		</Routes>
 	);

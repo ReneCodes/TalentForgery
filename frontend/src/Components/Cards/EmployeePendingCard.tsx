@@ -63,6 +63,7 @@ export default function EmployeePendingCard({user}: any) {
 							alignItems: 'center',
 							textAlign: {xs: 'center'},
 							width: '100%',
+							gap: '20px',
 						}}>
 						<Box sx={{color: 'gray.900'}}>
 							<Typography variant="h6">
