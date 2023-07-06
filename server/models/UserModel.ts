@@ -186,27 +186,36 @@ const getUserStatsByEmail = async (email: string) => {
     attributes: ['passed', 'failed', 'watched', 'not_watched', 'correct_questions', 'wrong_questions']
   });
 
-  const allTutorials = await Tutorial.findAll({ where: {} });
+  const allTutorials = await getUserTutorials(user.user_id);
   const allQuestions = await Question.findAll({ where: {} });
-  const totalTests = allTutorials.filter((tutorial: any) => tutorial.questions_id[0]);
+  const totalTests1 = allTutorials[0].filter((tutorial: any) => tutorial.questions_id[0]);
+  const totalTests2 = allTutorials[1].filter((tutorial: any) => tutorial.questions_id[0]);
 
-  const tests_todo = stats.watched - totalTests.length;
-  const questions_todo =  (stats.correct_questions + stats.wrong_questions) - (allQuestions.length > 0 ? allQuestions.length : 1);
-  const to_watch = stats.watched - allTutorials.length;
+  const tests_todo = (totalTests1.length + totalTests2.length) - (stats.passed - stats.failed);
+  const questions_todo =  (allQuestions.length > 0 ? allQuestions.length : 0) - (stats.correct_questions + stats.wrong_questions - 2);
+  const to_watch = (allTutorials[0].length + allTutorials[1].length) - (stats.watched - 1);
 
-  return { ...stats.dataValues, tests_todo, questions_todo, to_watch };
+  const updatedStats = Object.keys(stats.dataValues).map(key => {
+    return {
+      [key]: stats.dataValues[key] - 1
+    };
+  });
+  const updatedStatsObject = Object.assign({}, ...updatedStats);
+
+
+  return { ...updatedStatsObject, tests_todo, questions_todo, to_watch };
 };
 
 const getAllStaffStatistics = async () => {
 
   const allUsers = await User.findAll({ where: { role: 'user' } });
 
-  let questionsRight = 0;
-  let questionsWrong = 0;
-  let testsPassed = 0;
-  let testsFailed = 0;
-  let watched = 0;
-  let to_watch = 0;
+  let questionsRight = 1;
+  let questionsWrong = 1;
+  let testsPassed = 1;
+  let testsFailed = 1;
+  let watched = 1;
+  let to_watch = 1;
 
   allUsers.forEach(async (user: UserType) => {
 

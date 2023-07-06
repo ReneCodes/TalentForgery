@@ -10,7 +10,11 @@ import FaceIcon from '@mui/icons-material/Face';
 const baseURL = import.meta.env.VITE_BE_BASE_URL;
 
 const percentage = (passed: number, failed: number) => {
-  return parseInt((passed / (passed + failed) * 100).toString());
+  if(passed > 0 || failed > 0){
+    return parseInt((passed / (passed + failed) * 100).toString());
+  } else {
+    return 100
+  }
 }
 
 function UserStatsCard(props: any) {
@@ -28,8 +32,6 @@ function UserStatsCard(props: any) {
   let totalsTests = percentage(stats.passed, stats.failed);
   let totalsQuestions = percentage(stats.correct_questions, stats.wrong_questions);
   let totalTutorials = percentage(stats.watched, stats.to_watch);
-
-  console.log(stats);
 
 
   return (

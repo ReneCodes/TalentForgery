@@ -62,11 +62,11 @@ function AllUserStats() {
 
   };
 
-	async function searchUser(e: any) {
+  async function searchUser(e: any) {
 
-		setSearch(e.target.value);
+    setSearch(e.target.value);
 
-		if (e.target.value === '') setUsersSearched([...users]);
+    if (e.target.value === '') setUsersSearched([...users]);
     else {
       const allUsersFiltered = users.filter(user => {
         const searchLength = search.length;
@@ -79,19 +79,19 @@ function AllUserStats() {
 
   };
 
-	const allUsers = usersSearched.map((user) => {
-		return (
-			<UserCard
-				key={user.email}
+  const allUsers = usersSearched.map((user) => {
+    return (
+      <UserCard
+        key={user.email}
         first_name={user.first_name} last_name={user.last_name}
         profile_picture={user.profile_picture} email={user.email}
-				callback={() => enableUserStats(user)}
-				/>
-				)
-	});
+        callback={() => enableUserStats(user)}
+      />
+    )
+  });
 
-	return (
-		<Container>
+  return (
+    <Container>
       {
         showStats &&
         <UserStatsCard stats={userStats} user={userForStats} showStats={showStats}
@@ -99,7 +99,7 @@ function AllUserStats() {
         />
       }
 
-<Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10, my: 2 }}>
+      <Box sx={{ display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: 10, my: 2 }}>
         <Box sx={{
           display: 'flex', flexWrap: 'wrap', flexDirection: 'column', justifyContent: 'center',
           alignItems: 'center'
@@ -123,27 +123,27 @@ function AllUserStats() {
         </Box>
       </Box>
 
-			<Box sx={{display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px'}}>
-				<Typography
-					variant="h5"
-					sx={{borderBottom: '2px solid', borderColor: 'primary.main', pr: 2}}>
-					Total Users: {usersSearched.length}
-				</Typography>
-				<TextField
-					size="small"
-					sx={{width: '250px'}}
-					label="Search"
-					type="search"
-					onChange={searchUser}
-					InputProps={{
-						endAdornment: <SearchIcon sx={{}} />,
-					}}
-				/>
-			</Box>
-			<Box
-				sx={{
-					width: '100%',
-					boxSizing: 'border-box',
+      <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', height: '60px' }}>
+        <Typography
+          variant="h5"
+          sx={{ borderBottom: '2px solid', borderColor: 'primary.main', pr: 2 }}>
+          Total Users: {usersSearched.length}
+        </Typography>
+        <TextField
+          size="small"
+          sx={{ width: '250px' }}
+          label="Search"
+          type="search"
+          onChange={searchUser}
+          InputProps={{
+            endAdornment: <SearchIcon sx={{}} />,
+          }}
+        />
+      </Box>
+      <Box
+        sx={{
+          width: '100%',
+          boxSizing: 'border-box',
           display: 'flex',
           flexDirection: 'row',
           flexWrap: 'wrap',
