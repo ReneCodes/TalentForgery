@@ -4,6 +4,7 @@ import Login from '../Pages/Login';
 import Register from '../Pages/Register';
 import Unauthorized from '../Pages/Unauthorized';
 import ServerDown from '../Pages/serverDown';
+import NotFound from '../Pages/NotFound';
 
 export const NotAuthenticatedRoutes = () => {
 	return (
@@ -34,7 +35,7 @@ export const NotAuthenticatedRoutes = () => {
 			/>
 			<Route
 				path="/not_found"
-				element={<ServerDown />}
+				element={<NotFound />}
 			/>
 			<Route
 				path="/server_down"
@@ -42,7 +43,7 @@ export const NotAuthenticatedRoutes = () => {
 			/>
 			<Route
 				path="/*"
-				element={<ServerDown />}
+				element={<NotFound />}
 			/>
 		</Routes>
 	);
