@@ -1,5 +1,5 @@
 export function niceDate(date: string) {
-	let dateString = new Date(date).toLocaleDateString(undefined, {month: 'long', day: 'numeric', year: 'numeric'});
+	let dateString = new Date(date).toLocaleDateString(undefined, {month: 'short', day: 'numeric', year: '2-digit'});
 	return dateString;
 }
 export function niceTime(date: string) {

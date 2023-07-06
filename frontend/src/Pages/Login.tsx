@@ -192,7 +192,7 @@ const Login: FC = () => {
 					</Stack>
 				</form>
 			</Container>
-			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', my: 4}}>
+			{/* <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', my: 4}}>
 				<Button
 					type="button"
 					onClick={() => {
@@ -204,7 +204,7 @@ const Login: FC = () => {
 					sx={{backgroundColor: red.main}}>
 					Special Login
 				</Button>
-			</Box>
+			</Box> */}
 		</Container>
 	);
 };

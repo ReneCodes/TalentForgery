@@ -1,11 +1,7 @@
 // @ts-ignore
 import React, {FC, useEffect, useState} from 'react';
 import SmallVideoCard from '../../Components/Cards/SmallVideoCard';
-import {Box, Typography} from '@mui/material';
-// import EmployeePendingCard from '../../Components/Cards/EmployeePendingCard';
-// import EmployeeProfileForm from '../../Components/Cards/EmployeeProfileForm';
-// import WatchTutorial from '../../Components/WatchTutorial/WatchTutorial';
-// import {TutorialVideoDataType} from '../../@types/Types';
+import {Box, Card, Typography} from '@mui/material';
 import TimedTutorialCard from '../../Components/Cards/TimedTutorial/TimedTutorialCard';
 import {TutorialStore, userProfileStore} from '../../utils/zustand.store';
 
@@ -16,8 +12,12 @@ export const HomeMe = () => {
 	const {getUserRole} = userProfileStore();
 
 	const {userTutorials, allTutorials} = TutorialStore();
-	const generalTutorials = sortAccessDate('newest', userTutorials[0]);
-	const scheduledTutorials = sortAccessDate('newest', userTutorials[1]);
+	const generalTutorials = sortAccessDate('oldest', userTutorials[0]);
+	const scheduledTutorials = sortAccessDate('oldest', userTutorials[1]);
+
+	// console.log('lenght', generalTutorials[0].questions_id.length);
+	// console.log('questions', generalTutorials[0].questions_id);
+	// console.log('generalTutorials[0]', generalTutorials[0]);
 
 	const [adminScheduledTutorials, setAdminScheduledTutorials] = useState<SmallVideoData['videoData'][]>([]);
 
@@ -37,15 +37,23 @@ export const HomeMe = () => {
 				Latest Tutorials
 			</Typography>
 			<Box sx={styles.noBar}>
-				{generalTutorials &&
+				{generalTutorials.length > 0 ? (
 					generalTutorials.slice(0, 4).map((videoData: SmallVideoData['videoData']) => (
 						<Box
 							key={Math.floor(Math.random() * 99999999)}
 							sx={{mb: 2}}>
-							<SmallVideoCard videoData={videoData} />
+							{videoData.questions_id?.length > 0 ? (
+								<TimedTutorialCard videoData={videoData} />
+							) : (
+								<SmallVideoCard videoData={videoData} />
+							)}
 						</Box>
-					))}
+					))
+				) : (
+					<EmptyVideoBox />
+				)}
 			</Box>
+
 			<Typography
 				variant="h4"
 				sx={[styles.headline, styles.yellow]}>
@@ -53,27 +61,63 @@ export const HomeMe = () => {
 			</Typography>
 			{getUserRole() === 'user' && (
 				<Box sx={styles.noBar}>
-					{scheduledTutorials.length > 0 &&
+					{scheduledTutorials.length > 0 ? (
 						scheduledTutorials.slice(0, 4).map((videoData: SmallVideoData['videoData']) => (
-							<Box key={Math.floor(Math.random() * 99999999)}>
-								<TimedTutorialCard videoData={videoData} />
+							<Box
+								key={Math.floor(Math.random() * 99999999)}
+								sx={{mb: 2, height: '100%'}}>
+								{videoData.questions_id?.length > 0 ? (
+									<TimedTutorialCard videoData={videoData} />
+								) : (
+									<SmallVideoCard videoData={videoData} />
+								)}
 							</Box>
-						))}
+						))
+					) : (
+						<EmptyVideoBox />
+					)}
 				</Box>
 			)}
 			{getUserRole() === 'admin' && (
 				<Box sx={styles.noBar}>
-					{adminScheduledTutorials.length > 0 &&
-						adminScheduledTutorials.slice(0, 4).map((videoData: SmallVideoData['videoData']) => (
-							<Box key={Math.floor(Math.random() * 99999999)}>
-								<TimedTutorialCard videoData={videoData} />
-							</Box>
-						))}
+					{adminScheduledTutorials.length > 0 ? (
+						adminScheduledTutorials
+							.slice(0, 4)
+							.map((videoData: SmallVideoData['videoData']) => (
+								<Box key={Math.floor(Math.random() * 99999999)}>
+									{videoData.questions_id?.length > 0 ? (
+										<TimedTutorialCard videoData={videoData} />
+									) : (
+										<SmallVideoCard videoData={videoData} />
+									)}
+								</Box>
+							))
+					) : (
+						<EmptyVideoBox />
+					)}
 				</Box>
 			)}
 		</Box>
 	);
 };
+
+function EmptyVideoBox() {
+	return (
+		<Box>
+			<Card
+				sx={{
+					width: 350,
+					height: 300,
+					display: 'flex',
+					justifyContent: 'center',
+					alignItems: 'center',
+					mb: 0,
+				}}>
+				<Typography variant="overline">Currently no Videos</Typography>
+			</Card>
+		</Box>
+	);
+}
 
 /** @type {import("@mui/material").SxProps} */
 const styles = {
