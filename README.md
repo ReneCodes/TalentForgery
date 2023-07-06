@@ -3,19 +3,6 @@
 Welcome to our innovative web app that revolutionizes training and knowledge sharing within your organization. With our powerful features, you can effortlessly compose captivating training tutorials, craft engaging questionnaires, empower your staff through effective training, and foster a collaborative work environment for seamless knowledge exchange.
 
 
-## Env variables
-
-`FRONT_END_PORT` `PORT`
-
-`SECRET` `EXPIRITY_IN_HOURS`
-
-`POSTGRES_USER` `POSTGRES_PASSWORD` `POSTGRES_PORT` `DB_NAME`
-
-`TWILLIO_NUMBER` `TWILLIO_ACCOUNT_SID` `TWILLIO_AUTH_TOKEN`
-
-`EMAIL_ACCOUNT` `EMAIL_PASSWORD`
-
-
 ## Get Started
 ### Client
 - ```npm i``` to install the required node modules
