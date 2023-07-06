@@ -44,10 +44,11 @@ const Login: FC = () => {
 	const handleClickShowPassword = () => setShowPassword((show) => !show);
 
 	async function handleLogin(formData: LoginFormValues) {
-		const requestAnswer = await loginUser(formData, navigate);
-
-		if (requestAnswer) setLoginError(requestAnswer);
-		else {
+		const loginAnswer = await loginUser(formData, navigate);
+		if (loginAnswer?.response?.data) {
+			setLoginError(loginAnswer.response.data);
+		}
+		if (loginAnswer?.data) {
 			MinonLogin();
 			reset({
 				email: '',
@@ -191,7 +192,7 @@ const Login: FC = () => {
 					</Stack>
 				</form>
 			</Container>
-			<Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', my: 4}}>
+			{/* <Box sx={{display: 'flex', justifyContent: 'center', alignItems: 'center', my: 4}}>
 				<Button
 					type="button"
 					onClick={() => {
@@ -203,7 +204,7 @@ const Login: FC = () => {
 					sx={{backgroundColor: red.main}}>
 					Special Login
 				</Button>
-			</Box>
+			</Box> */}
 		</Container>
 	);
 };

@@ -9,12 +9,26 @@ import useMediaQuery from '@mui/material/useMediaQuery';
 import theme from '../../config/theme';
 // types
 import {SmallVideoData} from '../../@types/Types';
+import {Box, Divider, Typography} from '@mui/material';
 
-export default function SmallVideoInfo({videoData}: SmallVideoData) {
-	// Color Theme
+interface SmallVideoInfoProps {
+	videoData: SmallVideoData['videoData'];
+	accessTime: string | undefined;
+	accessDate: string | undefined;
+	niceDueTime: string | undefined;
+	niceDueDate: string | undefined;
+}
+
+export default function SmallVideoInfo({
+	videoData,
+	accessTime,
+	accessDate,
+	niceDueTime,
+	niceDueDate,
+}: SmallVideoInfoProps) {
 	const [open, setOpen] = React.useState(false);
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-	const {title, description} = videoData;
+	const {title, description, tags} = videoData;
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -44,7 +58,46 @@ export default function SmallVideoInfo({videoData}: SmallVideoData) {
 					{title}
 				</DialogTitle>
 				<DialogContent>
-					<DialogContentText>{description}</DialogContentText>
+					<DialogContentText variant="overline">{description}</DialogContentText>
+					<Divider sx={{width: '50%', m: 'auto'}} />
+
+					<Box sx={{}}>
+						{tags &&
+							tags.map((tag) => (
+								<Typography
+									key={tag}
+									variant="overline"
+									color={'primary.main'}
+									sx={{
+										mx: 1,
+										backgroundColor: 'primary.main',
+										color: 'white.main',
+										px: 1,
+										py: '3px',
+										borderRadius: '4px',
+									}}>
+									{tag}
+								</Typography>
+							))}
+					</Box>
+					<Typography
+						variant="overline"
+						sx={{borderBottom: '2px solid', borderColor: 'green.900', px: 1, pb: '3px'}}>
+						Access :
+					</Typography>
+					<Typography variant="overline">
+						{' '}
+						{accessDate} - {accessTime}{' '}
+					</Typography>
+					<Typography
+						variant="overline"
+						sx={{borderBottom: '2px solid', borderColor: 'red.900', px: 1, pb: '3px'}}>
+						Due By:
+					</Typography>
+					<Typography variant="overline">
+						{' '}
+						{niceDueDate} - {niceDueTime}
+					</Typography>
 				</DialogContent>
 				<DialogActions>
 					<Button

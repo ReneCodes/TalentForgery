@@ -16,6 +16,7 @@ import AssignmentIcon from '@mui/icons-material/Assignment';
 import {TutorialStore} from '../../../utils/zustand.store';
 import {getQuestions} from '../../../services/Api.service';
 import {YellowTooltip, BlackTooltip} from '../../Tooltips/CustomTooltips';
+import {Paper} from '@mui/material';
 
 const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	// Zustand Stores
@@ -27,9 +28,10 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	const [accessDate, setAccessDate] = React.useState<string>();
 	const [accessTime, setAccessTime] = React.useState<string>();
 	const [niceDueDate, setNiceDueDate] = React.useState<string>();
-	const [nicDueTime, setNiceDueTime] = React.useState<string>();
+	const [niceDueTime, setNiceDueTime] = React.useState<string>();
 	const [currentDateInMs, setCurrentDateInMs] = React.useState<number>();
 	const [accessDateInMs, setAccessDateInMs] = React.useState<number>();
+	const [dueDateInMs, setDueDateInMs] = React.useState<number>();
 
 	// console.log('videoData', videoData);
 
@@ -48,9 +50,12 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 		setAccessTime(niceTime(access_date));
 		setNiceDueDate(niceDate(due_date));
 		setNiceDueTime(niceTime(due_date));
-		const date = new Date(access_date);
-		const asseccInMS = date.getTime();
-		setAccessDateInMs(asseccInMS);
+		const access = new Date(access_date);
+		const accessInMS = access.getTime();
+		setAccessDateInMs(accessInMS);
+		const due = new Date(due_date);
+		const dueInMS = due.getTime();
+		setDueDateInMs(dueInMS);
 	}, [due_date]);
 
 	function fetchQuestions() {
@@ -58,7 +63,7 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	}
 
 	return (
-		<Card sx={{maxWidth: 345, minWidth: 300, position: 'relative', mb: 2}}>
+		<Card sx={{maxWidth: 350, minWidth: 250, position: 'relative', mb: 0}}>
 			<CardMedia
 				// VIDEO THUMB
 				component="img"
@@ -75,14 +80,17 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 						accessTime={accessTime}
 						currentDateInMs={currentDateInMs}
 						accessDateInMs={accessDateInMs}
+						dueDateInMs={dueDateInMs}
 						createCurrentDate={createCurrentDate}
+						niceDueDate={niceDueDate}
+						niceDueTime={niceDueTime}
 					/>
 				</CardActions>
+
 				<Typography
-					gutterBottom
-					variant="h5"
+					variant="h6"
 					component="div"
-					sx={{cursor: 'default'}}>
+					sx={{cursor: 'default', wordWrap: 'break-all', display: 'inline'}}>
 					{title}
 				</Typography>
 
@@ -100,10 +108,16 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 								borderColor: 'transparent',
 								':hover': {borderBottom: '1px solid', borderColor: 'secondary.main'},
 							}}>
-							{`${niceDueDate} - ${nicDueTime}`}
+							{`${niceDueDate} - ${niceDueTime}`}
 						</Typography>
 					</YellowTooltip>
-					<TimedVideoInfo videoData={videoData} />
+					<TimedVideoInfo
+						videoData={videoData}
+						accessDate={accessDate}
+						accessTime={accessTime}
+						niceDueDate={niceDueDate}
+						niceDueTime={niceDueTime}
+					/>
 					<Box sx={{display: 'flex'}}>
 						<BlackTooltip
 							title="Has Quizz"

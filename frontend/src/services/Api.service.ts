@@ -1,20 +1,40 @@
-import axios, { AxiosError, AxiosResponse } from 'axios';
-import { LoginFormValues, RegisterFormValues, UpdateProfile } from '../@types/Types';
-import { NavigateFunction } from 'react-router-dom';
-import { SetStateAction } from 'react';
-import { navigateTo } from '../App';
-import { QuestionType } from '../utils/types';
+import axios, {AxiosError, AxiosResponse} from 'axios';
+import {LoginFormValues, RegisterFormValues, UpdateProfile} from '../@types/Types';
+import {NavigateFunction} from 'react-router-dom';
+import {SetStateAction} from 'react';
+import {navigateTo} from '../App';
+import {QuestionType} from '../utils/types';
 
-function handleError(error: AxiosError) {
+function handleError(error: AxiosError, navigate?: NavigateFunction) {
+	console.log(error);
 	switch (error.response?.status) {
 		case 403:
-			navigateTo('/unauthorized');
+			if (navigate) {
+				navigate('/unauthorized');
+			} else {
+				navigateTo('/unauthorized');
+			}
 			break;
 		case 404:
-			navigateTo('/not_found');
+			if (navigate) {
+				navigate('/not_found');
+			} else {
+				navigateTo('/not_found');
+			}
 			break;
 		case 500:
-			navigateTo('/server_down');
+			if (navigate) {
+				navigate('/server_down');
+			} else {
+				navigateTo('/server_down');
+			}
+			break;
+		case 999:
+			if (navigate) {
+				navigate('/');
+			} else {
+				navigateTo('/');
+			}
 			break;
 		default:
 			return error.response?.data;
@@ -27,26 +47,30 @@ export async function authUser(navigate: NavigateFunction, callback?: any) {
 		await axios.get('/api/auth_user');
 		if (callback) callback();
 	} catch (error: any) {
-		handleError(error);
+		handleError(error, navigate);
 	}
 }
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
-	let errorMessage: string = '';
-
 	try {
 		const res = await axios.post('/api/login', formData);
+		console.log('RES', res);
+		console.log('RES DATA', res.data);
 		if (res.data) {
+			if (res.data.role === 'pending') {
+				return {
+					response: {data: 'Your status is still pending'},
+				};
+			}
 			navigate('/');
 		} else {
 			navigate('/login');
 		}
+		return res;
 	} catch (error: any) {
-		handleError(error);
-		errorMessage = error.response.data;
+		handleError(error, navigate);
+		return error;
 	}
-
-	return errorMessage;
 }
 
 export async function logoutUser(navigate?: NavigateFunction) {
@@ -58,8 +82,11 @@ export async function logoutUser(navigate?: NavigateFunction) {
 			navigate('/');
 		}
 	} catch (error: any) {
-		handleError(error);
-		errorMessage = error.response.data;
+		if (navigate) {
+			navigate('/');
+		} else {
+			errorMessage = error.response.data;
+		}
 	}
 
 	return errorMessage;
@@ -86,9 +113,9 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 		});
 		const email = formData.get('email') + '';
 		const password = formData.get('password') + '';
-		await loginUser({ email, password }, navigate);
+		await loginUser({email, password}, navigate);
 	} catch (error: any) {
-		handleError(error);
+		handleError(error, navigate);
 		errorMessage = error.response.data;
 	}
 
@@ -97,7 +124,7 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 
 export async function rejectUser(email: string, filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		await axios.post('/api/reject_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -115,7 +142,7 @@ export async function rejectUser(email: string, filterPendingPeople: any) {
 
 export async function acceptUser(email: string, tags: string[], filterPendingPeople: any) {
 	try {
-		const data = JSON.stringify({ email, tags });
+		const data = JSON.stringify({email, tags});
 		await axios.post('/api/accept_user', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -226,7 +253,6 @@ export async function markTutorialAsDone(body: any) {
 }
 
 export async function getAllDataBaseQuestions(): Promise<QuestionType[]> {
-
 	try {
 		const res = await axios.get('/api/get_all_questions');
 		console.log(res);
@@ -290,7 +316,7 @@ export async function getAllUsers(setUsers: SetStateAction<any>) {
 export async function getUserStats(email: string) {
 	let res;
 	try {
-		const data = JSON.stringify({ email });
+		const data = JSON.stringify({email});
 		res = await axios.post('/api/user_stats', data, {
 			headers: {
 				'Content-Type': 'application/json',
@@ -304,16 +330,16 @@ export async function getUserStats(email: string) {
 
 export async function deleteAnUserAccount(email: string) {
 	try {
-		const data = JSON.stringify({ user_delete: email });
+		const data = JSON.stringify({user_delete: email});
 
 		axios.delete('/api/an_user', {
 			data: data,
-			headers: { 'Content-Type': 'application/json' },
+			headers: {'Content-Type': 'application/json'},
 		});
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 export async function getStaffStatistics() {
 	try {
@@ -326,11 +352,11 @@ export async function getStaffStatistics() {
 	} catch (error: any) {
 		handleError(error);
 	}
-};
+}
 
 // VERIFICATION
 export async function sendValidation(
-	contact: { email?: string, number?: string },
+	contact: {email?: string; number?: string},
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
@@ -340,22 +366,20 @@ export async function sendValidation(
 
 		if (whereSend === 'email') {
 			whereToSend = 'validate_email';
-			data = JSON.stringify({ email: contact.email });
+			data = JSON.stringify({email: contact.email});
 		} else {
 			whereToSend = 'validate_number';
-			data = JSON.stringify({ number: contact.number });
+			data = JSON.stringify({number: contact.number});
 		}
 
 		const res = await axios.post(`/api/${whereToSend}`, data, {
-			headers: { 'Content-Type': 'application/json' },
+			headers: {'Content-Type': 'application/json'},
 		});
-
 	} catch (error: any) {
-
 		handleError(error);
 		setError(error.response?.data);
 	}
-};
+}
 
 export async function validateCode(
 	contact: { email?: string, number?: string },
@@ -363,7 +387,6 @@ export async function validateCode(
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
-
 	let res;
 	try {
 		let data;
@@ -371,22 +394,21 @@ export async function validateCode(
 
 		if (whereSend === 'email') {
 			whereToSend = 'confirm_email';
-			data = JSON.stringify({ email: contact.email, code });
+			data = JSON.stringify({email: contact.email, code});
 		} else {
 			whereToSend = 'confirm_number';
-			data = JSON.stringify({ number: contact.number, code });
+			data = JSON.stringify({number: contact.number, code});
 		}
 
 		const response = await axios.post(`/api/${whereToSend}`, data, {
-			headers: { 'Content-Type': 'application/json' },
+			headers: {'Content-Type': 'application/json'},
 		});
 
 		res = response;
-
 	} catch (error: any) {
 		handleError(error);
 		setError(error.response?.data);
 	}
 
 	return res;
-};
+}

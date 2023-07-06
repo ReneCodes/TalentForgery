@@ -7,14 +7,29 @@ import DialogContentText from '@mui/material/DialogContentText';
 import DialogTitle from '@mui/material/DialogTitle';
 import useMediaQuery from '@mui/material/useMediaQuery';
 import {useTheme} from '@mui/material/styles';
+import {Box, Divider, Typography} from '@mui/material';
+import {SmallVideoData} from '../../../@types/Types';
 // types
 
-// TODO: get the TS Prop Type right
-const TimedVideoInfo: React.FC<any> = ({videoData}) => {
+interface TimedVideoInfoProps {
+	videoData: SmallVideoData['videoData'];
+	accessTime: string | undefined;
+	accessDate: string | undefined;
+	niceDueTime: string | undefined;
+	niceDueDate: string | undefined;
+}
+
+const TimedVideoInfo: React.FC<TimedVideoInfoProps> = ({
+	videoData,
+	accessTime,
+	accessDate,
+	niceDueTime,
+	niceDueDate,
+}) => {
 	const [open, setOpen] = React.useState(false);
 	const theme = useTheme();
 	const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-	const {title, description} = videoData;
+	const {title, description, tags} = videoData;
 
 	const handleClickOpen = () => {
 		setOpen(true);
@@ -44,9 +59,49 @@ const TimedVideoInfo: React.FC<any> = ({videoData}) => {
 					{title}
 				</DialogTitle>
 				<DialogContent>
-					<DialogContentText>{description}</DialogContentText>
+					<DialogContentText variant="overline">{description}</DialogContentText>
+					<Divider sx={{width: '50%', m: 'auto'}} />
+					<Box sx={{}}>
+						{tags &&
+							tags.map((tag) => (
+								<Typography
+									key={tag}
+									variant="overline"
+									color={'primary.main'}
+									sx={{
+										mx: 1,
+										backgroundColor: 'primary.main',
+										color: 'white.main',
+										px: 1,
+										py: '3px',
+										borderRadius: '4px',
+									}}>
+									{tag}
+								</Typography>
+							))}
+					</Box>
+					<Box>
+						<Typography
+							variant="overline"
+							sx={{borderBottom: '2px solid', borderColor: 'green.900', px: 1, pb: '3px'}}>
+							Access :
+						</Typography>
+						<Typography variant="overline">
+							{' '}
+							{accessDate} - {accessTime}{' '}
+						</Typography>
+						<Typography
+							variant="overline"
+							sx={{borderBottom: '2px solid', borderColor: 'red.900', px: 1, pb: '3px'}}>
+							Due By:
+						</Typography>
+						<Typography variant="overline">
+							{' '}
+							{niceDueDate} - {niceDueTime}
+						</Typography>
+					</Box>
 				</DialogContent>
-				<DialogActions>
+				<DialogActions sx={{borderTop: '1px solid', borderColor: 'gray.300'}}>
 					<Button
 						autoFocus
 						aria-label="close"
