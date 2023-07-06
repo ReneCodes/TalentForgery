@@ -108,11 +108,6 @@ const ContactInfo: FC = () => {
 				</Box>
 			</Box>
 			<Divider />
-			<Typography
-				variant="h5"
-				sx={styles.header}>
-				Certificates
-			</Typography>
 		</Container>
 	);
 };
@@ -142,7 +137,7 @@ const styles = {
 		display: 'flex',
 		flexDirection: 'column',
 		justifyContent: 'end',
-		width: '100%',
+		width: 'max-content',
 		height: '100%',
 		minWidth: '200px',
 		maxWidth: '350px',
