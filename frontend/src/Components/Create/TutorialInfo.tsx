@@ -10,7 +10,6 @@ interface TutorialInfoProps {
 }
 
 const TutorialInfo: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => {
-  console.log(tutorial, 'TUTORIAL');
 
   return (
     <div>
