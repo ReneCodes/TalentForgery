@@ -111,9 +111,6 @@ export async function registerUser(userData: RegisterFormValues, navigate: Navig
 				'Content-Type': 'multipart/form-data',
 			},
 		});
-		const email = formData.get('email') + '';
-		const password = formData.get('password') + '';
-		await loginUser({email, password}, navigate);
 	} catch (error: any) {
 		handleError(error, navigate);
 		errorMessage = error.response.data;

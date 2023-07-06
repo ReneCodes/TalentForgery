@@ -4,6 +4,10 @@ Welcome to our innovative web app that revolutionizes training and knowledge sha
 
 
 ## Get Started
+- ```npx cypress open``` to run the cypress tests
+
+### root
+
 ### Client
 - ```npm i``` to install the required node modules
 - ```npm test``` to run the client tests
