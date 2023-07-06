@@ -23,6 +23,7 @@ function UserCard({first_name, last_name, profile_picture, email, callback}: any
 					'0px 2px 1px -1px rgba(0,0,0,0.2), 0px 1px 1px 0px rgba(0,0,0,0.14), 0px 1px 3px 0px rgba(0,0,0,0.12)',
 				gap: 3,
 				':hover': {
+					cursor: 'pointer',
 					// backgroundColor: 'white.main',
 					backgroundColor: 'secondary.main',
 					borderColor: 'secondary.main',

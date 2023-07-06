@@ -230,6 +230,8 @@ const getUserStats = async (req: Request, res: Response) => {
     res.status(200).json(data);
   } catch (error) {
     const errorMessage = (error as Error).message;
+    console.log(error);
+
     if (errorMessage === 'Invalid email') res.status(404).json(errorMessage);
     else res.status(500).json('Server failed');
   }
