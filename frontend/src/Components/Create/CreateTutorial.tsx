@@ -149,13 +149,15 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
         <div className='create_tutorial'>
           <TutorialForm getData={getData} onData={handleDataFromForm} />
           <div>
+            <h3 className='title_upload'>Video Upload</h3>
             <input
               type="file"
-              accept="video/**"
+              accept=".mp4"
               onChange={handleFileUpload}
               className="video_upload"
             />
             <VideoPreview showPreview={videoSubmit} videoData={data} />
+            <h3 className='title_upload'>Thumbnail Upload</h3>
             <input
               type="file"
               accept="image/*"

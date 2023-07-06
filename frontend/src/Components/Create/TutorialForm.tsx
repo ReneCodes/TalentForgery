@@ -13,10 +13,10 @@ const TutorialForm: FC<TutorialFormComp> = ({getData, onData}) => {
   const [title, setTitle] = useState('');
   const [description, setDesciption] = useState('');
 
-  const { selctedTags } = TutorialTagStore()
+  const { selectedTags } = TutorialTagStore()
 
   useEffect(() => {
-    if(getData) onData({title, description, tags: selctedTags})
+    if(getData) onData({title, description, tags: selectedTags})
   }, [getData])
 
   return <div className='form'>
