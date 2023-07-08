@@ -32,15 +32,15 @@ export const CodesValidation = (props: any) => {
   const allVerified = () => {
     let allVerified = true;
     verification.forEach((item: any) => {
-      if (item.verified === true || item.value === '' || item.value === undefined) allVerified = allVerified === true ? true : false;
+      if (item.verified || item.value === '' || item.value === undefined) allVerified = allVerified === true ? true : false;
       else allVerified = false;
     });
     return allVerified;
   }
 
-  function updateVerified(email: boolean, sending: string) {
+  function updateVerified(email: boolean, sending: string, verified: string) {
     const newArr = JSON.parse(JSON.stringify(verification));
-    newArr[indexSend[0]] = { email, value: sending, verified: true };
+    newArr[indexSend[0]] = { email, value: sending, verified };
     setVerification(newArr);
   };
 
@@ -48,22 +48,30 @@ export const CodesValidation = (props: any) => {
     return verification[indexSend[0]].verified;
   }
 
-  useEffect(() => {
-
+  async function checkCodes() {
     if (indexSend[0] <= 1 && sending !== '' && !checkVerified()) {
+
       setWhereSend('email');
       emptyVariables();
       sendValidation({ email: sending }, 'email', setError);
+
     } else if (indexSend[0] === 2 && sending !== '' && !checkVerified()) {
+
       setWhereSend('phone');
       emptyVariables();
       sendValidation({ number: sending }, 'phone', setError);
+
     } else if (indexSend[0] < 2) {
+
       setIndexSend([indexSend[0] + 1]);
+
     } else if (allVerified()) {
       closeWindowAndRegister();
     }
+  }
 
+  useEffect(() => {
+    checkCodes();
   }, [indexSend[0]]);
 
 
@@ -71,21 +79,25 @@ export const CodesValidation = (props: any) => {
 
     if (error === 'Email already registered') {
       setError('Change the email');
+
     } else if (error === 'Number already registered') {
       setError('Change the phone number');
+
     } else if (indexSend[0] === 0 || indexSend[0] === 1) {
 
       const codeValidated: any = await validateCode({ email: sending }, value, whereSend, setError);
-      if (codeValidated?.data === 'Right Code') {
-        updateVerified(true, sending);
+      console.log(codeValidated);
+
+      if (codeValidated && codeValidated.data) {
+        updateVerified(true, sending, codeValidated.data);
         setIndexSend([indexSend[0] + 1]);
         setError('');
       };
 
     } else if (indexSend[0] === 2) {
       const codeValidated: any = await validateCode({ number: sending }, value, whereSend, setError);
-      if (codeValidated?.data === 'Right Code') {
-        updateVerified(false, sending);
+      if (codeValidated && codeValidated.data) {
+        updateVerified(false, sending, codeValidated.data);
         setIndexSend([indexSend[0] + 1]);
         setError('');
       }

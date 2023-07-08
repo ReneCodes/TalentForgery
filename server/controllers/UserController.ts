@@ -60,6 +60,8 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     };
 
     const validCodes = await validateCodes(req);
+    console.log(validCodes);
+
     if (!validCodes) {
       req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(400).json("Wrong codes");

@@ -92,10 +92,20 @@ export async function logoutUser(navigate?: NavigateFunction) {
 	return errorMessage;
 }
 
-export async function registerUser(userData: RegisterFormValues, navigate: NavigateFunction) {
+export async function registerUser(userData: RegisterFormValues, verification: any, navigate: NavigateFunction) {
 	let errorMessage: string = '';
 
 	const formData = new FormData();
+
+	verification.forEach((verificationObject: any, index: number) => {
+		if (index === 0) { formData.append('mainEmailCode', verificationObject.verified); }
+		if (index === 1 && verificationObject.value !== '' && verificationObject.verified) {
+			formData.append('mainEmailCode', verificationObject.verified);
+		}
+		if (index === 2 && verificationObject.value !== '' && verificationObject.verified) {
+			formData.append('mainEmailCode', verificationObject.verified);
+		}
+	});
 
 	Object.entries(userData).forEach(([key, value]) => {
 		if (value instanceof FileList) {
@@ -350,6 +360,7 @@ export async function sendValidation(
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
+	let res;
 	try {
 		let data;
 		let whereToSend;
@@ -362,13 +373,14 @@ export async function sendValidation(
 			data = JSON.stringify({ number: contact.number });
 		}
 
-		const res = await axios.post(`/api/${whereToSend}`, data, {
+		res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 	} catch (error: any) {
 		handleError(error);
 		setError(error.response?.data);
 	}
+	return res;
 }
 
 export async function validateCode(
@@ -390,11 +402,10 @@ export async function validateCode(
 			data = JSON.stringify({ number: contact.number, code });
 		}
 
-		const response = await axios.post(`/api/${whereToSend}`, data, {
+		res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
-		res = response;
 	} catch (error: any) {
 		handleError(error);
 		setError(error.response?.data);

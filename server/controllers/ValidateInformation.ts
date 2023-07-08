@@ -87,7 +87,6 @@ const confirmEmail = async (req: Request, res: Response) => {
   } else if (isWriteCode === 'Wrong Code') {
     res.status(400).json(isWriteCode);
   } else {
-    await deleteCode(email);
     return res.status(200).json(isWriteCode);
   }
 
@@ -144,25 +143,33 @@ const validateCodes = async (req: Request): Promise<boolean> => {
     phoneCode,
   }: codesType = req.body;
 
-  if (!mainEmailCode) return false;
+  let validCode = true;
+  if (!mainEmailCode) return validCode;
 
   const emailValid = await getInformation(mainEmailCode);
-  if (!emailValid) { return false; }
-  else { await deleteCode(mainEmailCode); }
+  if (!emailValid) { validCode = false }
 
   if (secondEmailCode) {
     const secondEmailValid = await getInformation(secondEmailCode);
     if (!secondEmailValid) { return false; }
-    else { await deleteCode(secondEmailCode); }
   }
 
   if (phoneCode) {
     const secondEmailValid = await getInformation(phoneCode);
     if (!secondEmailValid) { return false; }
-    else { await deleteCode(phoneCode); }
   }
 
-  return true;
+  console.log(mainEmailCode, secondEmailCode, phoneCode);
+
+
+  if(validCode){
+    deleteCode(mainEmailCode);
+    deleteCode(secondEmailCode);
+    deleteCode(phoneCode);
+    return validCode;
+  }
+
+  return false;
 };
 
 

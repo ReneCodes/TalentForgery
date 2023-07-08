@@ -29,6 +29,7 @@ const checkCode = async (contact: string, code: number) => {
 };
 
 const deleteCode = async (contact: string) => {
+  if (!contact) return true;
   await Codes.destroy({ where: { contact } });
 };
 
