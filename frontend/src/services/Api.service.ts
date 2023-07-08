@@ -51,10 +51,9 @@ export async function authUser(navigate: NavigateFunction, callback?: any) {
 }
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
+	let res;
 	try {
-		const res = await axios.post('/api/login', formData);
-		console.log('RES', res);
-		console.log('RES DATA', res.data);
+		res = await axios.post('/api/login', formData);
 		if (res.data) {
 			if (res.data.role === 'pending') {
 				return {
@@ -65,11 +64,11 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 		} else {
 			navigate('/login');
 		}
-		return res;
 	} catch (error: any) {
 		handleError(error, navigate);
 		return error;
 	}
+	return res;
 }
 
 export async function logoutUser(navigate?: NavigateFunction) {

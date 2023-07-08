@@ -295,13 +295,14 @@ const Register = () => {
               {/* Profile Image */}
               <Box display="flex">
                 <label htmlFor="profile_image">
-                  <div style={{ width: 100, height: 100, borderRadius: 999 }}>
+                  <div style={{ width: 80, height: 80, borderRadius: 999 }}>
                     {file.name ? (
                       <img
                         style={{
                           width: "80px",
                           height: "80px",
                           borderRadius: "999px",
+                          objectFit: 'cover'
                         }}
                         src={URL.createObjectURL(file)}
                         alt=""

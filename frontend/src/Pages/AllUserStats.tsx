@@ -54,8 +54,8 @@ function AllUserStats() {
   async function deleteAccount() {
     await deleteAnUserAccount(userForStats.email);
     const allUsersFiltered = users.filter(user => user.email !== userForStats.email);
-
     setUsers(allUsersFiltered);
+    setUsersSearched(allUsersFiltered);
     setUserStats({});
     setUserForStats({})
     setShowStats(false);
