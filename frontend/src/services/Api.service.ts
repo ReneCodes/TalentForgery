@@ -195,7 +195,6 @@ export async function postTutorial(data: any) {
 export async function getUsersTutorials(storeUserTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_tutorials');
-		console.log('get Users Tutorials', res.data);
 		storeUserTutorials(res.data);
 		return res;
 	} catch (error: any) {
@@ -215,7 +214,6 @@ export async function getAllTutorials(storeAllTutorials: any) {
 
 export async function getQuestions(body: any, setTutorialQuestions: any) {
 	if (body.tutorial_id) {
-		// console.log('SEND ID', body);
 		try {
 			const res = await axios.post('/api/questions', body);
 			setTutorialQuestions(res.data);
@@ -230,7 +228,6 @@ export async function getQuestions(body: any, setTutorialQuestions: any) {
 export async function sendFinishedTest(body: any) {
 	try {
 		const res = await axios.post('/api/handle_test_done', body);
-		console.log(res.data);
 		return res;
 	} catch (error: any) {
 		console.error(error.response.data, '<= No Test');
@@ -241,7 +238,6 @@ export async function sendFinishedTest(body: any) {
 export async function markTutorialAsDone(body: any) {
 	try {
 		const res = await axios.post('/api/mark_as_watched', body);
-		console.log(res.data);
 		return res;
 	} catch (error: any) {
 		console.error(error.response.data, '<= No Test');
@@ -252,8 +248,6 @@ export async function markTutorialAsDone(body: any) {
 export async function getAllDataBaseQuestions(): Promise<QuestionType[]> {
 	try {
 		const res = await axios.get('/api/get_all_questions');
-		console.log(res);
-
 		return res.data;
 	} catch (error: any) {
 		handleError(error);
@@ -272,7 +266,6 @@ export async function updateProfileData(profileData: UpdateProfile) {
 			formData.append(key, String(value));
 		}
 	});
-	formData.forEach((entry) => console.log('From Form', entry));
 
 	try {
 		const res = await axios.post(`/api/update_user`, formData, {

@@ -1,7 +1,8 @@
+import { UUID } from "crypto";
 import { Request, Response } from "express";
 const { getUserByEmail, getUserByNumber } = require("../models/UserModel");
 const { sendEmail, sendMessage } = require("./SendInformation");
-const { saveCode, checkCode, deleteCode, checkContactWaiting } = require("../models/Codes");
+const { saveCode, checkCode, deleteCode, checkContactWaiting, getInformation } = require("../models/Codes");
 
 const createCode = async () => {
 
@@ -126,7 +127,43 @@ const confirmNumber = async (req: Request, res: Response) => {
 
 };
 
-module.exports = { validateEmail, confirmEmail, validateNumber, confirmNumber };
+// VALIDATES THE CODES PROVIDED BY THE USER
+type codesType = {
+  mainEmailCode: UUID | undefined;
+  secondEmailCode: UUID | undefined;
+  phoneCode: UUID | undefined;
+  email: string;
+  personal_email: string | undefined;
+  phone: string | undefined;
+}
+const validateCodes = async (req: Request): Promise<boolean> => {
+
+  const {
+    mainEmailCode,
+    secondEmailCode,
+    phoneCode,
+  }: codesType = req.body;
+
+  if(!mainEmailCode) return false;
+
+  const emailValid = await getInformation(mainEmailCode);
+  if(!emailValid) return false;
+
+  if(secondEmailCode) {
+    const secondEmailValid = await getInformation(secondEmailCode);
+    if(!secondEmailValid) return false;
+  }
+
+  if(phoneCode) {
+    const secondEmailValid = await getInformation(phoneCode);
+    if(!secondEmailValid) return false;
+  }
+
+  return true;
+};
+
+
+module.exports = { validateEmail, confirmEmail, validateNumber, confirmNumber, validateCodes };
 
 
 

@@ -20,6 +20,7 @@ import { NextFunction, Request, Response } from 'express';
 import { fileInput } from '../types/user';
 const { validateRegisterData, validateLoginData, validateUserDelete } = require('../middleware/Validation');
 const { getUserByEmail } = require('../models/UserModel');
+const { validateCodes } = require('./ValidateInformation');
 const fs = require('fs');
 
 const storage = multer.diskStorage({
@@ -57,6 +58,12 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
       req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
       return res.status(409).json('User already exists');
     };
+
+    const validCodes = await validateCodes(req);
+    if (!validCodes) {
+      req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
+      return res.status(400).json("Wrong codes");
+    }
 
     try {
       const profile_picture = req.file ? req.file.filename : null;
