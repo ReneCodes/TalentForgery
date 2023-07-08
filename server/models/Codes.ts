@@ -20,7 +20,12 @@ const checkCode = async (contact: string, code: number) => {
   const info = await Codes.findOne({ where: { contact } });
   if (!info) return 'Not Found';
   else if (info.code !== code) return 'Wrong Code';
-  else return 'Right Code';
+  else {
+    const newCodeId = crypto.randomUUID();
+    info.confirm = newCodeId;
+    await info.save();
+    return newCodeId;
+  }
 };
 
 const deleteCode = async (contact: string) => {

@@ -121,7 +121,6 @@ const confirmNumber = async (req: Request, res: Response) => {
   } else if (rightCode === 'Wrong Code') {
     res.status(409).json(rightCode);
   } else {
-    await deleteCode(number);
     return res.status(200).json(rightCode);
   }
 
@@ -135,7 +134,8 @@ type codesType = {
   email: string;
   personal_email: string | undefined;
   phone: string | undefined;
-}
+};
+
 const validateCodes = async (req: Request): Promise<boolean> => {
 
   const {
@@ -144,19 +144,22 @@ const validateCodes = async (req: Request): Promise<boolean> => {
     phoneCode,
   }: codesType = req.body;
 
-  if(!mainEmailCode) return false;
+  if (!mainEmailCode) return false;
 
   const emailValid = await getInformation(mainEmailCode);
-  if(!emailValid) return false;
+  if (!emailValid) { return false; }
+  else { await deleteCode(mainEmailCode); }
 
-  if(secondEmailCode) {
+  if (secondEmailCode) {
     const secondEmailValid = await getInformation(secondEmailCode);
-    if(!secondEmailValid) return false;
+    if (!secondEmailValid) { return false; }
+    else { await deleteCode(secondEmailCode); }
   }
 
-  if(phoneCode) {
+  if (phoneCode) {
     const secondEmailValid = await getInformation(phoneCode);
-    if(!secondEmailValid) return false;
+    if (!secondEmailValid) { return false; }
+    else { await deleteCode(phoneCode); }
   }
 
   return true;
