@@ -86,7 +86,6 @@ export const CodesValidation = (props: any) => {
     } else if (indexSend[0] === 0 || indexSend[0] === 1) {
 
       const codeValidated: any = await validateCode({ email: sending }, value, whereSend, setError);
-      console.log(codeValidated);
 
       if (codeValidated && codeValidated.data) {
         updateVerified(true, sending, codeValidated.data);

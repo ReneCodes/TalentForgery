@@ -159,9 +159,6 @@ const validateCodes = async (req: Request): Promise<boolean> => {
     if (!secondEmailValid) { return false; }
   }
 
-  console.log(mainEmailCode, secondEmailCode, phoneCode);
-
-
   if(validCode){
     deleteCode(mainEmailCode);
     deleteCode(secondEmailCode);

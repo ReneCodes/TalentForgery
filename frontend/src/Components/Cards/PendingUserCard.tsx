@@ -15,8 +15,6 @@ function PendingUsersCard(props: any) {
 
   const { closeStats, accept, reject, stats } = props;
 
-  console.log(stats);
-
   const imgPath = `${baseURL}images/profile_pictures/${stats.dataValues.profile_picture}`
 
   return (

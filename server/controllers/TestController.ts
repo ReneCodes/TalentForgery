@@ -40,8 +40,6 @@ const handleTest = async (req: Request, res: Response) => {
 
     return res.status(200).json('Check your email');
   } catch (error) {
-    console.log(error);
-
     res.status(500).json('Server Failed');
   }
 };

@@ -60,7 +60,6 @@ const registerUser = async (req: any, res: Response, next: NextFunction) => {
     };
 
     const validCodes = await validateCodes(req);
-    console.log(validCodes);
 
     if (!validCodes) {
       req.file && req.file.path ? await fs.unlinkSync(req.file.path) : false;
@@ -239,8 +238,6 @@ const getUserStats = async (req: Request, res: Response) => {
     res.status(200).json(data);
   } catch (error) {
     const errorMessage = (error as Error).message;
-    console.log(error);
-
     if (errorMessage === 'Invalid email') res.status(404).json(errorMessage);
     else res.status(500).json('Server failed');
   }
