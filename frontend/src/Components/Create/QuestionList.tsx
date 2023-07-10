@@ -10,11 +10,8 @@ interface QuestionListComp {
 const QuestionList: FC<QuestionListComp> = ({questions}) => {
   const [questionList, setQuestionList] = useState<{question: QuestionType}[]>([]);
 
-  useEffect(() => console.log(questionList), [questionList]);
-
   useEffect(() => {
     if(questions[0] && typeof questions[0] === 'string') {
-      console.log(questions);
       (async() => {
         await getQuestions({tutorial_id: questions}, setQuestionList);
       })()

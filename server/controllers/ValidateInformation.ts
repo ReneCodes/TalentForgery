@@ -1,7 +1,8 @@
+import { UUID } from "crypto";
 import { Request, Response } from "express";
 const { getUserByEmail, getUserByNumber } = require("../models/UserModel");
 const { sendEmail, sendMessage } = require("./SendInformation");
-const { saveCode, checkCode, deleteCode, checkContactWaiting } = require("../models/Codes");
+const { saveCode, checkCode, deleteCode, checkContactWaiting, getInformation } = require("../models/Codes");
 
 const createCode = async () => {
 
@@ -86,7 +87,6 @@ const confirmEmail = async (req: Request, res: Response) => {
   } else if (isWriteCode === 'Wrong Code') {
     res.status(400).json(isWriteCode);
   } else {
-    await deleteCode(email);
     return res.status(200).json(isWriteCode);
   }
 
@@ -120,13 +120,57 @@ const confirmNumber = async (req: Request, res: Response) => {
   } else if (rightCode === 'Wrong Code') {
     res.status(409).json(rightCode);
   } else {
-    await deleteCode(number);
     return res.status(200).json(rightCode);
   }
 
 };
 
-module.exports = { validateEmail, confirmEmail, validateNumber, confirmNumber };
+// VALIDATES THE CODES PROVIDED BY THE USER
+type codesType = {
+  mainEmailCode: UUID | undefined;
+  secondEmailCode: UUID | undefined;
+  phoneCode: UUID | undefined;
+  email: string;
+  personal_email: string | undefined;
+  phone: string | undefined;
+};
+
+const validateCodes = async (req: Request): Promise<boolean> => {
+
+  const {
+    mainEmailCode,
+    secondEmailCode,
+    phoneCode,
+  }: codesType = req.body;
+
+  let validCode = true;
+  if (!mainEmailCode) return validCode;
+
+  const emailValid = await getInformation(mainEmailCode);
+  if (!emailValid) { validCode = false }
+
+  if (secondEmailCode) {
+    const secondEmailValid = await getInformation(secondEmailCode);
+    if (!secondEmailValid) { return false; }
+  }
+
+  if (phoneCode) {
+    const secondEmailValid = await getInformation(phoneCode);
+    if (!secondEmailValid) { return false; }
+  }
+
+  if(validCode){
+    deleteCode(mainEmailCode);
+    deleteCode(secondEmailCode);
+    deleteCode(phoneCode);
+    return validCode;
+  }
+
+  return false;
+};
+
+
+module.exports = { validateEmail, confirmEmail, validateNumber, confirmNumber, validateCodes };
 
 
 

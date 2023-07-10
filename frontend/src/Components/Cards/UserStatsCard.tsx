@@ -27,7 +27,7 @@ function UserStatsCard(props: any) {
   const deleteAccount = props.deleteAccount;
 
   const fullScreen = useMediaQuery(theme.breakpoints.down('md'));
-  const imageUrl = `${baseURL}images/profile_pictures/${user.profile_picture}`;
+  const imageUrl = `${baseURL}/${user.profile_picture}`;
 
   let totalsTests = percentage(stats.passed, stats.failed);
   let totalsQuestions = percentage(stats.correct_questions, stats.wrong_questions);

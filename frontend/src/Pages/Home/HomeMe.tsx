@@ -15,10 +15,6 @@ export const HomeMe = () => {
 	const generalTutorials = sortAccessDate('oldest', userTutorials[0]);
 	const scheduledTutorials = sortAccessDate('oldest', userTutorials[1]);
 
-	// console.log('lenght', generalTutorials[0].questions_id.length);
-	// console.log('questions', generalTutorials[0].questions_id);
-	// console.log('generalTutorials[0]', generalTutorials[0]);
-
 	const [adminScheduledTutorials, setAdminScheduledTutorials] = useState<SmallVideoData['videoData'][]>([]);
 
 	useEffect(() => {
@@ -27,8 +23,6 @@ export const HomeMe = () => {
 		setAdminScheduledTutorials(newest);
 	}, [allTutorials]);
 
-	// console.log('generalTutorials', generalTutorials);
-	// console.log('scheduledTutorials', scheduledTutorials);
 	return (
 		<Box sx={{display: 'flex', flexDirection: 'column', alignItems: {xs: 'center', sm: 'flex-start'}, m: 'auto'}}>
 			<Typography

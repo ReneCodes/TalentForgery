@@ -51,10 +51,9 @@ export async function authUser(navigate: NavigateFunction, callback?: any) {
 }
 
 export async function loginUser(formData: LoginFormValues, navigate: NavigateFunction) {
+	let res;
 	try {
-		const res = await axios.post('/api/login', formData);
-		console.log('RES', res);
-		console.log('RES DATA', res.data);
+		res = await axios.post('/api/login', formData);
 		if (res.data) {
 			if (res.data.role === 'pending') {
 				return {
@@ -65,11 +64,11 @@ export async function loginUser(formData: LoginFormValues, navigate: NavigateFun
 		} else {
 			navigate('/login');
 		}
-		return res;
 	} catch (error: any) {
 		handleError(error, navigate);
 		return error;
 	}
+	return res;
 }
 
 export async function logoutUser(navigate?: NavigateFunction) {
@@ -93,10 +92,20 @@ export async function logoutUser(navigate?: NavigateFunction) {
 	return errorMessage;
 }
 
-export async function registerUser(userData: RegisterFormValues, navigate: NavigateFunction) {
+export async function registerUser(userData: RegisterFormValues, verification: any, navigate: NavigateFunction) {
 	let errorMessage: string = '';
 
 	const formData = new FormData();
+
+	verification.forEach((verificationObject: any, index: number) => {
+		if (index === 0) { formData.append('mainEmailCode', verificationObject.verified); }
+		if (index === 1 && verificationObject.value !== '' && verificationObject.verified) {
+			formData.append('mainEmailCode', verificationObject.verified);
+		}
+		if (index === 2 && verificationObject.value !== '' && verificationObject.verified) {
+			formData.append('mainEmailCode', verificationObject.verified);
+		}
+	});
 
 	Object.entries(userData).forEach(([key, value]) => {
 		if (value instanceof FileList) {
@@ -196,7 +205,6 @@ export async function postTutorial(data: any) {
 export async function getUsersTutorials(storeUserTutorials: any) {
 	try {
 		const res = await axios.get('/api/get_tutorials');
-		console.log('get Users Tutorials', res.data);
 		storeUserTutorials(res.data);
 		return res;
 	} catch (error: any) {
@@ -216,7 +224,6 @@ export async function getAllTutorials(storeAllTutorials: any) {
 
 export async function getQuestions(body: any, setTutorialQuestions: any) {
 	if (body.tutorial_id) {
-		// console.log('SEND ID', body);
 		try {
 			const res = await axios.post('/api/questions', body);
 			setTutorialQuestions(res.data);
@@ -231,7 +238,6 @@ export async function getQuestions(body: any, setTutorialQuestions: any) {
 export async function sendFinishedTest(body: any) {
 	try {
 		const res = await axios.post('/api/handle_test_done', body);
-		console.log(res.data);
 		return res;
 	} catch (error: any) {
 		console.error(error.response.data, '<= No Test');
@@ -242,7 +248,6 @@ export async function sendFinishedTest(body: any) {
 export async function markTutorialAsDone(body: any) {
 	try {
 		const res = await axios.post('/api/mark_as_watched', body);
-		console.log(res.data);
 		return res;
 	} catch (error: any) {
 		console.error(error.response.data, '<= No Test');
@@ -253,8 +258,6 @@ export async function markTutorialAsDone(body: any) {
 export async function getAllDataBaseQuestions(): Promise<QuestionType[]> {
 	try {
 		const res = await axios.get('/api/get_all_questions');
-		console.log(res);
-
 		return res.data;
 	} catch (error: any) {
 		handleError(error);
@@ -273,7 +276,6 @@ export async function updateProfileData(profileData: UpdateProfile) {
 			formData.append(key, String(value));
 		}
 	});
-	formData.forEach((entry) => console.log('From Form', entry));
 
 	try {
 		const res = await axios.post(`/api/update_user`, formData, {
@@ -358,6 +360,7 @@ export async function sendValidation(
 	whereSend: 'email' | 'phone',
 	setError: SetStateAction<any>
 ) {
+	let res;
 	try {
 		let data;
 		let whereToSend;
@@ -370,13 +373,14 @@ export async function sendValidation(
 			data = JSON.stringify({ number: contact.number });
 		}
 
-		const res = await axios.post(`/api/${whereToSend}`, data, {
+		res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 	} catch (error: any) {
 		handleError(error);
 		setError(error.response?.data);
 	}
+	return res;
 }
 
 export async function validateCode(
@@ -398,11 +402,10 @@ export async function validateCode(
 			data = JSON.stringify({ number: contact.number, code });
 		}
 
-		const response = await axios.post(`/api/${whereToSend}`, data, {
+		res = await axios.post(`/api/${whereToSend}`, data, {
 			headers: { 'Content-Type': 'application/json' },
 		});
 
-		res = response;
 	} catch (error: any) {
 		handleError(error);
 		setError(error.response?.data);

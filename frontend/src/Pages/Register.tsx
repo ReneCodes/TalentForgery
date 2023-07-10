@@ -24,6 +24,7 @@ import { registerUser } from "../services/Api.service";
 import { NavigateFunction, useNavigate } from "react-router-dom";
 import { LoginAndOut } from "../utils/zustand.store";
 import { CodesValidation } from "../Components/CodesValidation/CodesValidation";
+import { navigateTo } from "../App";
 
 // import './register.css';
 
@@ -45,7 +46,6 @@ const Register = () => {
   const [registerError, setRegisterError] = useState("");
   const [file, setFile] = useState<File>({} as File);
   const navigate: NavigateFunction = useNavigate();
-  const { MinonLogin } = LoginAndOut();
 
   const [verification, setVerification] = useState([
     { email: true, value: '', verified: false },
@@ -123,7 +123,7 @@ const Register = () => {
         endArr.push({
           email: isEmail,
           value: valueInserted,
-          verified: element.value === valueInserted && element.verified === true ? true : false,
+          verified: element.value === valueInserted && element.verified ? element.verified : false,
         });
       });
 
@@ -143,10 +143,10 @@ const Register = () => {
       );
 
       if (checkPassword) {
-        const registerAnswer = await registerUser(formData, navigate);
+        const registerAnswer = await registerUser(formData, verification, navigate);
         if (registerAnswer) setRegisterError(registerAnswer);
         else {
-          MinonLogin();
+          navigate('/login');
           reset({
             profile_image: {} as File,
             first_name: "",
@@ -295,13 +295,14 @@ const Register = () => {
               {/* Profile Image */}
               <Box display="flex">
                 <label htmlFor="profile_image">
-                  <div style={{ width: 100, height: 100, borderRadius: 999 }}>
+                  <div style={{ width: 80, height: 80, borderRadius: 999 }}>
                     {file.name ? (
                       <img
                         style={{
                           width: "80px",
                           height: "80px",
                           borderRadius: "999px",
+                          objectFit: 'cover'
                         }}
                         src={URL.createObjectURL(file)}
                         alt=""

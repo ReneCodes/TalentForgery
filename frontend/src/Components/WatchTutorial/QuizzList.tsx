@@ -75,7 +75,6 @@ const QuizzList: React.FC<QuizzListProps> = ({setQuizzDone, setQuizzToDo}) => {
 				ids.push(question.id);
 				choices.push(question.choice);
 			}
-			console.log(ids, choices);
 		}
 	}, [index]);
 
@@ -88,7 +87,6 @@ const QuizzList: React.FC<QuizzListProps> = ({setQuizzDone, setQuizzToDo}) => {
 				ids.push(question.id);
 				choices.push(question.choice);
 			}
-			console.log(ids, choices);
 
 			setQuizzToDo(false);
 			setQuizzDone(true);

@@ -162,7 +162,7 @@ const deleteOldProfilePicture = async (file: any, oldProfilePicture: string) => 
     const oldPicturePath = filePath.join('/');
     await deleteProfilePicture(oldProfilePicture)
   } catch (error) {
-    console.log({ msg: 'No Old Profile Image found' });
+    return 'Failed'
   }
 };
 

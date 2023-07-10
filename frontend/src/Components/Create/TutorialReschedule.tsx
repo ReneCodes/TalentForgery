@@ -33,7 +33,6 @@ const TutorialReshedule: FC<TutorialInfoProps> = ({open, onClose, tutorial}) => 
           access_date: data.startDate,
           due_date: data.endDate
         });
-        console.log(tutorial);
         setFormInfo((res) => {
           return {
             ...res,

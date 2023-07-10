@@ -68,10 +68,8 @@ const TimedQuizzList: React.FC<any> = ({setQuizzDone, setQuizzToDo, tutorialQues
 			// check Role
 			if(checkMail){
 				if (getUserRole() === 'user') {
-					console.log('fetch user tutorials');
 					await getUsersTutorials(storeUserTutorials);
 				} else if (getUserRole() === 'admin') {
-					console.log('fetch admin tutorials');
 					await getAllTutorials(storeAllTutorials);
 				}
 			}

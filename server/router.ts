@@ -5,7 +5,7 @@ const TutorialController = require("./controllers/TutorialControllers");
 const TestController = require('./controllers/TestController');
 const ValidateInformation = require('./controllers/ValidateInformation');
 
-const { authUser, authAdminUser, userExists } = require('./middleware/AuthMiddleware');
+const { authUser, authAdminUser } = require('./middleware/AuthMiddleware');
 
 // VALIDATION ROUTES
 router.post("/validate_email", ValidateInformation.validateEmail);
@@ -17,7 +17,7 @@ router.post("/confirm_number", ValidateInformation.confirmNumber);
 // AUTHENTICATION ROUTES
 router.post("/register", UserController.registerUser);
 router.post("/login", UserController.loginUser);
-router.get("/auth_user", authUser, userExists);
+router.get("/auth_user", authUser);
 
 // ACCEPT / REJECT / UPDATE /GETALL USERS / GET USER STATS
 router.post("/accept_user", authAdminUser, UserController.acceptUser);

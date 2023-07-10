@@ -33,10 +33,6 @@ export const SideNav = () => {
 	const {profile_picture, department, first_name} = localProfileInfo;
 	const remoteProfileAvatar = `${avatar_url_path}${profile_picture}`;
 	const {collapsed, toggled, breakpoint, isToggled, reachedBreakpoint} = NavbarStore();
-	console.log(remoteProfileAvatar);
-	// useEffect(() => {
-	// 	console.log('localProfileInfo', localProfileInfo);
-	// }, [localProfileInfo]);
 
 	const theme = useTheme();
 	const location = useLocation();

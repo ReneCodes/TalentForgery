@@ -92,18 +92,12 @@ const TimedStartWatchTutorial: React.FC<TimedWatchTutorialProps> = ({
 		setOpenAlert(false);
 	};
 	const handleAbortTutorial = () => {
-		console.log('User Aborted Tutorial');
 		handleClose();
 		setOpenAlert(false);
 	};
 	const markAsDone = () => {
 		markTutorialAsDone({tutorial_id});
 	};
-
-	// console.log('new render');
-	// console.log('currentDateTime', currentDateTime);
-	// console.log('accessDate', accessDate);
-	// console.log('accessTime', accessTime);
 
 	return (
 		<div>

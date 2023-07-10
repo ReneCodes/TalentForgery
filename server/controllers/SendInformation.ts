@@ -44,7 +44,6 @@ const sendMessage = async (number: string, code: string) => {
       from: process.env.TWILLIO_NUMBER,
       to: number
     })
-    .then((message: any) => console.log('SMS sent. SID:', message.sid))
     .catch((error: any) => console.error('Error sending SMS:', error));
 
 };

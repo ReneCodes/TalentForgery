@@ -9,13 +9,10 @@ const TimedTotorialVideo: React.FC<any> = ({videoData, setVideoToWatch, setQuizz
 	// Zustand Store
 	const {video_base_url} = TutorialStore();
 
-	// console.log('In Video', videoData);
-
 	const handleVideoDone = () => {
 		setVideoToWatch(false);
 		setQuizzToDo(true);
 	};
-	// console.log('TimedTotorialVideo', videoData);
 	return (
 		<Box sx={{maxWidth: '95%', margin: 'auto'}}>
 			<DialogContent sx={{width: 'fit-content', maxWidth: '1000px', margin: 'auto', textAlign: 'center'}}>

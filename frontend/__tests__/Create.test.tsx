@@ -24,7 +24,7 @@ describe('Question', () => {
     const option1 = screen.getByText('hello');
     const option2 = screen.getByText('wassup');
     const option3 = screen.getByText('go away');
-    
+
     expect(question).toBeDefined();
     expect(option1).toBeDefined();
     expect(option2).toBeDefined();
@@ -105,7 +105,7 @@ describe('Question List', () => {
     const option1 = screen.getByText('this is an option');
     const option2 = screen.getByText('when its green its the answer');
     const option3 = screen.getByText('press delete to remove the tutorial');
-    
+
     expect(question).toBeDefined();
     expect(option1).toBeDefined();
     expect(option2).toBeDefined();
@@ -178,7 +178,7 @@ describe('Question List', () => {
     const option1 = screen.getByText('Im good');
     const option2 = screen.getByText('Im bad');
     const option3 = screen.getByText('Im epic');
-    
+
     expect(question).toBeDefined();
     expect(option1).toBeDefined();
     expect(option2).toBeDefined();
@@ -289,7 +289,7 @@ describe('import', () => {
   test('renders a dropdown', () => {
     const arrowIcon = screen.getByTestId('ArrowDropDownIcon');
     expect(arrowIcon).toBeDefined();
-    
+
     const dropdown = screen.getByLabelText('Import Questions');
     expect(dropdown).toBeDefined();
   })
@@ -315,7 +315,7 @@ describe('import', () => {
     const option1 = screen.getByText('Detroit');
     const option2 = screen.getByText('Michigan');
     const option3 = screen.getByText('Orlando');
-    
+
     expect(question.length).toBe(3);
     expect(option1).toBeDefined();
     expect(option2).toBeDefined();
@@ -353,7 +353,7 @@ describe('submit', () => {
     fireEvent.change(inputs[2], {target: {value: 'test2'}});
     fireEvent.click(buttons[0]);
     fireEvent.change(inputs[3], {target: {value: 1}});
-    
+
     expect(screen.getByText('test1')).toBeDefined();
 
     fireEvent.change(inputs[4], {target: {value: 'question'}});

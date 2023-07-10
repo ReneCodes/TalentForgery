@@ -123,7 +123,6 @@ const CreateTutorial: FC<{onData: (childData: DataType) => void}> = ({onData}) =
           access_date: data.startDate,
           due_date: data.endDate
         });
-        console.log(tutorial);
         setFormInfo((res) => {
           return {
             ...res,

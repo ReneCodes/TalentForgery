@@ -33,8 +33,6 @@ const TimedTutorialCard = ({videoData}: SmallVideoData) => {
 	const [accessDateInMs, setAccessDateInMs] = React.useState<number>();
 	const [dueDateInMs, setDueDateInMs] = React.useState<number>();
 
-	// console.log('videoData', videoData);
-
 	const createCurrentDate = async () => {
 		const milliseconds = Date.now();
 		setCurrentDateInMs(milliseconds);

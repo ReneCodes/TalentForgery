@@ -57,7 +57,6 @@ const WatchTutorial: React.FC<WatchTutorialProps> = ({videoData}) => {
 		setOpenAlert(false);
 	};
 	const handleAbortTutorial = () => {
-		console.log('User Aborted Tutorial');
 		handleClose();
 		setOpenAlert(false);
 	};
